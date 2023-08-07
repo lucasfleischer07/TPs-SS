@@ -1,4 +1,4 @@
-package ar.edu.itba.ss;
+package ar.edu.itba.ss.algorithms;
 
 import ar.edu.itba.ss.models.Particle;
 
