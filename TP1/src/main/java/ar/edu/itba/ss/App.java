@@ -42,6 +42,7 @@ public class App {
             }
 
             CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic);
+            cellIndexMethod.printCellMap();
 
             long startTime = System.currentTimeMillis();
             Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighbors();
@@ -59,7 +60,7 @@ public class App {
 
     private static void generateOutput(String fileName, Map<Particle, List<Particle>> neighbors, long endTime) throws IOException {
         PrintWriter output = new PrintWriter(new FileWriter(fileName));
-        output.printf("%d\t\t", endTime);
+        output.printf("Time = " + endTime + "ms\n");
         for(Map.Entry<Particle, List<Particle>> mapKeys : neighbors.entrySet()) {
             output.printf("%d\t\t", mapKeys.getKey().getId());
             for (Particle neighborsParticle :  mapKeys.getValue()) {

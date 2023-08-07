@@ -3,7 +3,7 @@
   "property": 1.000,
   "rc": 1.00,
   "L": 100.00,
-  "M": 5,
+  "M": 50,
   "N": 200,
   "isPeriodic": false,
   "staticFileName": "static.txt",

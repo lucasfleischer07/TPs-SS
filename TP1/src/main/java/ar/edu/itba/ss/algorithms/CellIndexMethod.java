@@ -48,7 +48,6 @@ public class CellIndexMethod {
         for(Particle particle : cellMap.get(currentCell)) {
             for(Particle adjacent : cellMap.get(adjacentCell)) {
                 if(particle.getId() != adjacent.getId() && particle.distanceTo(adjacent, isPeriodic, l) < rc) {
-                    System.out.println("Hola");
                     neighbors.putIfAbsent(particle, new LinkedList<>());
                     neighbors.get(particle).add(adjacent);
                     if(currentCell != adjacentCell) {
@@ -68,7 +67,7 @@ public class CellIndexMethod {
         //en este for se buscaran las particulas vecinas de cada celda siguiendo la forma en L (arriba, arriba derecha, derecha, derecha abajo) ya que gracias a la simetria cumple Dij = Dji
         for (int x = 1; x <= m; x++) {
             for (int y = 0; y < m; y++) {
-                long currentCell = calculateCellNumber(x, y);
+                long currentCell = x + y*m;
                 //por si rc es menor a la celda en si.
                 if (cellMap.containsKey(currentCell)) {
                     addNeighbours(neighbors, currentCell, currentCell);
