@@ -9,27 +9,32 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 public class GenerateFiles {
-    private static String STATIC_FILE = "static.txt";
-    private static String DYNAMIC_FILE = "dynamic.txt";
-    private static String TIMES_FILE = "times.txt";
 
     public static void main(String[] args) throws IOException {
+//        Lectura del archivo JSON
         InputStream inputStream = Files.newInputStream(Paths.get("config.json"));
         InputStreamReader reader = new InputStreamReader(inputStream);
         JsonParser jsonParser = new JsonParser();
         JsonObject configObject = jsonParser.parse(reader).getAsJsonObject();
 
-        double particleRadius = 0.25;
-        double property = 1.000;
-//        TODO: VER BIEN QUE TIPO DE DATO ES CADA UNO DE ESTOS
+//        Geteo la informacion del config.json
+        double particleRadius = configObject.get("particleRadius").getAsDouble();
+        double property = configObject.get("property").getAsDouble();
+
         double rc = configObject.get("rc").getAsDouble();
         double l = configObject.get("L").getAsDouble();
-        double m = configObject.get("M").getAsDouble();
+        int m = configObject.get("M").getAsInt();
         int n = configObject.get("N").getAsInt();
+        String staticFileName = configObject.get("staticFileName").getAsString();
+        String dynamicFileName = configObject.get("dynamicFileName").getAsString();
 
-        PrintWriter staticWriter = new PrintWriter(new FileWriter(STATIC_FILE));
-        PrintWriter dynamicWriter = new PrintWriter(new FileWriter(DYNAMIC_FILE));
-        staticWriter.printf("%f\n%f\n%f\n%d\n", rc, l, m, n);
+//        Creo los archivos para poder escribirlos
+        PrintWriter staticWriter = new PrintWriter(new FileWriter(staticFileName));
+        PrintWriter dynamicWriter = new PrintWriter(new FileWriter(dynamicFileName));
+        staticWriter.printf("%d\n%f\n", n, l);
+
+//        TODO: Este 0 esta hardcodeado porque mas adelante se va a tener que cambiar, pero para este TP seirve que este el 0
+        dynamicWriter.printf("%d\n", 0);
 
         Random random = new Random();
         for(int i = 0; i < n; i++) {

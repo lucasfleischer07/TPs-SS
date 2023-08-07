@@ -52,18 +52,29 @@ public class Particle {
         this.property = property;
     }
 
-    public double distanceTo(Particle p2, boolean isPeriodic) {
-        final double deltaX = this.x - p2.getX();
-        final double deltaY = this.y - p2.getY();
+    public double distanceTo(Particle p2, boolean isPeriodic, double l) {
+        double deltaX = Math.abs(this.x - p2.getX());
+        double deltaY = Math.abs(this.y - p2.getY());
 
-//        TODO: Ver lo de si es periodic o no
+        if(isPeriodic) {
+            //se verifica si la diferencia en la coordenada (deltaX) es mayor que la mitad del tamaño del espacio (l/2).
+            // Si es mayor, significa que la distancia es más corta a través de los bordes del espacio periódico, por lo que se ajusta la diferencia
+            // para que sea la más corta posible.
+            // Esto se hace al restar la diferencia del tamaño del espacio (l) para obtener la distancia correcta a través de los bordes.
+            if(deltaX > l/2) {
+                deltaX = l - deltaX;
+            }
+            if(deltaY > l/2) {
+                deltaY = l - deltaY;
+            }
+        }
 
         return Math.sqrt(deltaX * deltaX + deltaY * deltaY) - this.radius - p2.getRadius();
     }
 
     @Override
     public String toString() {
-        return "Particle " + id + " = {" + "x = " + x + ", y = " + y + "radius = " + radius + '}';
+        return "Particle " + id + " = {" + "x = " + x + ", y = " + y + ", radius = " + radius + '}';
     }
 
     @Override

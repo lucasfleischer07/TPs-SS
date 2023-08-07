@@ -1,6 +1,13 @@
 {
-  "rc": 2,
-  "L": 20,
-  "M": 10,
-  "N": 20
+  "particleRadius": 0.25,
+  "property": 1.000,
+  "rc": 1.00,
+  "L": 100.00,
+  "M": 5,
+  "N": 200,
+  "isPeriodic": false,
+  "staticFileName": "static.txt",
+  "dynamicFileName": "dynamic.txt",
+  "outputFileName": "output.txt",
+  "timesFileName": "times.txt"
 }
