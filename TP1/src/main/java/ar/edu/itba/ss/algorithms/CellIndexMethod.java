@@ -106,12 +106,14 @@ public class CellIndexMethod {
                         addNeighbours(neighbors, currentCell, right);
                     }
 
-                    if (cellMap.containsKey(currentCell) && cellMap.containsKey(upRight)) {
-                        if (y > 0 || isPeriodic) {
+                    if (y > 0 || isPeriodic) {
+                        if (cellMap.containsKey(currentCell) && cellMap.containsKey(upRight)) {
                             addNeighbours(neighbors, currentCell, upRight);
                         }
+                    }
 
-                        if (y > m - 1 || isPeriodic) {
+                    if (y < m - 1 || isPeriodic) {
+                        if (cellMap.containsKey(currentCell) && cellMap.containsKey(downRight)) {
                             addNeighbours(neighbors, currentCell, downRight);
                         }
                     }
