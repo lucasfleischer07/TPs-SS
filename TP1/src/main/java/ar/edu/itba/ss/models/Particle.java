@@ -68,8 +68,7 @@ public class Particle {
                 deltaY = l - deltaY;
             }
         }
-        double aux =Math.sqrt(deltaX * deltaX + deltaY * deltaY) - this.radius - p2.getRadius();
-        return aux;
+        return Math.sqrt(deltaX * deltaX + deltaY * deltaY) - this.radius - p2.getRadius();
     }
 
     @Override

@@ -18,13 +18,15 @@ public class GenerateFiles {
         JsonObject configObject = jsonParser.parse(reader).getAsJsonObject();
 
 //        Geteo la informacion del config.json
-        double particleRadius = configObject.get("particleRadius").getAsDouble();
+        double particleRadiusMin = configObject.get("particleRadiusMin").getAsDouble();
+        double particleRadiusMax = configObject.get("particleRadiusMax").getAsDouble();
         double property = configObject.get("property").getAsDouble();
 
         double rc = configObject.get("rc").getAsDouble();
         double l = configObject.get("L").getAsDouble();
         int m = configObject.get("M").getAsInt();
         int n = configObject.get("N").getAsInt();
+        int times = configObject.get("times").getAsInt();
         String staticFileName = configObject.get("staticFileName").getAsString();
         String dynamicFileName = configObject.get("dynamicFileName").getAsString();
 
@@ -33,14 +35,18 @@ public class GenerateFiles {
         PrintWriter dynamicWriter = new PrintWriter(new FileWriter(dynamicFileName));
         staticWriter.printf("%d\n%f\n", n, l);
 
-//        TODO: Este 0 esta hardcodeado porque mas adelante se va a tener que cambiar, pero para este TP seirve que este el 0
-        dynamicWriter.printf("%d\n", 0);
-
         Random random = new Random();
-        for(int i = 0; i < n; i++) {
-            staticWriter.printf("%f\t%f\n", particleRadius, property);
-            dynamicWriter.printf("%.2f\t%.2f\n", random.nextDouble() * l, random.nextDouble() * l);
+//        Para mas adelante vamos a tener que generar movimiento de las particulas, entonces ya lo dejamos asi listo
+        for(int i = 0; i < times; i++) {
+            dynamicWriter.printf("%d\n", i);
+            for(int j = 0; j < n; j++) {
+                if(i == 0) {
+                    staticWriter.printf("%f\t%f\n", particleRadiusMin + Math.random() * (particleRadiusMax - particleRadiusMin), property);
+                }
+                dynamicWriter.printf("%.2f\t%.2f\n", random.nextDouble() * l, random.nextDouble() * l);
+            }
         }
+
         staticWriter.close();
         dynamicWriter.close();
     }

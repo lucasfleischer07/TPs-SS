@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.InvalidParameterException;
 import java.util.*;
 
 public class App {
@@ -20,6 +21,8 @@ public class App {
         String staticFileName = configObject.get("staticFileName").getAsString();
         String dynamicFileName = configObject.get("dynamicFileName").getAsString();
         String outputFileName = configObject.get("outputFileName").getAsString();
+        String timesFileName = configObject.get("timesFileName").getAsString();
+        String method = configObject.get("method").getAsString();
 
         double rc = configObject.get("rc").getAsDouble();
         int m = configObject.get("M").getAsInt();
@@ -35,20 +38,25 @@ public class App {
 
             int n = staticFileScanner.nextInt();
             double l = staticFileScanner.nextDouble();
-
+            int actualTimes = dynamicFileScanner.nextInt();
+//            TODO: Ver de agregar lo del times aca
             for(int i = 0; i < n; i++) {
                 Particle particle = new Particle(i, dynamicFileScanner.nextDouble(), dynamicFileScanner.nextDouble(), staticFileScanner.nextDouble(), staticFileScanner.nextDouble());
                 particleList.add(particle);
             }
 
-            CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic);
-            cellIndexMethod.printCellMap();
-
-            long startTime = System.currentTimeMillis();
-            Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighbors();
-            long endTime = System.currentTimeMillis() - startTime;
-
-            generateOutput(outputFileName, neighbors, endTime);
+            if(Objects.equals(method, "CIM")) {
+                CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic);
+                long startTime = System.currentTimeMillis();
+                Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighbors();
+                long endTime = System.currentTimeMillis() - startTime;
+                generateOutput(outputFileName, neighbors);
+                generateTimeFile(timesFileName, endTime);
+            } else if(Objects.equals(method, "BRUTE")) {
+                System.out.println("Meter el codigo de fuerza bruta aca");
+            } else {
+                throw new InvalidParameterException("Invalid Method");
+            }
 
             staticFileScanner.close();
             dynamicFileScanner.close();
@@ -58,9 +66,8 @@ public class App {
 
     }
 
-    private static void generateOutput(String fileName, Map<Particle, List<Particle>> neighbors, long endTime) throws IOException {
+    private static void generateOutput(String fileName, Map<Particle, List<Particle>> neighbors) throws IOException {
         PrintWriter output = new PrintWriter(new FileWriter(fileName));
-        output.printf("Time = " + endTime + "ms\n");
         for(Map.Entry<Particle, List<Particle>> mapKeys : neighbors.entrySet()) {
             output.printf("%d\t\t", mapKeys.getKey().getId());
             for (Particle neighborsParticle :  mapKeys.getValue()) {
@@ -68,6 +75,12 @@ public class App {
             }
             output.println();
         }
+        output.close();
+    }
+
+    private static void generateTimeFile(String fileName, long endTime) throws IOException {
+        PrintWriter output = new PrintWriter(new FileWriter(fileName));
+        output.printf("Time = " + endTime + "ms\n");
         output.close();
     }
 }
