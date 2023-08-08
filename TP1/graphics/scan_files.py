@@ -20,6 +20,22 @@ def read_dynamic(dynamic_file):
             data[key] = values
     return data
 
+def read_static(static_file):
+    n = None
+    l = None
+    radius_and_prop_map = {}
+    with open(static_file, 'r') as file:
+        n = file.readline()
+        l = file.readline()
+        for i, line in enumerate(file):
+            parts = line.strip().split('\t')  # parts[0]=x parts[1]=y
+            key = i
+            values = [parts[0], parts[1]]
+            radius_and_prop_map[key] = values
+
+    print(radius_and_prop_map)
+    return n, l, radius_and_prop_map
+
 
 def read_time(time_file):
     data = None
