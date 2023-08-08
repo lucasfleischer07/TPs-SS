@@ -20,6 +20,7 @@ def read_dynamic(dynamic_file):
             data[key] = values
     return data
 
+
 def read_static(static_file):
     n = None
     l = None
