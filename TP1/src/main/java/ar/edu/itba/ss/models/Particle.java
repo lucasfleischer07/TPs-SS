@@ -66,6 +66,7 @@ public class Particle {
             if(deltaY > l/2) {
                 deltaY = l - deltaY;
             }
+
         }
         return Math.sqrt(deltaX * deltaX + deltaY * deltaY) - this.radius - p2.getRadius();
     }

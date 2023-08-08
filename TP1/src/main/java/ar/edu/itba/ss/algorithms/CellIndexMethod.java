@@ -14,7 +14,7 @@ public class CellIndexMethod {
     private final double cellSize;
 
     public CellIndexMethod(List<Particle> particles, double l, int m, double rc, boolean isPeriodic) {
-        if (l / m <= rc) {
+        if ((l / m) <= rc) {
             throw new RuntimeException("Invalid parameters");
         }
 
