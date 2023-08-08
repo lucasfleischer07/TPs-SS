@@ -15,7 +15,6 @@ public class Particle {
         this.property = property;
 
     }
-
     public int getId() {
         return id;
     }

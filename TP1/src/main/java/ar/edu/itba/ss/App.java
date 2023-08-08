@@ -45,15 +45,19 @@ public class App {
                 particleList.add(particle);
             }
 
+            CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic);
             if(Objects.equals(method, "CIM")) {
-                CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic);
                 long startTime = System.currentTimeMillis();
                 Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighbors();
                 long endTime = System.currentTimeMillis() - startTime;
                 generateOutput(outputFileName, neighbors);
                 generateTimeFile(timesFileName, endTime);
             } else if(Objects.equals(method, "BRUTE")) {
-                System.out.println("Meter el codigo de fuerza bruta aca");
+                long startTime = System.currentTimeMillis();
+                Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighborsBruteForce();
+                long endTime = System.currentTimeMillis() - startTime;
+                generateOutput(outputFileName, neighbors);
+                generateTimeFile(timesFileName, endTime);
             } else {
                 throw new InvalidParameterException("Invalid Method");
             }

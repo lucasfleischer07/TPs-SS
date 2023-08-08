@@ -60,11 +60,11 @@ public class CellIndexMethod {
     }
 
     public Map<Particle, List<Particle>> generateNeighbors() {
-        long excTime = System.currentTimeMillis();
 
         Map<Particle, List<Particle>> neighbors = new HashMap<>();
 
-        //en este for se buscaran las particulas vecinas de cada celda siguiendo la forma en L (arriba, arriba derecha, derecha, derecha abajo) ya que gracias a la simetria cumple Dij = Dji
+        //en este for se buscaran las particulas vecinas de cada celda siguiendo
+        // la forma en L (arriba, arriba derecha, derecha, derecha abajo) ya que gracias a la simetria cumple Dij = Dji
         for (int x = 1; x <= m; x++) {
             for (int y = 0; y < m; y++) {
                 long currentCell = x + y*m;
@@ -135,4 +135,25 @@ public class CellIndexMethod {
             }
         }
     }
+
+    // algoritmo de fuerza bruta, a diferencia del anterior se buscan en todos los vecinos aunque sea ineficiente
+
+    public Map<Particle, List<Particle>> generateNeighborsBruteForce() {
+        Map<Particle, List<Particle>> neighbours = new HashMap<>();
+
+        for(Particle p: particles) {
+            List<Particle> particleNeighbours = new ArrayList<>();
+            for(Particle p2: particles) {
+                if(p.getId() != p2.getId() && p.distanceTo(p2, isPeriodic, l) < rc) {
+                    particleNeighbours.add(p2);
+                }
+            }
+            //si los vecinos estan vacios, agrega a p su lista de vecinos
+            if (!particleNeighbours.isEmpty()) {
+                neighbours.put(p, particleNeighbours);
+            }
+        }
+    return neighbours;
+    }
+
 }
