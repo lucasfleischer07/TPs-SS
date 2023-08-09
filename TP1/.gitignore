@@ -11,6 +11,7 @@ target/
 *.iws
 *.iml
 *.ipr
+.idea
 
 ### Eclipse ###
 .apt_generated
@@ -42,3 +43,4 @@ dynamic.txt
 static.txt
 times.txt
 graphics/media
+graphics/__pycache__/
