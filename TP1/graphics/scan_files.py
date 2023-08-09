@@ -1,3 +1,6 @@
+import json
+
+
 def read_neighbors(output_file):
     data = {}
     with open(output_file, 'r') as file:
@@ -22,8 +25,6 @@ def read_dynamic(dynamic_file):
 
 
 def read_static(static_file):
-    n = None
-    l = None
     radius_and_prop_map = {}
     with open(static_file, 'r') as file:
         n = file.readline()
@@ -34,7 +35,6 @@ def read_static(static_file):
             values = [parts[0], parts[1]]
             radius_and_prop_map[key] = values
 
-    print(radius_and_prop_map)
     return n, l, radius_and_prop_map
 
 
@@ -45,3 +45,10 @@ def read_time(time_file):
         data = line[1].strip()
 
     return data
+
+
+def json_scan(json_path):
+    with open(json_path, 'r') as file:
+        config = json.load(file)
+
+    return config["M"], config["rc"]

@@ -1,6 +1,6 @@
 {
-  "particleRadiusMin": 0,
-  "particleRadiusMax": 0.25,
+  "particleRadiusMin": 1.00,
+  "particleRadiusMax": 2.00,
   "property": 1.000,
   "rc": 15.00,
   "L": 100.00,
