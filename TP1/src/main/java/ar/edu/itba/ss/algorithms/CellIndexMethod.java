@@ -12,9 +12,10 @@ public class CellIndexMethod {
     private final double rc;
     private final boolean isPeriodic;
     private final double cellSize;
+    double maxParticleRadius;
 
-    public CellIndexMethod(List<Particle> particles, double l, int m, double rc, boolean isPeriodic) {
-        if ((l / m) <= rc) {
+    public CellIndexMethod(List<Particle> particles, double l, int m, double rc, boolean isPeriodic, double maxParticleRadius) {
+        if ((l / m) <= rc + 2*maxParticleRadius) {
             throw new RuntimeException("Invalid parameters");
         }
 
@@ -24,6 +25,7 @@ public class CellIndexMethod {
         this.rc = rc;
         this.isPeriodic = isPeriodic;
         this.cellSize = l/m;
+        this.maxParticleRadius = maxParticleRadius;
 
         initializeCellMap(particles, l, m);
 
@@ -60,7 +62,6 @@ public class CellIndexMethod {
     }
 
     public Map<Particle, List<Particle>> generateNeighbors() {
-
         Map<Particle, List<Particle>> neighbors = new HashMap<>();
 
         //en este for se buscaran las particulas vecinas de cada celda siguiendo
@@ -121,7 +122,6 @@ public class CellIndexMethod {
 
             }
         }
-
         return neighbors;
     }
 

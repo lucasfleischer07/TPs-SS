@@ -39,13 +39,21 @@ public class App {
             int n = staticFileScanner.nextInt();
             double l = staticFileScanner.nextDouble();
             int actualTimes = dynamicFileScanner.nextInt();
+            double maxParticleRadius = 0.0;
 //            TODO: Ver de agregar lo del times aca
             for(int i = 0; i < n; i++) {
-                Particle particle = new Particle(i, dynamicFileScanner.nextDouble(), dynamicFileScanner.nextDouble(), staticFileScanner.nextDouble(), staticFileScanner.nextDouble());
+                double coordinateX = dynamicFileScanner.nextDouble();
+                double coordinateY = dynamicFileScanner.nextDouble();
+                double radius = staticFileScanner.nextDouble();
+                double property = staticFileScanner.nextDouble();
+                Particle particle = new Particle(i, coordinateX, coordinateY, radius, property);
+                if(maxParticleRadius < radius) {
+                    maxParticleRadius = radius;
+                }
                 particleList.add(particle);
             }
 
-            CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic);
+            CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic, maxParticleRadius);
             if(Objects.equals(method, "CIM")) {
                 long startTime = System.currentTimeMillis();
                 Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighbors();
