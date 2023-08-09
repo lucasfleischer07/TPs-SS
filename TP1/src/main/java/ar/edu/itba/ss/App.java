@@ -12,6 +12,9 @@ import java.security.InvalidParameterException;
 import java.util.*;
 
 public class App {
+//    private static int AMOUNT_OF_STATISTICS_RUN = 1000;
+//    private static int STATISTICS_STEPS = 50;
+
     public static void main( String[] args ) throws IOException {
         InputStream inputStream = Files.newInputStream(Paths.get("config.json"));
         InputStreamReader reader = new InputStreamReader(inputStream);
@@ -22,11 +25,14 @@ public class App {
         String dynamicFileName = configObject.get("dynamicFileName").getAsString();
         String outputFileName = configObject.get("outputFileName").getAsString();
         String timesFileName = configObject.get("timesFileName").getAsString();
+//        String statisticsFileName = configObject.get("statisticsFileName").getAsString();
         String method = configObject.get("method").getAsString();
+
 
         double rc = configObject.get("rc").getAsDouble();
         int m = configObject.get("M").getAsInt();
         boolean isPeriodic = configObject.get("isPeriodic").getAsBoolean();
+//        boolean isStatistics = configObject.get("statistics").getAsBoolean();
 
         List<Particle> particleList = new LinkedList<>();
 
@@ -40,7 +46,7 @@ public class App {
             double l = staticFileScanner.nextDouble();
             int actualTimes = dynamicFileScanner.nextInt();
             double maxParticleRadius = 0.0;
-//            TODO: Ver de agregar lo del times aca
+
             for(int i = 0; i < n; i++) {
                 double coordinateX = dynamicFileScanner.nextDouble();
                 double coordinateY = dynamicFileScanner.nextDouble();
@@ -54,21 +60,41 @@ public class App {
             }
 
             CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic, maxParticleRadius);
-            if(Objects.equals(method, "CIM")) {
-                long startTime = System.currentTimeMillis();
-                Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighbors();
-                long endTime = System.currentTimeMillis() - startTime;
-                generateOutput(outputFileName, neighbors);
-                generateTimeFile(timesFileName, endTime);
-            } else if(Objects.equals(method, "BRUTE")) {
-                long startTime = System.currentTimeMillis();
-                Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighborsBruteForce();
-                long endTime = System.currentTimeMillis() - startTime;
-                generateOutput(outputFileName, neighbors);
-                generateTimeFile(timesFileName, endTime);
-            } else {
-                throw new InvalidParameterException("Invalid Method");
-            }
+//            if(!isStatistics) {
+                if(Objects.equals(method, "CIM")) {
+                    double startTime = System.currentTimeMillis();
+                    Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighbors();
+                    double endTime = System.currentTimeMillis() - startTime;
+                    generateOutput(outputFileName, neighbors);
+                    generateTimeFile(timesFileName, endTime);
+                } else if(Objects.equals(method, "BRUTE")) {
+                    long startTime = System.currentTimeMillis();
+                    Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighborsBruteForce();
+                    long endTime = System.currentTimeMillis() - startTime;
+                    generateOutput(outputFileName, neighbors);
+                    generateTimeFile(timesFileName, endTime);
+                } else {
+                    throw new InvalidParameterException("Invalid Method");
+                }
+//            } else {
+//                PrintWriter statisticsWriter = new PrintWriter(new FileWriter(statisticsFileName));
+//                for(int i = 0; i <= AMOUNT_OF_STATISTICS_RUN; i+=STATISTICS_STEPS) {
+//                    if(Objects.equals(method, "CIM")) {
+//                        double startTime = System.currentTimeMillis();
+//                        Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighbors();
+//                        double endTime = System.currentTimeMillis() - startTime;
+//                        statisticsWriter.printf("%d\t%f\n", i, endTime);
+//                    } else if(Objects.equals(method, "BRUTE")) {
+//                        double startTime = System.currentTimeMillis();
+//                        Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighborsBruteForce();
+//                        double endTime = System.currentTimeMillis() - startTime;
+//                        statisticsWriter.printf("%d\t%f\n", i, endTime);
+//                    } else {
+//                        throw new InvalidParameterException("Invalid Method");
+//                    }
+//                }
+//                statisticsWriter.close();
+//            }
 
             staticFileScanner.close();
             dynamicFileScanner.close();
@@ -90,7 +116,7 @@ public class App {
         output.close();
     }
 
-    private static void generateTimeFile(String fileName, long endTime) throws IOException {
+    private static void generateTimeFile(String fileName, double endTime) throws IOException {
         PrintWriter output = new PrintWriter(new FileWriter(fileName));
         output.printf("Time = " + endTime + "ms\n");
         output.close();

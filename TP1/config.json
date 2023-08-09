@@ -9,8 +9,10 @@
   "isPeriodic": false,
   "method": "CIM",
   "times": 1,
+  "statistics": false,
   "staticFileName": "src/main/resources/static.txt",
   "dynamicFileName": "src/main/resources/dynamic.txt",
   "outputFileName": "src/main/resources/output.txt",
-  "timesFileName": "src/main/resources/times.txt"
+  "timesFileName": "src/main/resources/times.txt",
+  "statisticsFileName": "src/main/resources/statistics.txt"
 }

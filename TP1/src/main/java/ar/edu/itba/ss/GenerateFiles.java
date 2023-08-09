@@ -29,10 +29,17 @@ public class GenerateFiles {
         int times = configObject.get("times").getAsInt();
         String staticFileName = configObject.get("staticFileName").getAsString();
         String dynamicFileName = configObject.get("dynamicFileName").getAsString();
+        String statisticsFileName = configObject.get("statisticsFileName").getAsString();
+        boolean isStatistics = configObject.get("statistics").getAsBoolean();
 
 //        Creo los archivos para poder escribirlos
         PrintWriter staticWriter = new PrintWriter(new FileWriter(staticFileName));
         PrintWriter dynamicWriter = new PrintWriter(new FileWriter(dynamicFileName));
+        if(isStatistics) {
+            PrintWriter statisticsWriter = new PrintWriter(new FileWriter(statisticsFileName));
+            statisticsWriter.close();
+        }
+
         staticWriter.printf("%d\n%f\n", n, l);
 
         Random random = new Random();

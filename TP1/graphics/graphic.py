@@ -21,8 +21,7 @@ def draw_particles(particles, target_particle_id, l, m, rc):
 
         circle = plt.Circle((x, y), radius, fill=True, color=color)
         ax.add_artist(circle)
-        ax.text(x + radius, y, str(particle.id), fontsize=8, verticalalignment='center')  # Agregar etiqueta
-
+        ax.text(x + radius, y, str(particle.id), fontsize=8, verticalalignment='center')  
 
     # Dibujar el círculo centrado en las coordenadas de target_particle_id
     target_particle = particles[target_particle_id]
@@ -40,6 +39,26 @@ def draw_particles(particles, target_particle_id, l, m, rc):
 
     ax.set_xlim(0, l)
     ax.set_ylim(0, l)
+
+    plt.show()
+
+
+def draw_times(n_values, time_values_cim, time_values_brute, l, rc, r):
+
+    plt.figure(figsize=(10, 6))  # Ajustar el tamaño del gráfico si es necesario
+
+    plt.plot(n_values, time_values_cim, marker='o', linestyle='-', color='b', label='CIM')
+    plt.plot(n_values, time_values_brute, marker='s', linestyle='--', color='r', label='Brute')
+
+    plt.xlabel('Number of particle')
+    plt.ylabel('Time')
+    plt.title('Graphic of time in function of number of particles')
+    plt.legend()
+    plt.grid(True)
+
+    plt.text(1.02, 0.5, f'L = {l}', transform=plt.gca().transAxes, fontsize=10, verticalalignment='center')
+    plt.text(1.02, 0.4, f'rc = {rc}', transform=plt.gca().transAxes, fontsize=10, verticalalignment='center')
+    plt.text(1.02, 0.3, f'r = {r}', transform=plt.gca().transAxes, fontsize=10, verticalalignment='center')
 
     plt.show()
 
@@ -70,7 +89,12 @@ def main():
         particle.set_radius(current_radius_and_prop_values[0])
         particle.set_prop(current_radius_and_prop_values[1])
 
-    draw_particles(particles, target_particle_id, l, m, rc)
+    # draw_particles(particles, target_particle_id, l, m, rc)
+
+    n_values = [0, 50, 100, 150, 200, 250, 500, 750, 1000]         # Valores de n
+    time_values_cim = [0, 1, 3, 5, 6, 7, 9, 19, 24]  # Valores de tiempo para el conjunto 1
+    time_values_brute = [0, 1, 3, 6, 8, 12, 19, 33, 60]  # Valores de tiempo para el conjunto 1
+    draw_times(n_values, time_values_cim, time_values_brute, l, rc, 0.25)
 
 
 if __name__ == "__main__":
