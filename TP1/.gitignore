@@ -42,7 +42,8 @@ output.txt
 dynamic.txt
 static.txt
 times.txt
-statistics.txt
+statisticsCIM.txt
+statisticsBrute.txt
 
 graphics/media
 graphics/__pycache__/

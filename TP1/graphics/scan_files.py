@@ -51,4 +51,17 @@ def json_scan(json_path):
     with open(json_path, 'r') as file:
         config = json.load(file)
 
-    return config["M"], config["rc"]
+    return config["M"], config["rc"], config["statistics"]
+
+
+def read_statistics(statistics_file):
+    data = {}
+    with open(statistics_file, 'r') as file:
+        for line in file:
+            parts = line.strip().split('\t')
+            n = int(parts[0])
+            times = list(map(float, parts[1:]))
+            data[n] = times
+
+    return data
+
