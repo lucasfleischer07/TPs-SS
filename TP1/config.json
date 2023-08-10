@@ -7,7 +7,7 @@
   "M":12,
   "N":50,
   "isPeriodic": false,
-  "method": "CIM",
+  "method": "BRUTE",
   "times": 1,
   "statistics": true,
   "staticFileName": "src/main/resources/static.txt",
