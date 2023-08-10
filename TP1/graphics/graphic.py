@@ -66,7 +66,7 @@ def draw_times(plot_labels, n_values, time_values_cim, time_errors_cim, time_val
 
 
 def main():
-    target_particle_id = 27
+    target_particle_id = 23
     output_file_name = "../src/main/resources/output.txt"
     dynamic_file_name = "../src/main/resources/dynamic.txt"
     static_file_name = "../src/main/resources/static.txt"
@@ -77,10 +77,25 @@ def main():
     l = int(float(l_str))
     m, rc = json_scan("../config.json")
 
-    particles = []
+    all_neighbors_particles = []
     for particle_id, particle_neighbors in neighbors_map.items():
         particle = Particle(particle_id, particle_neighbors)
-        particles.append(particle)
+        all_neighbors_particles.append(particle)
+
+    particles = []
+    for i in range(int(n)):
+        particle_id = i
+        existing_particle = None
+        for neighbor_particle in all_neighbors_particles:
+            if neighbor_particle.get_id() == particle_id:
+                existing_particle = neighbor_particle
+                break
+
+        if existing_particle:
+            particles.append(existing_particle)
+        else:
+            new_particle = Particle(particle_id, None)
+            particles.append(new_particle)
 
     for particle in particles:
         current_id = particle.get_id()
