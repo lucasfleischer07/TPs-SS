@@ -4,15 +4,16 @@
   "property": 1.000,
   "rc": 1,
   "L": 20.00,
-  "M": 13,
-  "N": 500,
+  "M": 12,
+  "N": 50,
   "isPeriodic": false,
-  "method": "BRUTE",
+  "method": "CIM",
   "times": 1,
   "statistics": false,
   "staticFileName": "src/main/resources/static.txt",
   "dynamicFileName": "src/main/resources/dynamic.txt",
   "outputFileName": "src/main/resources/output.txt",
   "timesFileName": "src/main/resources/times.txt",
-  "statisticsFileName": "src/main/resources/statistics.txt"
+  "statisticsCIMFileName": "src/main/resources/statisticsCIM.txt",
+  "statisticsBruteFileName": "src/main/resources/statisticsBrute.txt"
 }

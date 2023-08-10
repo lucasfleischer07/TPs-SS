@@ -42,5 +42,7 @@ output.txt
 dynamic.txt
 static.txt
 times.txt
+statistics.txt
+
 graphics/media
 graphics/__pycache__/
