@@ -43,19 +43,20 @@ def draw_particles(particles, target_particle_id, l, m, rc):
     plt.show()
 
 
-def draw_times(plot_labels, n_values, time_values_cim, time_values_brute, l, rc, r, froce_brute):
+def draw_times(plot_labels, n_values, time_values_cim, time_errors_cim, time_values_brute, time_errors_brute, l, rc, r, brute_force):
 
     plt.figure(figsize=(10, 6))  # Ajustar el tamaño del gráfico si es necesario
 
-    plt.plot(n_values, time_values_cim, marker='o', linestyle='-', color='b', label='CIM')
-    if froce_brute:
-        plt.plot(n_values, time_values_brute, marker='s', linestyle='--', color='r', label='Brute')
+    # plt.plot(n_values, time_values_cim, marker='o', linestyle='-', color='b', label='CIM')
+    plt.errorbar(n_values, time_values_cim, yerr=time_errors_cim, marker='o', linestyle='-', color='b', label='CIM')
+    if brute_force:
+        # plt.plot(n_values, time_values_brute, marker='s', linestyle='--', color='r', label='Brute')
+        plt.errorbar(n_values, time_values_brute, yerr=time_errors_brute, marker='s', linestyle='-', color='r', label='Brute')
 
     plt.xlabel(plot_labels[0])
     plt.ylabel(plot_labels[1])
     plt.title(plot_labels[2])
     plt.legend()
-    # plt.grid(True)
 
     plt.text(1.02, 0.5, f'L = {l}', transform=plt.gca().transAxes, fontsize=10, verticalalignment='center')
     plt.text(1.02, 0.4, f'rc = {rc}', transform=plt.gca().transAxes, fontsize=10, verticalalignment='center')
@@ -95,16 +96,20 @@ def main():
     plot_labels = ['Number of particle (N)', 'Time in ms', 'Graphic of time in function of number of particles']
     n_values = [0, 50, 100, 150, 200, 250, 500, 750, 1000]
     time_values_cim = [0, 1, 3, 5, 6, 7, 9, 19, 24]
-    time_values_brute = [0, 1, 3, 6, 8, 12, 19, 33, 60]
-    draw_times(plot_labels, n_values, time_values_cim, time_values_brute, l, rc, 0.25, True)
+    time_errors_cim = [1, 2, 3, 4, 5, 4, 3, 2, 1]
+    time_values_brute = [0.0, 1.0, 3.0, 6.0, 8.0, 12.0, 19.0, 33.0, 60.0]
+    time_errors_brute = [0.5, 1, 1.5, 2, 2.5, 3.5, 4, 4.5, 5]
+    draw_times(plot_labels, n_values, time_values_cim, time_errors_cim, time_values_brute, time_errors_brute, l, rc, 0.25, True)
 
     plot_labels = ['Number of cells (M)', 'Time in ms', 'Graphic of time in function of number of cells']
     m_values = [1, 2, 3, 4, 9, 13]
     time_values_cim = [18, 12, 11, 10, 6, 5]
     time_values_brute = [0, 0, 0, 0, 0, 0]     # No deberia estar este
+    time_errors_cim = [1, 2, 3, 4, 5, 4]
+    time_errors_brute = [0.5, 1, 1.5, 2, 2.5, 3.5]
 
     # time_values_brute = [16, 14, 13, 12, 11, 9]     # No deberia estar este
-    draw_times(plot_labels, m_values, time_values_cim, time_values_brute, l, rc, 0.25, False)
+    draw_times(plot_labels, m_values, time_values_cim, time_errors_cim, time_values_brute, time_errors_brute, l, rc, 0.25, False)
 
 
 if __name__ == "__main__":
