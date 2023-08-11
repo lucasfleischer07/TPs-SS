@@ -44,6 +44,7 @@ static.txt
 times.txt
 statisticsCIM.txt
 statisticsBrute.txt
+statisticsMVariation.txt
 
 graphics/media
 graphics/__pycache__/
