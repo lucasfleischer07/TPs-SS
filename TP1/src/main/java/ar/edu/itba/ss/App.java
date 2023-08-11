@@ -15,8 +15,8 @@ import java.util.*;
 public class App {
     private static int AMOUNT_OF_N_STATISTICS_RUN = 500;
     private static int STATISTICS_N_STEPS = 50;
-    private static int STATISTICS_N = 5;
-    private static int STATISTICS_M = 5;
+    private static int AMOUNT_OF_N_SAMES_RUNS = 5;
+    private static int AMOUNT_OF_M_SAMES_RUNS = 5;
     private static int AMOUNT_OF_M_STATISTICS_RUN = 13;
 
     public static void main( String[] args ) throws IOException {
@@ -85,7 +85,7 @@ public class App {
         for(int i = 0; i < AMOUNT_OF_N_STATISTICS_RUN; i+= STATISTICS_N_STEPS) {
 //            System.out.println("En el primer for con i = " + i);
             mapTimes.putIfAbsent(i, new ArrayList<>());
-            for(int j = 0; j < 5; j++) {
+            for(int j = 0; j < AMOUNT_OF_N_SAMES_RUNS; j++) {
 //                System.out.println("En el segundo for con j = " + j);
                 double maxParticleRadius = generateParticles(particleList, staticFileName, dynamicFileName);
                 CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic, maxParticleRadius);
@@ -109,12 +109,12 @@ public class App {
     private static void statisticsMRuns(List<Particle> particleList, String staticFileName, String dynamicFileName, String statisticsFileName, double l, int m, double rc, boolean isPeriodic, double particleRadiusMin, double particleRadiusMax, double property) throws IOException {
         WriteFiles generateFiles = new WriteFiles();
         SortedMap<Integer, List<Double>> mapTimes = new TreeMap<>();
-        for(int i = 0; i < AMOUNT_OF_M_STATISTICS_RUN; i++) {
+        for(int i = 1; i <= AMOUNT_OF_M_STATISTICS_RUN; i++) {
 //            System.out.println("En el primer for con i = " + i);
             double maxParticleRadius = generateParticles(particleList, staticFileName, dynamicFileName);
             generateFiles.writeFiles(staticFileName, dynamicFileName, particleRadiusMin, particleRadiusMax, property, l, i, 1, true);
             mapTimes.putIfAbsent(i, new ArrayList<>());
-            for(int j = 0; j < 5; j++) {
+            for(int j = 0; j < AMOUNT_OF_M_SAMES_RUNS; j++) {
 //                System.out.println("En el segundo for con j = " + j);
                 CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic, maxParticleRadius);
                 double startTime = System.currentTimeMillis();
