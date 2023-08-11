@@ -13,6 +13,7 @@ public class CellIndexMethod {
     private final boolean isPeriodic;
     private final double cellSize;
     double maxParticleRadius;
+    double finalTime = 0;
 
     public CellIndexMethod(List<Particle> particles, double l, int m, double rc, boolean isPeriodic, double maxParticleRadius) {
         if ((l / m) <= rc + 2*maxParticleRadius) {
@@ -63,9 +64,9 @@ public class CellIndexMethod {
 
     public Map<Particle, List<Particle>> generateNeighbors() {
         Map<Particle, List<Particle>> neighbors = new HashMap<>();
-
         //en este for se buscaran las particulas vecinas de cada celda siguiendo
         // la forma en L (arriba, arriba derecha, derecha, derecha abajo) ya que gracias a la simetria cumple Dij = Dji
+        double startTime = System.currentTimeMillis();
         for (int x = 1; x <= m; x++) {
             for (int y = 0; y < m; y++) {
                 long currentCell = x + y*m;
@@ -122,8 +123,11 @@ public class CellIndexMethod {
 
             }
         }
+        finalTime = System.currentTimeMillis() - startTime;
+        System.out.println(finalTime);
         return neighbors;
     }
+
 
     public void printCellMap(){
         for(Map.Entry<Long, List<Particle>> e : cellMap.entrySet()){
@@ -140,7 +144,7 @@ public class CellIndexMethod {
 
     public Map<Particle, List<Particle>> generateNeighborsBruteForce() {
         Map<Particle, List<Particle>> neighbours = new HashMap<>();
-
+        double startTime = System.currentTimeMillis();
         for(Particle p: particles) {
             List<Particle> particleNeighbours = new ArrayList<>();
             for(Particle p2: particles) {
@@ -153,7 +157,11 @@ public class CellIndexMethod {
                 neighbours.put(p, particleNeighbours);
             }
         }
-    return neighbours;
+        finalTime = System.currentTimeMillis() - startTime;
+        return neighbours;
     }
 
+    public double getFinalTime() {
+        return finalTime;
+    }
 }
