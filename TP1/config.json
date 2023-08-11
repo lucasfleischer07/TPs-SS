@@ -6,14 +6,15 @@
   "L": 20.00,
   "M":12,
   "N":50,
-  "isPeriodic": false,
-  "method": "BRUTE",
+  "isPeriodic": true,
+  "method": "CIM",
   "times": 1,
-  "statistics": true,
+  "statistics": false,
   "staticFileName": "src/main/resources/static.txt",
   "dynamicFileName": "src/main/resources/dynamic.txt",
   "outputFileName": "src/main/resources/output.txt",
   "timesFileName": "src/main/resources/times.txt",
   "statisticsCIMFileName": "src/main/resources/statisticsCIM.txt",
-  "statisticsBruteFileName": "src/main/resources/statisticsBrute.txt"
+  "statisticsBruteFileName": "src/main/resources/statisticsBrute.txt",
+  "statisticsMVariationFileName": "src/main/resources/statisticsMVariation.txt"
 }

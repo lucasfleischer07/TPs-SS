@@ -16,14 +16,14 @@ def draw_particles(particles, target_particle_id, l, m, rc):
 
         if int(particle.id) == target_particle_id:
             color = 'green'
-        elif particle.id in neighbors_list:
+        elif (neighbors_list is not None) and (particle.id in neighbors_list):
             color = 'blue'
         else:
             color = 'red'
 
         circle = plt.Circle((x, y), radius, fill=True, color=color)
         ax.add_artist(circle)
-        ax.text(x + radius, y, str(particle.id), fontsize=8, verticalalignment='center')  
+        ax.text(x + radius, y, str(particle.id), fontsize=8, verticalalignment='center')
 
     # Dibujar el círculo centrado en las coordenadas de target_particle_id
     target_particle = particles[target_particle_id]
@@ -52,15 +52,12 @@ def draw_particles(particles, target_particle_id, l, m, rc):
     plt.show()
 
 
-def draw_times(plot_labels, n_values, time_values_cim, time_errors_cim, time_values_brute, time_errors_brute, l, rc, r, brute_force):
+def draw_times(plot_labels, n_values, time_values_cim, time_errors_cim, time_values_brute, time_errors_brute, l, rc, r):
 
     plt.figure(figsize=(10, 6))  # Ajustar el tamaño del gráfico si es necesario
 
-    # plt.plot(n_values, time_values_cim, marker='o', linestyle='-', color='b', label='CIM')
     plt.errorbar(n_values, time_values_cim, yerr=time_errors_cim, marker='o', linestyle='-', color='b', label='CIM')
-    if brute_force:
-        # plt.plot(n_values, time_values_brute, marker='s', linestyle='--', color='r', label='Brute')
-        plt.errorbar(n_values, time_values_brute, yerr=time_errors_brute, marker='s', linestyle='-', color='r', label='Brute')
+    plt.errorbar(n_values, time_values_brute, yerr=time_errors_brute, marker='s', linestyle='-', color='r', label='Brute')
 
     plt.xlabel(plot_labels[0])
     plt.ylabel(plot_labels[1])
@@ -95,6 +92,23 @@ def dict_calc(n_values_dict):
     return n_value, time_values_average, time_values_cim_mean_error
 
 
+def draw_m_times(plot_labels, n_values, time_values_cim, time_errors_cim, l, rc, r):
+    plt.figure(figsize=(10, 6))  # Ajustar el tamaño del gráfico si es necesario
+
+    plt.errorbar(n_values, time_values_cim, yerr=time_errors_cim, marker='o', linestyle='-', color='b', label='CIM')
+
+    plt.xlabel(plot_labels[0])
+    plt.ylabel(plot_labels[1])
+    plt.title(plot_labels[2])
+    plt.legend()
+    plt.ylim(bottom=0)
+
+    plt.text(1.02, 0.5, f'L = {l}', transform=plt.gca().transAxes, fontsize=10, verticalalignment='center')
+    plt.text(1.02, 0.4, f'rc = {rc}', transform=plt.gca().transAxes, fontsize=10, verticalalignment='center')
+    plt.text(1.02, 0.3, f'r = {r}', transform=plt.gca().transAxes, fontsize=10, verticalalignment='center')
+
+    plt.show()
+
 
 def main():
     target_particle_id = 23
@@ -103,6 +117,7 @@ def main():
     static_file_name = "../src/main/resources/static.txt"
     statistics_cim_file_name = "../src/main/resources/statisticsCIM.txt"
     statistics_brute_file_name = "../src/main/resources/statisticsBrute.txt"
+    statistics_m_file_name = "../src/main/resources/statisticsMVariation.txt"
 
     neighbors_map = read_neighbors(output_file_name)
     positions_map = read_dynamic(dynamic_file_name)
@@ -147,17 +162,23 @@ def main():
         brute_values_dict = read_statistics(statistics_brute_file_name)
         cim_n_values, cim_time_values_average, time_values_cim_mean_error = dict_calc(cim_values_dict)
         brute_n_values, brute_time_values_average, time_values_brute_mean_error = dict_calc(brute_values_dict)
-        draw_times(plot_labels, cim_n_values, cim_time_values_average,  time_values_cim_mean_error, brute_time_values_average, time_values_brute_mean_error, l, rc, 0.25, True)
+        draw_times(plot_labels, cim_n_values, cim_time_values_average,  time_values_cim_mean_error, brute_time_values_average, time_values_brute_mean_error, l, rc, 0.25)
 
         # TODO: Falta hacer este generico, pero pincho
         plot_labels = ['Number of cells (M)', 'Time in ms', 'Graphic of time in function of number of cells']
-        m_values = [1, 2, 3, 4, 9, 13]
-        time_values_cim = [18, 12, 11, 10, 6, 5]
-        time_values_brute = [0, 0, 0, 0, 0, 0]     # No deberia estar este
-        time_errors_cim = [1, 2, 2.5, 1.5, 1.75, 2.7]
-        time_errors_brute = [0.5, 1, 1.5, 2, 2.5, 3.5]
+        m_values_dict = read_statistics(statistics_m_file_name)
+        m_values, m_time_values_average, time_values_m_mean_error = dict_calc(m_values_dict)
+        draw_m_times(plot_labels, m_values, m_time_values_average,  time_values_m_mean_error, l, rc, 0.25)
 
-        draw_times(plot_labels, m_values, time_values_cim, time_errors_cim, time_values_brute, time_errors_brute, l, rc, 0.25, False)
+
+
+
+        # m_values = [1, 2, 3, 4, 9, 13]
+        # time_values_cim = [18, 12, 11, 10, 6, 5]
+        # time_values_brute = [0, 0, 0, 0, 0, 0]     # No deberia estar este
+        # time_errors_cim = [1, 2, 2.5, 1.5, 1.75, 2.7]
+        # time_errors_brute = [0.5, 1, 1.5, 2, 2.5, 3.5]
+        # draw_times(plot_labels, m_values, time_values_cim, time_errors_cim, time_values_brute, time_errors_brute, l, rc, 0.25)
 
 
 if __name__ == "__main__":

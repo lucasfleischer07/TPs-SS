@@ -13,8 +13,11 @@ import java.security.InvalidParameterException;
 import java.util.*;
 
 public class App {
-    private static int AMOUNT_OF_STATISTICS_RUN = 500;
-    private static int STATISTICS_STEPS = 50;
+    private static int AMOUNT_OF_N_STATISTICS_RUN = 500;
+    private static int STATISTICS_N_STEPS = 50;
+    private static int STATISTICS_N = 5;
+    private static int STATISTICS_M = 5;
+    private static int AMOUNT_OF_M_STATISTICS_RUN = 13;
 
     public static void main( String[] args ) throws IOException {
 //        Lectura del archivo JSON
@@ -30,6 +33,7 @@ public class App {
         String timesFileName = configObject.get("timesFileName").getAsString();
         String statisticsCIMFileName = configObject.get("statisticsCIMFileName").getAsString();
         String statisticsBruteFileName = configObject.get("statisticsBruteFileName").getAsString();
+        String statisticsMVariationFileName = configObject.get("statisticsMVariationFileName").getAsString();
 
         String method = configObject.get("method").getAsString();
 
@@ -67,17 +71,18 @@ public class App {
             generateOutputFile(outputFileName, neighbors);
             generateTimeFile(timesFileName, endTime);
         } else {
-            statisticsRuns(particleList, staticFileName, dynamicFileName, statisticsCIMFileName, l, m, rc, isPeriodic, particleRadiusMin, particleRadiusMax, property, "CIM");
-            statisticsRuns(particleList, staticFileName, dynamicFileName, statisticsBruteFileName, l, m, rc, isPeriodic, particleRadiusMin, particleRadiusMax, property, "BRUTE");
+            statisticsNRuns(particleList, staticFileName, dynamicFileName, statisticsCIMFileName, l, m, rc, isPeriodic, particleRadiusMin, particleRadiusMax, property, "CIM");
+            statisticsNRuns(particleList, staticFileName, dynamicFileName, statisticsBruteFileName, l, m, rc, isPeriodic, particleRadiusMin, particleRadiusMax, property, "BRUTE");
+            statisticsMRuns(particleList, staticFileName, dynamicFileName, statisticsMVariationFileName, l, m, rc, isPeriodic, particleRadiusMin, particleRadiusMax, property);
         }
 
     }
 
 // *    Este metodo es utilizado para correr las statistics. Corre varias veces los algoritmos para un determinado valor de N
-    private static void statisticsRuns(List<Particle> particleList, String staticFileName, String dynamicFileName, String statisticsFileName, double l, int m, double rc, boolean isPeriodic, double particleRadiusMin, double particleRadiusMax, double property, String method) throws IOException {
+    private static void statisticsNRuns(List<Particle> particleList, String staticFileName, String dynamicFileName, String statisticsFileName, double l, int m, double rc, boolean isPeriodic, double particleRadiusMin, double particleRadiusMax, double property, String method) throws IOException {
         WriteFiles generateFiles = new WriteFiles();
         SortedMap<Integer, List<Double>> mapTimes = new TreeMap<>();
-        for(int i = 0; i < AMOUNT_OF_STATISTICS_RUN; i+= STATISTICS_STEPS) {
+        for(int i = 0; i < AMOUNT_OF_N_STATISTICS_RUN; i+= STATISTICS_N_STEPS) {
 //            System.out.println("En el primer for con i = " + i);
             mapTimes.putIfAbsent(i, new ArrayList<>());
             for(int j = 0; j < 5; j++) {
@@ -93,6 +98,27 @@ public class App {
                 } else {
                     throw new InvalidParameterException("Invalid Method");
                 }
+                double endTime = System.currentTimeMillis() - startTime;
+                mapTimes.get(i).add(endTime);
+            }
+        }
+        generateStatisticsFile(statisticsFileName, mapTimes);
+    }
+
+    // *    Este metodo es utilizado para correr las statistics. Corre varias veces los algoritmos para un determinado valor de N
+    private static void statisticsMRuns(List<Particle> particleList, String staticFileName, String dynamicFileName, String statisticsFileName, double l, int m, double rc, boolean isPeriodic, double particleRadiusMin, double particleRadiusMax, double property) throws IOException {
+        WriteFiles generateFiles = new WriteFiles();
+        SortedMap<Integer, List<Double>> mapTimes = new TreeMap<>();
+        for(int i = 0; i < AMOUNT_OF_M_STATISTICS_RUN; i++) {
+//            System.out.println("En el primer for con i = " + i);
+            double maxParticleRadius = generateParticles(particleList, staticFileName, dynamicFileName);
+            generateFiles.writeFiles(staticFileName, dynamicFileName, particleRadiusMin, particleRadiusMax, property, l, i, 1, true);
+            mapTimes.putIfAbsent(i, new ArrayList<>());
+            for(int j = 0; j < 5; j++) {
+//                System.out.println("En el segundo for con j = " + j);
+                CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic, maxParticleRadius);
+                double startTime = System.currentTimeMillis();
+                Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighbors();
                 double endTime = System.currentTimeMillis() - startTime;
                 mapTimes.get(i).add(endTime);
             }
