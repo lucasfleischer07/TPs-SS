@@ -16,7 +16,7 @@ public class App {
     private static int AMOUNT_OF_N_STATISTICS_RUN = 500;
     private static int STATISTICS_N_STEPS = 50;
     private static int AMOUNT_OF_N_SAMES_RUNS = 5;
-    private static int AMOUNT_OF_M_SAMES_RUNS = 5;
+    private static int AMOUNT_OF_M_SAMES_RUNS = 10;
     private static int AMOUNT_OF_M_STATISTICS_RUN = 13;
 
     public static void main( String[] args ) throws IOException {
@@ -106,21 +106,19 @@ public class App {
     }
 
     // *    Este metodo es utilizado para correr las statistics. Corre varias veces los algoritmos para un determinado valor de N
-    private static void statisticsMRuns(List<Particle> particleList, String staticFileName, String dynamicFileName, String statisticsFileName, double l, int m, double rc, boolean isPeriodic, double particleRadiusMin, double particleRadiusMax, double property) throws IOException {
+    private static void statisticsMRuns(List<Particle> particleList, String staticFileName, String dynamicFileName, String statisticsFileName, double l, int n, double rc, boolean isPeriodic, double particleRadiusMin, double particleRadiusMax, double property) throws IOException {
         WriteFiles generateFiles = new WriteFiles();
         SortedMap<Integer, List<Double>> mapTimes = new TreeMap<>();
-        for(int i = 1; i <= AMOUNT_OF_M_STATISTICS_RUN; i++) {
-//            System.out.println("En el primer for con i = " + i);
-            double maxParticleRadius = generateParticles(particleList, staticFileName, dynamicFileName);
-            generateFiles.writeFiles(staticFileName, dynamicFileName, particleRadiusMin, particleRadiusMax, property, l, i, 1, true);
-            mapTimes.putIfAbsent(i, new ArrayList<>());
+        for(int m = 1; m <= AMOUNT_OF_M_STATISTICS_RUN; m++) {
+//            System.out.println("En el primer for con m = " + m);
+            mapTimes.putIfAbsent(m, new ArrayList<>());
             for(int j = 0; j < AMOUNT_OF_M_SAMES_RUNS; j++) {
 //                System.out.println("En el segundo for con j = " + j);
+                double maxParticleRadius = generateParticles(particleList, staticFileName, dynamicFileName);
+                generateFiles.writeFiles(staticFileName, dynamicFileName, particleRadiusMin, particleRadiusMax, property, l, n, 1, true);
                 CellIndexMethod cellIndexMethod = new CellIndexMethod(particleList, l, m, rc, isPeriodic, maxParticleRadius);
-                double startTime = System.currentTimeMillis();
                 Map<Particle, List<Particle>> neighbors = cellIndexMethod.generateNeighbors();
-                double endTime = System.currentTimeMillis() - startTime;
-                mapTimes.get(i).add(endTime);
+                mapTimes.get(m).add(cellIndexMethod.getFinalTime());
             }
         }
         generateStatisticsFile(statisticsFileName, mapTimes);
