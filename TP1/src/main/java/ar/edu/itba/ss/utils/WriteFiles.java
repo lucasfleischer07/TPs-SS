@@ -8,14 +8,14 @@ import java.util.Random;
 public class WriteFiles {
 
     public void writeFiles(String staticFileName, String dynamicFileName, double particleRadiusMin, double particleRadiusMax, double property, double l, int n, int times, boolean isStatistics) throws IOException {
-//        Creo los archivos para poder escribirlos
+        //  Creo los archivos para poder escribirlos
         PrintWriter staticWriter = new PrintWriter(new FileWriter(staticFileName));
         PrintWriter dynamicWriter = new PrintWriter(new FileWriter(dynamicFileName));
 
         staticWriter.printf("%d\n%f\n", n, l);
 
         Random random = new Random();
-//        Para mas adelante vamos a tener que generar movimiento de las particulas, entonces ya lo dejamos asi listo
+        //  Para mas adelante vamos a tener que generar movimiento de las particulas, entonces ya lo dejamos asi listo
         for(int i = 0; i < times; i++) {
             dynamicWriter.printf("%d\n", i);
             for(int j = 0; j < n; j++) {
