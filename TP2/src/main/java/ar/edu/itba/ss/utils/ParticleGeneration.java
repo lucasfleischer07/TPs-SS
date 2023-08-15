@@ -18,6 +18,10 @@ public class ParticleGeneration {
         try (BufferedReader reader = new BufferedReader(new FileReader(staticFileName))) {
             String line;
             AtomicInteger particleId = new AtomicInteger(0);
+
+            // Saltear la primera línea del archivo
+            reader.readLine();
+
             //  Itero sobre cada linea del archivo que existe
             while ((line = reader.readLine()) != null) {
                 //  Meto los valores de cada linea en un string

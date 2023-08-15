@@ -117,7 +117,6 @@ public class CellIndexMethod {
             }
         }
         finalTime = System.currentTimeMillis() - startTime;
-        System.out.println(finalTime);
         return neighbors;
     }
 

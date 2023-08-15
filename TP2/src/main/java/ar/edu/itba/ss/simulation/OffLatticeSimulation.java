@@ -4,6 +4,7 @@ import ar.edu.itba.ss.algorithms.CellIndexMethod;
 import ar.edu.itba.ss.models.Parameters;
 import ar.edu.itba.ss.models.Particle;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class OffLatticeSimulation {
         for(Particle particle: particles) {
             particle.setX(particle.getX() + particle.getV()*Math.cos(particle.getTheta())*dt);
             particle.setY(particle.getY() + particle.getV()*Math.sin(particle.getTheta())*dt);
-            particle.updateAngle(neighbourhoods.get(particle), eta);
+            particle.updateAngle(neighbourhoods.getOrDefault(particle, new LinkedList<>()), eta);
         }
 
         time += dt;

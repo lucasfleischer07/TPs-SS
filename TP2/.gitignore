@@ -35,5 +35,8 @@ build/
 ### VS Code ###
 .vscode/
 
+static.txt
+output.txt
+
 ### Mac OS ###
 .DS_Store

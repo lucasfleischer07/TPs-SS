@@ -47,13 +47,15 @@ public class App {
         // Hago la simulacion
         for (int i = 0; i < iterations; i++) {
             offLatticeSimulation.nextIteration();
+            System.out.println(offLatticeSimulation.getParticles());
+            System.out.println("\n");
             generateOutputFile(outputFileName, offLatticeSimulation.getParticles(), offLatticeSimulation.getTime());
         }
 
     }
 
     private static void generateOutputFile(String fileName, List<Particle> particles, int time) throws IOException {
-        PrintWriter outputWriter = new PrintWriter(new FileWriter(fileName));
+        PrintWriter outputWriter = new PrintWriter(new FileWriter(fileName, true));
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(time).append("\n");
