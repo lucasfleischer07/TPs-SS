@@ -1,5 +1,6 @@
 package ar.edu.itba.ss.models;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Particle {
@@ -78,6 +79,40 @@ public class Particle {
 
         }
         return Math.sqrt(deltaX * deltaX + deltaY * deltaY) - this.radius - p2.getRadius();
+    }
+
+    public void updateAngle(List<Particle> neighbours, double eta){
+        //TODO CHEQUEAR ESTA CUENTA DE ATAN2
+        // "Promedio de todos los ángulos de todas las particulas dentro de r incluyendo a la propia"
+        double totalSin = 0;
+        double totalCos = 0;
+        totalSin += Math.sin(this.getTheta());
+        totalCos += Math.cos(this.getTheta());
+        for(Particle p : neighbours){
+            totalSin += Math.sin(p.getTheta());
+            totalCos += Math.cos(p.getTheta());
+        }
+        double avgSin = totalSin / (neighbours.size() + 1);
+        double avgCos = totalCos / (neighbours.size() + 1);
+        double val = Math.atan2(avgSin, avgCos);
+        double randomFactor = ((eta/2)*(Math.random())*(Math.random() <= 0.5? -1:1));
+        val += randomFactor;
+        this.theta = val;
+    }
+
+    public void updateParticlePositionAndVelocity(double l, int dt) {
+
+        double vx = this.getV() * Math.cos(this.getTheta());
+        double vy = this.getV() * Math.sin(this.getTheta());
+
+        //posicion, ecuacion sacada de a teorica (fisica I)
+        double updatedX = (this.getX() + vx * dt) % l;
+        double updatedY = (this.getY() + vy * dt) % l;
+
+        // Updatea y asegura que la nueva posición esté dentro de los límites [0, L)
+        this.setX((updatedX + l) % l);
+        this.setY((updatedY + l) % l);
+
     }
 
     @Override

@@ -46,7 +46,7 @@ public class App {
 
         // Hago la simulacion
         for (int i = 0; i < iterations; i++) {
-            offLatticeSimulation.group();
+            offLatticeSimulation.nextIteration();
             generateOutputFile(outputFileName, offLatticeSimulation.getParticles(), offLatticeSimulation.getTime());
         }
 
