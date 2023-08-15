@@ -26,17 +26,5 @@ public class OffLatticeSimulation {
         CellIndexMethod cim = new CellIndexMethod(particles,true, L);
     }
 
-    public List<Particle> addParticle(Particle particle) {
-        particles.add(particle);
-        return particles;
-    }
-
-    public List<Particle> getParticles() {
-        return particles;
-    }
-
-
-
-
 
 }
