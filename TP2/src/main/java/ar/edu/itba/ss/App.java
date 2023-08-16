@@ -36,7 +36,7 @@ public class App {
 
         // Escribo el archivo static.txt
         WriteFiles writeFiles = new WriteFiles();
-        writeFiles.writeFiles(staticFileName, particleRadius, l, n, rc, velocity);
+        writeFiles.generateStaticFile(staticFileName, particleRadius, l, n, rc, velocity);
 
         // En base a la info del archivo static.txt genero las particulas
         Parameters particles = ParticleGeneration.generateParticles(staticFileName);
@@ -47,32 +47,9 @@ public class App {
         // Hago la simulacion
         for (int i = 0; i < iterations; i++) {
             offLatticeSimulation.nextIteration();
-            System.out.println(offLatticeSimulation.getParticles());
-            System.out.println("\n");
-            generateOutputFile(outputFileName, offLatticeSimulation.getParticles(), offLatticeSimulation.getTime());
+            writeFiles.generateOutputFile(outputFileName, offLatticeSimulation.getParticles(), offLatticeSimulation.getTime());
         }
 
     }
 
-    private static void generateOutputFile(String fileName, List<Particle> particles, int time) throws IOException {
-        PrintWriter outputWriter = new PrintWriter(new FileWriter(fileName, true));
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append(time).append("\n");
-
-        String formattedLine = null;
-        for(Particle particle : particles) {
-            formattedLine = String.format(Locale.US, "%d %.2f %.2f %.2f %.2f%n",
-                    particle.getId(), particle.getX(),
-                    particle.getY(), particle.getV(),
-                    particle.getTheta());
-            stringBuilder.append(formattedLine);
-        }
-
-        if(formattedLine != null) {
-            outputWriter.write(formattedLine);
-        }
-
-        outputWriter.close();
-    }
 }
