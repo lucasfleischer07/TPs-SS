@@ -24,27 +24,24 @@ public class OffLatticeSimulation {
         this.eta = eta;
         this.l = l;
     }
-
     public void nextIteration() {
-        InitializeGroups();
+        InitializeNeighbors();
 
         for(Particle particle: particles) {
-            particle.updateParticlePositionAndVelocity(l, dt);
-            particle.updateAngle(neighbourhoods.getOrDefault(particle, new LinkedList<>()), eta);
+            particle.updateParticlePosition(l, dt);
+            particle.updateAngle(neighbourhoods.getOrDefault(particle,
+                                 new LinkedList<>()), eta);
         }
 
         time += dt;
     }
-
-    public void InitializeGroups() {
+    public void InitializeNeighbors() {
         cimMethod = new CellIndexMethod(particles,true, l);
         neighbourhoods = cimMethod.generateNeighbors();
     }
-
     public int getTime() {
         return time;
     }
-
     public List<Particle> getParticles() {
         return particles;
     }
