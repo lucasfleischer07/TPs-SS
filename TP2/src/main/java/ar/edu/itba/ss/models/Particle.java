@@ -110,8 +110,14 @@ public class Particle {
         double updatedY = (this.getY() + vy * dt) % l;
 
         // Updatea y asegura que la nueva posición esté dentro de los límites [0, L)
-        this.setX((updatedX + l) % l);
-        this.setY((updatedY + l) % l);
+        if(updatedX < 0) {
+            updatedX += l;
+        }
+        if(updatedY < 0) {
+            updatedY += l;
+        }
+        this.setX(updatedX);
+        this.setY(updatedY);
 
     }
 

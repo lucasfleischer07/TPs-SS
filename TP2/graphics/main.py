@@ -17,7 +17,7 @@ def update_particle_for_simulation(step, iterations, N, L):
     plt.clf()
     plt.gcf().text(0.02, 0.95, "Iteration = {}".format(math.floor(step / 10) * 10))
 
-    plt.quiver(x, y, x_vel, y_vel, thetas, cmap='hsv')
+    plt.quiver(x, y, x_vel, y_vel, thetas, cmap='winter')
 
     plt.xlim(0, L)
     plt.ylim(0, L)

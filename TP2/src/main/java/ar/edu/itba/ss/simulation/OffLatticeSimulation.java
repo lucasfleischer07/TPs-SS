@@ -29,8 +29,7 @@ public class OffLatticeSimulation {
         InitializeGroups();
 
         for(Particle particle: particles) {
-            particle.setX(particle.getX() + particle.getV()*Math.cos(particle.getTheta())*dt);
-            particle.setY(particle.getY() + particle.getV()*Math.sin(particle.getTheta())*dt);
+            particle.updateParticlePositionAndVelocity(l, dt);
             particle.updateAngle(neighbourhoods.getOrDefault(particle, new LinkedList<>()), eta);
         }
 
