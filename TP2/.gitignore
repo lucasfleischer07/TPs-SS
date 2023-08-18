@@ -35,8 +35,10 @@ build/
 ### VS Code ###
 .vscode/
 
-static.txt
-output.txt
+src/main/resources/*
+graphics/simulation.gif
+
+graphics/__pycache__
 
 ### Mac OS ###
 .DS_Store

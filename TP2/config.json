@@ -6,6 +6,9 @@
   "iterations": 1000,
   "eta": 0.0,
   "velocity": 0.03,
+  "vaStationaryT": 250,
   "staticFileName": "src/main/resources/static.txt",
-  "outputFileName": "src/main/resources/output.txt"
+  "outputFileName": "src/main/resources/output.txt",
+  "staticStatisticsFileName": "src/main/resources/statistics/static",
+  "outputStatisticsFileName": "src/main/resources/statistics/output"
 }

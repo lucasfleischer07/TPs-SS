@@ -9,9 +9,9 @@ def parse_config_json(file_path):
         L = float(config["L"])
         iterations = int(config["iterations"])
 
-        # va_stationary_t = int(config["vaStationaryT"])
+        va_stationary_t = int(config["vaStationaryT"])
 
-        return N, L, iterations
+        return N, L, iterations, va_stationary_t
 
 
 def parse_static_file(static_file_path):
@@ -54,5 +54,3 @@ def parse_output_file(output_file_path, iterations, particle_velocities, particl
             skip = True
 
     return iterations, particle_velocities, particle_theta
-
-
