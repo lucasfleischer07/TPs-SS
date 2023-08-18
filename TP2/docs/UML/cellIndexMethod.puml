@@ -1,0 +1,19 @@
+@startuml
+class CellIndexMethod {
+    -Map<Long, List<Particle>> cellMap <<final>>
+    -m: int <<final>>
+    -double l <<final>>
+    -double rc <<final>>
+    -boolean isPeriodic <<final>>
+    -double cellSize <<final>>
+    -double finalTime <<final>>
+
+    +CellIndexMethod(List<Particle> particles, boolean isPeriodic, double l)
+    -void initializeCellMap(List<Particle> particles, double l, long m)
+    -long calculateCellNumber(double posX, double posY)
+    -void addNeighbours(Map<Particle, List<Particle>> neighbors, long currentCell, long adjacentCell)
+    +Map<Particle, List<Particle>> generateNeighbors()
+    +double getFinalTime()
+}
+
+@enduml

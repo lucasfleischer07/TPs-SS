@@ -1,0 +1,32 @@
+@startuml
+class Particle {
+    -int id <<final>>
+    -double v
+    -double theta
+    -double radius
+    -double x
+    -double y
+
+    +Particle(int id, double x, double y, double v, double theta, double radius)
+    +int getId()
+    +double getX()
+    +void setX(double x)
+    +double getY()
+    +void setY(double y)
+    +double getRadius()
+    +void setRadius(double radius)
+    +double getV()
+    +void setV(double v)
+    +double getTheta()
+    +void setTheta(double theta)
+    +double distanceTo(Particle p2, boolean isPeriodic, double l)
+    +void updateAngle(List<Particle> neighbours, double eta)
+    +void updateParticlePosition(double l, int dt)
+    +String toString()
+    +boolean equals(Object o)
+    +int hashCode()
+}
+
+
+
+@enduml

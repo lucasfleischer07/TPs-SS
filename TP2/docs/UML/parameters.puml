@@ -1,0 +1,12 @@
+@startuml
+class Parameters{
+-List<Particle> particles
+-double L
+
++void addParticle(Particle particle)
++List<Particle> getParticles()
++void setParticles
++double getL()
++void setL(double L)
+}
+@enduml

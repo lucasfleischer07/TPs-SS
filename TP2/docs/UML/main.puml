@@ -1,0 +1,11 @@
+@startuml
+!include particle.puml
+!include cellIndexMethod.puml
+!include parameters.puml
+!include offLatticeSimulation.puml
+
+CellIndexMethod *-- Particle
+Parameters *--Particle
+OffLatticeSimulation *--Particle
+OffLatticeSimulation *--CellIndexMethod
+@enduml

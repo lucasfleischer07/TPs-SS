@@ -1,0 +1,19 @@
+@startuml
+class OffLatticeSimulation{
+-int time
+-int dt
+-double l <<final>>
+-double eta <<final>>
+-List<Particle> particles
+-Map<Particle, List<Particle>> neighbourhoods
+-CellIndexMethod cimMethod
+
++OffLatticeSimulation(double eta, Parameters parameters, double l)
++void nextIteration()
++void InitializeNeighbors()
++int getTime()
++List<Particle> getParticles()
+}
+
+
+@enduml
