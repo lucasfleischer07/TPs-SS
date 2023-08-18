@@ -14,41 +14,45 @@ def parse_config_json(file_path):
         return N, L, iterations
 
 
-# Me agarra el valor inicial de velocidad, posiciones y theta de cada particula y la guardo en un diccionario de diciconarios
 def parse_static_file(static_file_path):
-    # Creo un diccionario de diccionarios donde la clave del primero es la iteracion y el valor es otro diccionario
-    # donde la clave es el id de las particulas y el valor, la velocidad, posicion y theta
-    # iteration = {0: {id: {posX, posY, vel, theta}}}
-    iterations = {0: {}}
+    iterations = [[]]
+    particle_velocities = [[]]  # Lista de listas para almacenar las velocidades de las partículas en cada iteración
+    particle_theta = [[]]       # Lista de listas para almacenar las thetas de las partículas en cada iteración
 
     with open(static_file_path, 'r') as static_file:
-        static_file.readline().rsplit("\n")  # Me salteo la primer lunea del archivo que es el rc que no lo uso ahora
+        static_file.readline()  # Me salteo la primer línea del archivo que es el rc que no lo uso ahora
 
-        particle_id = 0             # Lo uso como indice para la clave del segundo diccionario (que es el id de cada particula)
-        for line in static_file:    # Itero sobre cada linea del archivo
-            iterations[0][particle_id] = [float(particle_info) for particle_info in line.rstrip("\n").split("\t")[1:]]
-            particle_id += 1
+        for line in static_file:    # Itero sobre cada línea del archivo
+            particle_info = [float(info) for info in line.rstrip("\n").split("\t")[1:]]
+            iterations[-1].append(particle_info)
+            particle_velocities[-1].append(particle_info[2])  # Agrego la velocidad de la partícula a la lista de velocidades
+            particle_theta[-1].append(particle_info[3])  # Agrego la velocidad de la partícula a la lista de velocidades
 
-    return iterations
+    return iterations, particle_velocities, particle_theta
 
 
-def parse_output_file(output_file_path, iterations, N):
+def parse_output_file(output_file_path, iterations, particle_velocities, particle_theta, N):
     with open(output_file_path, "r") as output_file:
-        amount_of_particles = 0
-        iteration = 0
-        skip = True     # Lo uso para skipear la linea que indica la iteracion
+        amount_of_particles, iteration = 0, 0
+        skip = True                 # Lo uso para skipear la linea que indica la iteracion
 
         for line in output_file:    # Itero por cada linea del archivo
             if amount_of_particles % N == 0 and skip:   # Si la linea indica el numero de iteracion, la salteo ya que no contiene info de las particulas
                 iteration += 1
-                iterations[iteration] = {}  # Creo un nuevo diccionario para almacenar la info que va a venir despues
+                iterations.append([])           # Creo una nueva lista para almacenar la info que va a venir después
+                particle_velocities.append([])  # Creo una nueva lista para las velocidades en esta iteración
+                particle_theta.append([])       # Creo una nueva lista para las thetas en esta iteración
                 skip = False
                 continue
 
             particle_data = [float(x) for x in line.rstrip("\n").split("\t")]
-            iterations[iteration][particle_data[0]] = particle_data[1:]
+            iterations[-1].append(particle_data[1:])            # Agrego la información de la partícula a la última iteración
+            particle_velocities[-1].append(particle_data[3])    # Agrego la velocidad de la partícula a la lista de velocidades
+            particle_theta[-1].append(particle_data[4])         # Agrego la velocidad de la partícula a la lista de velocidades
 
             amount_of_particles += 1
             skip = True
 
-    return iterations
+    return iterations, particle_velocities, particle_theta
+
+

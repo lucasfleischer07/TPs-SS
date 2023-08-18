@@ -29,9 +29,12 @@ def main():
     output_file_path = "../src/main/resources/output.txt"
 
     N, L, amount_of_iterations = parse_config_json(config_json_path)
-    initial_state = parse_static_file(static_file_path)
-    output_iterations = parse_output_file(output_file_path, initial_state, N)
-    animation.FuncAnimation(plt.gcf(), update_particle_for_simulation, fargs=(output_iterations, N, L), interval=30, frames=amount_of_iterations, repeat=False).save("simulation.gif")
+    initial_state, velocity_initial_state, theta_initial_state = parse_static_file(static_file_path)
+    output_iterations, particle_velocities, particle_theta = parse_output_file(output_file_path, initial_state, velocity_initial_state, theta_initial_state, N)
+    print("hola")
+
+    # Hace la animacion (el .gif)
+    # animation.FuncAnimation(plt.gcf(), update_particle_for_simulation, fargs=(output_iterations, N, L), interval=30, frames=amount_of_iterations, repeat=False).save("simulation.gif")
 
 
 if __name__ == "__main__":

@@ -1,10 +1,10 @@
 {
   "particleRadius": 0.00,
   "rc":1.00,
-  "L": 10.0,
-  "N": 400,
+  "L": 15.0,
+  "N": 500,
   "iterations": 1000,
-  "eta": 1.0,
+  "eta": 0.0,
   "velocity": 0.03,
   "staticFileName": "src/main/resources/static.txt",
   "outputFileName": "src/main/resources/output.txt"
