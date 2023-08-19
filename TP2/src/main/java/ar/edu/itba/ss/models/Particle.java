@@ -81,7 +81,7 @@ public class Particle {
         return Math.sqrt(deltaX * deltaX + deltaY * deltaY) - this.radius - p2.getRadius();
     }
 
-    public void updateAngle(List<Particle> neighbours, double eta){
+    public void updateAngle(List<Particle> neighbours, double eta){ //1 -> 2,3,4
         double totalSin = Math.sin(this.getTheta());
         double totalCos = Math.cos(this.getTheta());
 
