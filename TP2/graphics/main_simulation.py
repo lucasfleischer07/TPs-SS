@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 from parse_files import parse_config_json, parse_static_file, parse_output_file
-from plots import calculate_va_mean_and_std
 
 
 def update_particle_for_simulation(iteration, iterations, N, L):

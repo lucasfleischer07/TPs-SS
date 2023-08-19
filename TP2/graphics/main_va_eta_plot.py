@@ -15,8 +15,8 @@ def main():
         stats = []
 
         for i in range(0, 6):
-            static_file_path_eta = f"../src/main/resources/statistics/staticEta{i}N{N_value}L{L_value}.txt"
-            output_file_path_eta = f"../src/main/resources/statistics/outputEta{i}N{N_value}L{L_value}.txt"
+            static_file_path_eta = f"../src/main/resources/statisticsEta/staticEta{i}N{N_value}L{L_value}.txt"
+            output_file_path_eta = f"../src/main/resources/statisticsEta/outputEta{i}N{N_value}L{L_value}.txt"
 
             initial_state, velocity_initial_state, theta_initial_state = parse_static_file(static_file_path_eta)
             output_iterations, particle_velocities, particle_theta = parse_output_file(output_file_path_eta, initial_state, velocity_initial_state, theta_initial_state, N_value)

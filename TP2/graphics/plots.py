@@ -41,3 +41,31 @@ def plot_va_eta(stats_500, stats_400, N_values, L_values, amount_of_iterations):
     plt.show()
 
 
+def plot_va_rho(stats, N_values, L, amount_of_iterations):
+
+    # Desempaquetar los datos en arreglos separados para stats_400
+    values = np.array([entry[0] for entry in stats])
+    errors = np.array([entry[1] for entry in stats])
+
+    # Crear la figura y el eje
+    fig, ax = plt.subplots()
+
+    # Graficar los puntos con barras de error para stats
+    ax.errorbar(np.arange(1, len(values) + 1), values, yerr=errors, fmt='o', capsize=6, label=f'L = {L}, Iterations = {amount_of_iterations}')
+
+    # Agregar una línea que une los puntos para stats
+    ax.plot(np.arange(1, len(values) + 1), values, linestyle='-', marker='o', markersize=4, color='blue')
+
+    # Etiquetas de los ejes y título
+    ax.set_xlabel('densidad')
+    ax.set_ylabel('va')
+    ax.set_title('Gráfico de va en funcion de la densidad')
+
+    # Agregar una leyenda
+    ax.legend()
+
+    # Agregar la grilla de fondo
+    ax.grid(True)
+
+    # Mostrar el gráfico
+    plt.show()
