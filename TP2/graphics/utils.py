@@ -37,3 +37,26 @@ def calculate_va_mean_and_std(particle_velocities, particle_theta, va_stationary
     print(f"Error v_a: {error_va}")
 
     return mean_va, error_va
+
+
+def calculate_va_in_each_iteration(particle_velocities, particle_theta, n, amount_of_iterations):
+    v_a_values = []
+
+    for i in range(amount_of_iterations):
+        total_vx = 0.0
+        total_vy = 0.0
+
+        for j in range(n):
+            vx = particle_velocities[i][j] * np.cos(particle_theta[i][j])  # Componente x de la velocidad
+            vy = particle_velocities[i][j] * np.sin(particle_theta[i][j])  # Componente y de la velocidad
+
+            total_vx += vx
+            total_vy += vy
+
+        v_total = np.sqrt(total_vx**2 + total_vy**2)  # Magnitud de la velocidad total
+
+        # Formula de va
+        v_a_values.append((1 / (n * particle_velocities[i][0])) * v_total)
+
+    return v_a_values
+
