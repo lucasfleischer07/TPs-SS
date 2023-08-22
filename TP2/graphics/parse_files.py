@@ -37,7 +37,7 @@ def parse_output_file(output_file_path, iterations, particle_velocities, particl
         skip = True                 # Lo uso para skipear la linea que indica la iteracion
 
         for line in output_file:    # Itero por cada linea del archivo
-            if amount_of_particles % N == 0 and skip:   # Si la linea indica el numero de iteracion, la salteo ya que no contiene info de las particulas
+            if  amount_of_particles % N == 0 and skip:   # Si la linea indica el numero de iteracion, la salteo ya que no contiene info de las particulas
                 iteration += 1
                 iterations.append([])           # Creo una nueva lista para almacenar la info que va a venir después
                 particle_velocities.append([])  # Creo una nueva lista para las velocidades en esta iteración

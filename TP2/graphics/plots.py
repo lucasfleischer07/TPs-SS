@@ -50,14 +50,16 @@ def plot_va_rho(stats, N_values, L, amount_of_iterations):
     # Crear la figura y el eje
     fig, ax = plt.subplots()
 
+    divided_values = [value / (L ** 2) for value in N_values]
+
     # Graficar los puntos con barras de error para stats
-    ax.errorbar(np.arange(1, len(values) + 1), values, yerr=errors, fmt='o', capsize=6, label=f'L = {L}, Iterations = {amount_of_iterations}')
+    ax.errorbar(divided_values, values, yerr=errors, fmt='o', capsize=6, label=f'L = {L}, Iterations = {amount_of_iterations}')
 
     # Agregar una línea que une los puntos para stats
-    ax.plot(np.arange(1, len(values) + 1), values, linestyle='-', marker='o', markersize=4, color='blue')
+    ax.plot(divided_values, values, linestyle='-', marker='o', markersize=4, color='blue')
 
     # Etiquetas de los ejes y título
-    ax.set_xlabel('densidad')
+    ax.set_xlabel('densidad [N/L^2]')
     ax.set_ylabel('va')
     ax.set_title('Gráfico de va en funcion de la densidad')
 
@@ -66,6 +68,9 @@ def plot_va_rho(stats, N_values, L, amount_of_iterations):
 
     # Agregar la grilla de fondo
     ax.grid(True)
+
+    ax.set_xlim(0, max(divided_values) + 0.5)
+
 
     # Mostrar el gráfico
     plt.show()

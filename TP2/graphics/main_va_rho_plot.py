@@ -5,7 +5,7 @@ from plots import plot_va_rho
 def main():
     config_json_path = "../config.json"
     N, L, amount_of_iterations, va_stationary_t = parse_config_json(config_json_path)
-    N_values = [400, 800, 1200, 1600, 2000, 2400, 2800]
+    N_values = [150, 300, 450, 750, 900, 1200, 2400, 3200, 4000]
 
     stats = []
 

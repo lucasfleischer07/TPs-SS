@@ -36,7 +36,39 @@ public class StatisticsRhoFilesGeneration {
 
         WriteFiles writeFiles = new WriteFiles();
 
-        for(int n = 400; n <= 2800; n += 400) {
+        for(int n = 0; n <= 900; n += 150) {
+            // Escribo el archivo static.txt
+            writeFiles.generateStaticFile(staticFileName + "Rho" + (int)(n/(l*l)) + "N" + n + "L" + (int)l + ".txt", particleRadius, l, n, rc, velocity);
+
+            // En base a la info del archivo static.txt genero las particulas
+            Parameters particles = ParticleGeneration.generateParticles(staticFileName + "Rho" + (int)(n/(l*l)) + "N" + n + "L" + (int)l + ".txt");
+
+            // Inicializo la instancia de la simulacion
+            OffLatticeSimulation offLatticeSimulation = new OffLatticeSimulation(eta, particles, l);
+
+            // Hago la simulacion
+            for (int j = 0; j < iterations; j++) {
+                offLatticeSimulation.nextIteration();
+                writeFiles.generateOutputFile(outputFileName + "Rho" + (int)(n/(l*l)) + "N" + n + "L" + (int)l + ".txt", offLatticeSimulation.getParticles(), offLatticeSimulation.getTime());
+            }
+        }
+        for(int n = 1000; n <= 1200; n += 200) {
+            // Escribo el archivo static.txt
+            writeFiles.generateStaticFile(staticFileName + "Rho" + (int)(n/(l*l)) + "N" + n + "L" + (int)l + ".txt", particleRadius, l, n, rc, velocity);
+
+            // En base a la info del archivo static.txt genero las particulas
+            Parameters particles = ParticleGeneration.generateParticles(staticFileName + "Rho" + (int)(n/(l*l)) + "N" + n + "L" + (int)l + ".txt");
+
+            // Inicializo la instancia de la simulacion
+            OffLatticeSimulation offLatticeSimulation = new OffLatticeSimulation(eta, particles, l);
+
+            // Hago la simulacion
+            for (int j = 0; j < iterations; j++) {
+                offLatticeSimulation.nextIteration();
+                writeFiles.generateOutputFile(outputFileName + "Rho" + (int)(n/(l*l)) + "N" + n + "L" + (int)l + ".txt", offLatticeSimulation.getParticles(), offLatticeSimulation.getTime());
+            }
+        }
+        for(int n = 2400; n <= 4000; n += 800) {
             // Escribo el archivo static.txt
             writeFiles.generateStaticFile(staticFileName + "Rho" + (int)(n/(l*l)) + "N" + n + "L" + (int)l + ".txt", particleRadius, l, n, rc, velocity);
 
