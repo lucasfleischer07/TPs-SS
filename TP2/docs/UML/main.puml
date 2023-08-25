@@ -11,5 +11,6 @@ Parameters *--Particle
 OffLatticeSimulation *--Particle
 OffLatticeSimulation *-left CellIndexMethod
 Parameters -up* ParticleGeneration
+WriteFiles -right[hidden]> Particle
 
 @enduml
