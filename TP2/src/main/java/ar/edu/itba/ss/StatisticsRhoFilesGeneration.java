@@ -52,6 +52,7 @@ public class StatisticsRhoFilesGeneration {
                 writeFiles.generateOutputFile(outputFileName + "Rho" + (int)(n/(l*l)) + "N" + n + "L" + (int)l + ".txt", offLatticeSimulation.getParticles(), offLatticeSimulation.getTime());
             }
         }
+
         for(int n = 1000; n <= 1200; n += 200) {
             // Escribo el archivo static.txt
             writeFiles.generateStaticFile(staticFileName + "Rho" + (int)(n/(l*l)) + "N" + n + "L" + (int)l + ".txt", particleRadius, l, n, rc, velocity);
@@ -68,6 +69,7 @@ public class StatisticsRhoFilesGeneration {
                 writeFiles.generateOutputFile(outputFileName + "Rho" + (int)(n/(l*l)) + "N" + n + "L" + (int)l + ".txt", offLatticeSimulation.getParticles(), offLatticeSimulation.getTime());
             }
         }
+
         for(int n = 2400; n <= 4000; n += 800) {
             // Escribo el archivo static.txt
             writeFiles.generateStaticFile(staticFileName + "Rho" + (int)(n/(l*l)) + "N" + n + "L" + (int)l + ".txt", particleRadius, l, n, rc, velocity);

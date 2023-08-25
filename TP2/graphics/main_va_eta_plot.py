@@ -6,7 +6,7 @@ def main():
     config_json_path = "../config.json"
     N, L, amount_of_iterations, va_stationary_t = parse_config_json(config_json_path)
     N_values = [100, 400]
-    L_values = [5, 10]
+    L_values = [5.0, 10.0]
 
     stats_100 = []
     stats_400 = []

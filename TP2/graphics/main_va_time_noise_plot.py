@@ -1,6 +1,6 @@
 from parse_files import parse_config_json, parse_static_file, parse_output_file
 from utils import calculate_va_in_each_iteration
-from plots import plot_va_time
+from plots import plot_va_time_noise
 
 def main():
     config_json_path = "../config.json"
@@ -17,7 +17,7 @@ def main():
             va = calculate_va_in_each_iteration(particle_velocities, particle_theta, N, amount_of_iterations)
             stats.append(va)
 
-    plot_va_time(stats, N, L)
+    plot_va_time_noise(stats, N, L)
 
 
 if __name__ == "__main__":

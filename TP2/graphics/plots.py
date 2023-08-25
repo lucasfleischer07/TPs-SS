@@ -78,7 +78,7 @@ def plot_va_rho(stats, N_values, L, amount_of_iterations):
     plt.show()
 
 
-def plot_va_time(stats, N, L):
+def plot_va_time_noise(stats, N, L):
     # Crear una figura y ejes para el gráfico
     fig, ax = plt.subplots()
 
@@ -96,10 +96,28 @@ def plot_va_time(stats, N, L):
 
     ax.legend()
 
-    # Colocar la leyenda fuera del gráfico
-    # Ajustar el diseño para evitar recortes
-    # ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
-    # plt.tight_layout()
+    # Mostrar el gráfico
+    plt.grid()
+    plt.show()
+
+
+def plot_va_time_density(stats, N_values, L, eta):
+    # Crear una figura y ejes para el gráfico
+    fig, ax = plt.subplots()
+
+    # Iterar a través de cada array en va_stats y graficar una línea
+    for i, data in enumerate(stats):
+        ax.plot(data, label=f'ρ={(N_values[i])/(L*L)}, N={N_values[i]}, L={L}, η={eta}')
+
+    # Etiquetas de los ejes y título del gráfico
+    ax.set_xlabel('tiempo')
+    ax.set_ylabel('vₐ')
+    ax.set_title('Evolución de vₐ en función del tiempo')
+
+    # Establecer la escala del eje y en incrementos de 0.1
+    ax.set_yticks(np.arange(0, 1.1, 0.1))
+
+    ax.legend()
 
     # Mostrar el gráfico
     plt.grid()
