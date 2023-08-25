@@ -8,15 +8,16 @@ def main():
     stats = []
 
     for i in range(0, 6):
-        static_file_path_eta = f"../src/main/resources/statisticsTime/staticEta{i}N{N}L{int(L)}.txt"
-        output_file_path_eta = f"../src/main/resources/statisticsTime/outputEta{i}N{N}L{int(L)}.txt"
+        if i == 0 or i == 2 or i == 5:
+            static_file_path_eta = f"../src/main/resources/statisticsTime/staticEta{i}N{N}L{int(L)}.txt"
+            output_file_path_eta = f"../src/main/resources/statisticsTime/outputEta{i}N{N}L{int(L)}.txt"
 
-        initial_state, velocity_initial_state, theta_initial_state = parse_static_file(static_file_path_eta)
-        output_iterations, particle_velocities, particle_theta = parse_output_file(output_file_path_eta, initial_state, velocity_initial_state, theta_initial_state, N)
-        va = calculate_va_in_each_iteration(particle_velocities, particle_theta, N, amount_of_iterations)
-        stats.append(va)
+            initial_state, velocity_initial_state, theta_initial_state = parse_static_file(static_file_path_eta)
+            output_iterations, particle_velocities, particle_theta = parse_output_file(output_file_path_eta, initial_state, velocity_initial_state, theta_initial_state, N)
+            va = calculate_va_in_each_iteration(particle_velocities, particle_theta, N, amount_of_iterations)
+            stats.append(va)
 
-    plot_va_time(stats, N, L, amount_of_iterations)
+    plot_va_time(stats, N, L)
 
 
 if __name__ == "__main__":

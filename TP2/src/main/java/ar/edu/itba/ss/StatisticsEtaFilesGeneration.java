@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class StatisticsEtaFilesGeneration {
-    public static int ETA_MAX = 5;
+    public static double ETA_MAX = 5.00;
     public static void main(String[] args) throws IOException {
         //  Lectura del archivo JSON
         InputStream inputStream = Files.newInputStream(Paths.get("config.json"));
@@ -34,11 +34,11 @@ public class StatisticsEtaFilesGeneration {
 
         WriteFiles writeFiles = new WriteFiles();
 
-        for(int n= 500; n >= 400; n -= 100) {
+        for(int n= 100; n <= 400; n += 300) {
             if(n == 400) {
-                l -= 5;
+                l += 5;
             }
-            for(int eta = 0; eta <= ETA_MAX; eta++) {
+            for(double eta = 0; eta <= ETA_MAX; eta += 0.5) {
                 // Escribo el archivo static.txt
                 writeFiles.generateStaticFile(staticFileName + "Eta" + eta + "N" + n + "L" + (int)l + ".txt", particleRadius, l, n, rc, velocity);
 

@@ -1,9 +1,9 @@
 {
   "particleRadius": 0.00,
   "rc":1.00,
-  "L": 20.0,
-  "N": 400,
-  "iterations": 3000,
+  "L": 10.0,
+  "N": 1000,
+  "iterations": 1000,
   "eta": 2.0,
   "velocity": 0.03,
   "vaStationaryT": 250,

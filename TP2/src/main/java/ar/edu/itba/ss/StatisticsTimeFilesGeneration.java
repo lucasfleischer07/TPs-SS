@@ -35,7 +35,10 @@ public class StatisticsTimeFilesGeneration {
 
         WriteFiles writeFiles = new WriteFiles();
 
-        for(int eta = 0; eta <= ETA_MAX; eta++) {
+        for(int eta = 0; eta <= ETA_MAX; eta += 2) {
+            if(eta == 4) {
+                eta += 1;
+            }
             // Escribo el archivo static.txt
             writeFiles.generateStaticFile(staticFileName + "Eta" + eta + "N" + n + "L" + (int)l + ".txt", particleRadius, l, n, rc, velocity);
 
