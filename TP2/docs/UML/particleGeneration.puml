@@ -1,0 +1,7 @@
+@startuml
+class ParticleGeneration {
+- {static} Parameters parameters
+
++ {static} Parameters generateParticles(String staticFileName)
+}
+@enduml

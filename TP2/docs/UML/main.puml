@@ -3,9 +3,13 @@
 !include cellIndexMethod.puml
 !include parameters.puml
 !include offLatticeSimulation.puml
+!include particleGeneration.puml
+!include writeFiles.puml
 
 CellIndexMethod *-- Particle
 Parameters *--Particle
 OffLatticeSimulation *--Particle
 OffLatticeSimulation *-left CellIndexMethod
+Parameters -up* ParticleGeneration
+
 @enduml
