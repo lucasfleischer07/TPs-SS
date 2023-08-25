@@ -7,5 +7,5 @@
 CellIndexMethod *-- Particle
 Parameters *--Particle
 OffLatticeSimulation *--Particle
-OffLatticeSimulation *--CellIndexMethod
+OffLatticeSimulation -left* CellIndexMethod
 @enduml
