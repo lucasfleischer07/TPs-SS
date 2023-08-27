@@ -16,17 +16,17 @@ def plot_va_eta(stats_100, stats_400, N_values, L_values, amount_of_iterations):
     # Crear la figura y el eje
     fig, ax = plt.subplots()
 
-    # Graficar los puntos con barras de error para stats_500
-    ax.errorbar(eta_values, values_100, yerr=errors_100, fmt='o', capsize=5, label=f'N = {N_values[1]}, L = {L_values[1]}')
+    # Graficar los puntos con barras de error para stats_100
+    ax.errorbar(eta_values, values_100, yerr=errors_100, fmt='o', capsize=5, label=f'N = {N_values[0]}, L = {L_values[0]}')
 
     # Graficar los puntos con barras de error para stats_400
-    ax.errorbar(eta_values, values_400, yerr=errors_400, fmt='x', capsize=5, label=f'N = {N_values[0]}, L = {L_values[0]}')
+    ax.errorbar(eta_values, values_400, yerr=errors_400, fmt='o', capsize=5, label=f'N = {N_values[1]}, L = {L_values[1]}')
 
-    # Agregar una línea que une los puntos para stats_500
+    # Agregar una línea que une los puntos para stats_100
     ax.plot(eta_values, values_100, linestyle='-', marker='o', markersize=4, color='blue')
 
     # Agregar una línea que une los puntos para stats_400
-    ax.plot(eta_values, values_400, linestyle='-', marker='x', markersize=4, color='orange')
+    ax.plot(eta_values, values_400, linestyle='-', marker='o', markersize=4, color='orange')
 
     # Etiquetas de los ejes y título
     ax.set_xlabel('ruido')
@@ -84,7 +84,7 @@ def plot_va_time_noise(stats, N, L):
 
     # Iterar a través de cada array en va_stats y graficar una línea
     for i, data in enumerate(stats):
-        ax.plot(data, label=f'N={N}, L={L}, η={i}')
+        ax.plot(data, label=f'η={i}')
 
     # Etiquetas de los ejes y título del gráfico
     ax.set_xlabel('tiempo')

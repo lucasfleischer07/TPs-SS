@@ -6,10 +6,10 @@ def main():
     config_json_path = "../config.json"
     N, L, amount_of_iterations, va_stationary_t = parse_config_json(config_json_path)
     N_values = [100, 400]
-    L_values = [5.0, 10.0]
+    L_values = [5, 10]
 
-    stats_100 = []
     stats_400 = []
+    stats_100 = []
 
     for N_value, L_value in zip(N_values, L_values):
         stats = []
