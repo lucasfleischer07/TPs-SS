@@ -22,9 +22,6 @@ def update_particle_for_simulation(iteration, iterations, N, L):
     # Borrar la figura actual (limpiar el lienzo)
     plt.clf()
 
-    # Agregar texto a la figura actual indicando el número de iteración
-    plt.gcf().text(0.02, 0.95, "Iteration = {}", ha='center')
-
     # Crear un gráfico de vectores (flechas) utilizando las posiciones (x, y) y las velocidades (x_vel, y_vel)
     # La dirección de las flechas se determina por los ángulos thetas
     plt.quiver(x, y, x_vel, y_vel, thetas, cmap='winter')
@@ -34,6 +31,7 @@ def update_particle_for_simulation(iteration, iterations, N, L):
     plt.ylim(0, L)
 
     # Agregar etiquetas a los ejes x e y
+    plt.title(f'Iteration = {iteration}')
     plt.xlabel('Position x')
     plt.ylabel('Position y')
 
