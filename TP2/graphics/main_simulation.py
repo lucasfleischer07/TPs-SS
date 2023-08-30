@@ -24,7 +24,7 @@ def update_particle_for_simulation(iteration, iterations, N, L):
 
     # Crear un gráfico de vectores (flechas) utilizando las posiciones (x, y) y las velocidades (x_vel, y_vel)
     # La dirección de las flechas se determina por los ángulos thetas
-    plt.quiver(x, y, x_vel, y_vel, thetas, cmap='winter')
+    plt.quiver(x, y, x_vel, y_vel, thetas, cmap='hsv')
 
     # Establecer los límites del gráfico en los ejes x e y
     plt.xlim(0, L)

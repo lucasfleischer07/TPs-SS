@@ -7,9 +7,10 @@ def main():
     N, L, amount_of_iterations, va_stationary_t = parse_config_json(config_json_path)
     stats = []
 
-    for i in range(0, 6):
-        if i == 0 or i == 2 or i == 5:
-            static_file_path_eta = f"../src/main/resources/statisticsTime/staticEta{i}N{N}L{int(L)}.txt"
+    for i in range(0, 12):
+        i = i*0.5
+        if i == 0.0 or i == 1.5 or i == 3.5:
+            static_file_path_eta = f"../src/main/resources/statisticsTime/staticEta{float(i)}N{N}L{int(L)}.txt"
             output_file_path_eta = f"../src/main/resources/statisticsTime/outputEta{i}N{N}L{int(L)}.txt"
 
             initial_state, velocity_initial_state, theta_initial_state = parse_static_file(static_file_path_eta)

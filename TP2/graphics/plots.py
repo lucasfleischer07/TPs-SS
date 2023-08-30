@@ -55,18 +55,18 @@ def plot_va_rho(stats, N_values, L, amount_of_iterations):
     divided_values = [value / (L ** 2) for value in N_values]
 
     # Graficar los puntos con barras de error para stats
-    ax.errorbar(divided_values, values, yerr=errors, fmt='o', capsize=6, label=f'L = {L}, Iterations = {amount_of_iterations}')
+    ax.errorbar(divided_values, values, yerr=errors, fmt='o', capsize=6)
 
     # Agregar una línea que une los puntos para stats
     ax.plot(divided_values, values, linestyle='-', marker='o', markersize=4, color='blue')
 
     # Etiquetas de los ejes y título
-    ax.set_xlabel('densidad [N/L^2]')
-    ax.set_ylabel('vₐ')
+    ax.set_xlabel('Densidad [$\\frac{N}{{L^2}}$]')
+    ax.set_ylabel('Parámetro de orden (vₐ)')
     ax.set_title('Gráfico de va en función de la densidad')
 
     # Agregar una leyenda
-    ax.legend()
+    # ax.legend()
 
     # Agregar la grilla de fondo
     ax.grid(True)
@@ -84,11 +84,16 @@ def plot_va_time_noise(stats, N, L):
 
     # Iterar a través de cada array en va_stats y graficar una línea
     for i, data in enumerate(stats):
-        ax.plot(data, label=f'η={i}')
+        if i == 0:
+            ax.plot(data, label=f'η={0}')
+        elif i == 1:
+            ax.plot(data, label=f'η={1.5}')
+        elif i == 2:
+            ax.plot(data, label=f'η={3.5}')
 
     # Etiquetas de los ejes y título del gráfico
-    ax.set_xlabel('tiempo')
-    ax.set_ylabel('vₐ')
+    ax.set_xlabel('Iteraciones')
+    ax.set_ylabel('Parámetro de orden (vₐ)')
     ax.set_title('Evolución de vₐ en función del tiempo')
 
     # Establecer la escala del eje y en incrementos de 0.1
