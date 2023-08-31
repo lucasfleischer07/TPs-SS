@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class StatisticsTimeFilesGeneration {
-    public static int ETA_MAX = 5;
+    public static double ETA_MAX = 3.5;
     public static int N_MAX = 800;
     public static void main(String[] args) throws IOException {
         //  Lectura del archivo JSON
@@ -37,9 +37,9 @@ public class StatisticsTimeFilesGeneration {
 
 //        * Este for es para el ruido
         int n = configObject.get("N").getAsInt();
-        for(int eta = 0; eta <= ETA_MAX; eta += 2) {
-            if(eta == 4) {
-                eta += 1;
+        for(double eta = 0; eta <= ETA_MAX; eta += 1.5) {
+            if(eta == 3.0) {
+                eta += 0.5;
             }
             // Escribo el archivo static.txt
             writeFiles.generateStaticFile(staticFileName + "Eta" + eta + "N" + n + "L" + (int)l + ".txt", particleRadius, l, n, rc, velocity);
