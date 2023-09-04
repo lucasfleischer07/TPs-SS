@@ -1,0 +1,13 @@
+{
+  "enclosure1X": 0.9,
+  "enclosure1Y": 0.9,
+  "enclosure2X": 0.9,
+  "enclosure2Y": 0.9,
+  "N": 300,
+  "particleRadius": 0.0015,
+  "velocity": 0.01,
+  "mass": 1,
+  "vaStationaryT": 1500,
+  "staticFileName": "src/main/resources/static.txt",
+  "outputFileName": "src/main/resources/output.txt"
+}
