@@ -126,7 +126,7 @@ public class Particle {
 
     @Override
     public String toString() {
-        return "Particle " + id + " = {" + "x = " + x + ", y = " + y + ", radius = " + radius + '}';
+        return "Particle " + id + " = {" + "x = " + x + ", y = " + y + ", radius = " + radius + ", mass = " + mass + ", velocity = " + v + '}';
     }
 
     @Override
