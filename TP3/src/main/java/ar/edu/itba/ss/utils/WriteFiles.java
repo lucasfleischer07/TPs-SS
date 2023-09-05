@@ -42,7 +42,9 @@ public class WriteFiles {
                     particle.getId(),
                     particle.getX(),
                     particle.getY(),
-                    particle.getV()));
+                    particle.getVx(),
+                    particle.getVy()));
+
         }
 
         outputWriter.write(stringBuilder.toString());

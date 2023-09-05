@@ -1,18 +1,23 @@
 package ar.edu.itba.ss.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Particle {
     private final int id;
-    private double v, mass, radius, x, y;
+    private double v, mass, radius, x, y, tc, velX, velY;
     private int collisionCount;
 
-    public Particle(int id, double x, double y, double mass, double v, double radius) {
+    private final double TABLEWIDTH = 0.009;
+
+    public Particle(int id, double x, double y, double mass, double v, double radius, double velX, double velY) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.v = v;
+        this.velX = velX;
+        this.velY = velY;
         this.mass = mass;
         this.radius = radius;
         this.collisionCount = 0;
@@ -46,8 +51,12 @@ public class Particle {
         this.radius = radius;
     }
 
-    public double getV() {
-        return v;
+    public double getVx() {
+        return velX;
+    }
+
+    public double getVy() {
+        return velY;
     }
 
     public void setV(double v) {
@@ -68,6 +77,85 @@ public class Particle {
 
     public void setCollisionCount(int collisionCount) {
         this.collisionCount = collisionCount;
+    }
+
+
+    public double impactXWall() {
+        tc = Double.MAX_VALUE; //porque sino vale infinito
+
+        //va a chocar con la pared derecha
+        if(velX > 0) {
+            tc = (TABLEWIDTH - radius - x) / velX;
+        }
+
+        //va a chocar con la pared izquierda
+        if(velX < 0) {
+            tc = (0 + radius - x) / velX;
+        }
+
+        return tc;
+    }
+
+    public double impactYWall() {
+        tc = Double.MAX_VALUE; //porque sino vale infinito
+
+        //va a chocar con la pared derecha
+        if(velY > 0) {
+            tc = (TABLEWIDTH - radius - y) / velY;
+        }
+
+        //va a chocar con la pared izquierda
+        if(velY < 0) {
+            tc = (0 + radius - y) / velY;
+        }
+
+        return tc;
+    }
+
+    public double collideWithParticle(Particle p2) {
+
+        double[] dv = {p2.getVx() - this.velX, p2.getVy() - this.velY};
+        double[] dr = {p2.getX() - this.getX(), p2.getY() - this.getY()};
+
+        if(dotProduct(dv, dr) >= 0) {
+            return tc = Double.MAX_VALUE;
+        }
+
+        double sigma = this.radius + p2.radius;
+
+        double dx = p2.getX() - this.getX();
+        double dy = p2.getY() - this.getY();
+        double dr2 = Math.pow((dx), 2) + Math.pow((dy), 2);
+
+        double dvelX = p2.getVx() - this.velX;
+        double dvelY = p2.getVy() - this.velY;
+        double dv2 = Math.pow((dvelX), 2) + Math.pow((dvelY), 2);
+
+        double dvdr = (dvelX * dx) + (dvelY * dy);
+
+        double d = Math.pow(dvdr, 2) - (dv2 * (dr2 - Math.pow(sigma, 2)));
+
+        if(d < 0) {
+            return tc = Double.MAX_VALUE;
+        }
+
+        return  tc = -((dvdr + Math.sqrt(d))/dv2);
+
+    }
+
+    //no lo uso aun
+    public static double dotProduct(double[] vector1, double[] vector2) {
+        if (vector1.length != vector2.length) {
+            throw new IllegalArgumentException("Los vectores deben tener la misma longitud.");
+        }
+
+        double result = 0.0;
+
+        for (int i = 0; i < vector1.length; i++) {
+            result += vector1[i] * vector2[i];
+        }
+
+        return result;
     }
 
 //    TODO: Esto creo que no lo usamos
