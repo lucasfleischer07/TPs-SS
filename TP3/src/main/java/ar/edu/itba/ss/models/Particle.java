@@ -80,6 +80,18 @@ public class Particle {
     }
 
 
+    public void impactXWallSign() {
+        this.velX = -velX;
+        this.collisionCount++;
+
+    }
+
+    public void impactYWallSign() {
+        this.velY = -velY;
+        this.collisionCount++;
+
+    }
+
     public double impactXWall() {
         tc = Double.MAX_VALUE; //porque sino vale infinito
 
