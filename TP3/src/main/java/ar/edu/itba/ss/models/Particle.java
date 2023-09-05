@@ -59,8 +59,12 @@ public class Particle {
         return velY;
     }
 
-    public void setV(double v) {
-        this.v = v;
+    public void setVx(double vx) {
+        this.velX = vx;
+    }
+
+    public void setVy(double vy) {
+        this.velY = vy;
     }
 
     public double getMass() {
@@ -79,20 +83,20 @@ public class Particle {
         this.collisionCount = collisionCount;
     }
 
-
-    public void impactXWallSign() {
+//Se muestran las funciones si la particula choca con una pared, tanto para el tiempo de choque como para velocidades.
+    public void impactXWall() {
         this.velX = -velX;
         this.collisionCount++;
 
     }
 
-    public void impactYWallSign() {
+    public void impactYWall() {
         this.velY = -velY;
         this.collisionCount++;
 
     }
 
-    public double impactXWall() {
+    public double impactXWallTime() {
         tc = Double.MAX_VALUE; //porque sino vale infinito
 
         //va a chocar con la pared derecha
@@ -108,7 +112,7 @@ public class Particle {
         return tc;
     }
 
-    public double impactYWall() {
+    public double impactYWallTime() {
         tc = Double.MAX_VALUE; //porque sino vale infinito
 
         //va a chocar con la pared derecha
@@ -124,7 +128,9 @@ public class Particle {
         return tc;
     }
 
-    public double collideWithParticle(Particle p2) {
+    //se muestran las funciones por si la particula choca con otra particula, tanto su tiempo de choque como velocidades.
+
+    public double collideWithParticleTime(Particle p2) {
 
         double[] dv = {p2.getVx() - this.velX, p2.getVy() - this.velY};
         double[] dr = {p2.getX() - this.getX(), p2.getY() - this.getY()};
@@ -152,6 +158,36 @@ public class Particle {
         }
 
         return  tc = -((dvdr + Math.sqrt(d))/dv2);
+
+    }
+
+    public void collideWithParticle(Particle p2) {
+
+        double[] dv = {p2.getVx() - this.velX, p2.getVy() - this.velY};
+        double[] dr = {p2.getX() - this.getX(), p2.getY() - this.getY()};
+        double sigma = this.radius + p2.radius;
+
+        double dvelX = p2.getVx() - this.velX;
+        double dvelY = p2.getVy() - this.velY;
+
+        double dx = p2.getX() - this.getX();
+        double dy = p2.getY() - this.getY();
+
+        double dvdr = (dvelX * dx) + (dvelY * dy);
+
+        double j = ((2*this.mass*p2.getMass())*(dvdr)/(sigma*this.mass*p2.getMass()));
+
+        double jx = (j * dr[0]) / sigma;
+        double jy = (j * dr[1]) / sigma;
+
+        this.velX = velX + jx / this.mass;
+        this.velY = velY + jy / this.mass;
+
+        p2.setVx(p2.getVx() - jx / p2.getMass());
+        p2.setVy(p2.getVy() - jy / p2.getMass());
+
+        this.collisionCount++;
+        p2.collisionCount++;
 
     }
 
