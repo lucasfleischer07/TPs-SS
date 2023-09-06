@@ -11,7 +11,7 @@ public class Particle {
 
     private final double TABLEWIDTH = 0.009;
 
-    public Particle(int id, double x, double y, double mass, double v, double radius, double velX, double velY) {
+    public Particle(int id, double x, double y, double mass, double velX, double velY, double radius) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -262,7 +262,7 @@ public class Particle {
 
     @Override
     public String toString() {
-        return "Particle " + id + " = {" + "x = " + x + ", y = " + y + ", radius = " + radius + ", mass = " + mass + ", velocity = " + v + '}';
+        return "Particle " + id + " = {" + "x = " + x + ", y = " + y + ", radius = " + radius + ", mass = " + mass + ", velocityX = " + velX + ", velocityY = " + velY + '}';
     }
 
     @Override

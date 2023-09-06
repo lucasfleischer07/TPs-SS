@@ -19,10 +19,11 @@ public class WriteFiles {
             file.createNewFile();
         }
         PrintWriter staticWriter = new PrintWriter(new FileWriter(file));
+        staticWriter.printf("0.0\n");
 
         Random random = new Random();
         for(int j = 0; j < n; j++) {
-            staticWriter.printf("%f\t%f\t%f\t%d\t%f\n", particleRadius, random.nextDouble() * enclosure1X, random.nextDouble() * enclosure1Y, mass, velocity);
+            staticWriter.printf("%f\t%f\t%f\t%d\t%f\t%f\n", particleRadius, random.nextDouble() * enclosure1X, random.nextDouble() * enclosure1Y, mass, velocity*Math.cos(random.nextDouble()), velocity*Math.sin(random.nextDouble()));
         }
 
         staticWriter.close();
@@ -38,7 +39,7 @@ public class WriteFiles {
         stringBuilder.append(time).append("\n");
 
         for(Particle particle : particles) {
-            stringBuilder.append(String.format(Locale.US ,"%d\t%f\t%f\t%f\n",
+            stringBuilder.append(String.format(Locale.US ,"%d\t%f\t%f\t%f\t%f\n",
                     particle.getId(),
                     particle.getX(),
                     particle.getY(),
