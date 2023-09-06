@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ParticleGeneration {
     private static Parameters parameters;
-    public static Parameters generateParticles(String staticFileName) {
+    public static Parameters generateParticles(String staticFileName, double enclosure1X, double enclosure2Y) {
         parameters = new Parameters();
         parameters.setParticles(new ArrayList<Particle>());
 
@@ -30,7 +30,7 @@ public class ParticleGeneration {
                 for (int i = 0; i < values.length; i++) {
                     valuesInDoubles[i] = Double.parseDouble(values[i]);
                 }
-                parameters.addParticle(new Particle(particleId.getAndAdd(1), valuesInDoubles[1], valuesInDoubles[2], valuesInDoubles[3], valuesInDoubles[4], valuesInDoubles[5], valuesInDoubles[0]));
+                parameters.addParticle(new Particle(particleId.getAndAdd(1), valuesInDoubles[1], valuesInDoubles[2], valuesInDoubles[3], valuesInDoubles[4], valuesInDoubles[5], valuesInDoubles[0], enclosure1X, enclosure2Y));
             }
 
         } catch (IOException e) {

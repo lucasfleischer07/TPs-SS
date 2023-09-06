@@ -6,21 +6,24 @@ import java.util.Objects;
 
 public class Particle {
     private final int id;
-    private double v, mass, radius, x, y, tc, velX, velY;
+    private double mass, radius, x, y, tc, velX, velY, inferiorY, superiorY;
     private int collisionCount;
+    private final double tableWidth;
+    private final double l;
 
-    private final double TABLEWIDTH = 0.009;
-
-    public Particle(int id, double x, double y, double mass, double velX, double velY, double radius) {
+    public Particle(int id, double x, double y, double mass, double velX, double velY, double radius, double tableWidth, double l) {
         this.id = id;
         this.x = x;
         this.y = y;
-        this.v = v;
         this.velX = velX;
         this.velY = velY;
         this.mass = mass;
         this.radius = radius;
         this.collisionCount = 0;
+        this.tableWidth = tableWidth;
+        this.l = l;
+        this.inferiorY = tableWidth - l/2;
+        this.superiorY = tableWidth - l/2;
     }
 
     public int getId() {
@@ -83,7 +86,7 @@ public class Particle {
         this.collisionCount = collisionCount;
     }
 
-//Se muestran las funciones si la particula choca con una pared, tanto para el tiempo de choque como para velocidades.
+    // Se muestran las funciones si la particula choca con una pared, tanto para el tiempo de choque como para velocidades.
     public void impactXWall() {
         this.velX = -velX;
         this.collisionCount++;
@@ -97,11 +100,15 @@ public class Particle {
     }
 
     public double impactXWallTime() {
-        tc = Double.MAX_VALUE; //porque sino vale infinito
+        tc = Double.MAX_VALUE; // porque sino vale infinito
 
-        //va a chocar con la pared derecha
+        // Va a chocar con la pared derecha
+        if(velX > 0 && (inferiorY < y && superiorY > y) && (x >= tableWidth)) {
+            tc = ((2*tableWidth) - radius - x) / velX;
+        }
+
         if(velX > 0) {
-            tc = (TABLEWIDTH - radius - x) / velX;
+            tc = (tableWidth - radius - x) / velX;
         }
 
         //va a chocar con la pared izquierda
@@ -116,11 +123,19 @@ public class Particle {
         tc = Double.MAX_VALUE; //porque sino vale infinito
 
         //va a chocar con la pared derecha
+        if(velY > 0 && (x >= tableWidth)) {
+            tc = ((superiorY+l) - radius - y) / velY;
+        }
+
         if(velY > 0) {
-            tc = (TABLEWIDTH - radius - y) / velY;
+            tc = (tableWidth - radius - y) / velY;
         }
 
         //va a chocar con la pared izquierda
+        if(velY < 0 && (x >= tableWidth)) {
+            tc = (superiorY + radius - y) / velY;
+        }
+
         if(velY < 0) {
             tc = (0 + radius - y) / velY;
         }
@@ -128,8 +143,7 @@ public class Particle {
         return tc;
     }
 
-    //se muestran las funciones por si la particula choca con otra particula, tanto su tiempo de choque como velocidades.
-
+    // Se muestran las funciones por si la particula choca con otra particula, tanto su tiempo de choque como velocidades.
     public double collideWithParticleTime(Particle p2) {
 
         double[] dv = {p2.getVx() - this.velX, p2.getVy() - this.velY};
@@ -175,7 +189,7 @@ public class Particle {
 
         double dvdr = (dvelX * dx) + (dvelY * dy);
 
-        double j = ((2*this.mass*p2.getMass())*(dvdr)/(sigma*this.mass*p2.getMass()));
+        double j = (((2*this.mass*p2.getMass())*(dvdr))/(sigma*(this.mass+p2.getMass())));
 
         double jx = (j * dr[0]) / sigma;
         double jy = (j * dr[1]) / sigma;
@@ -191,7 +205,7 @@ public class Particle {
 
     }
 
-    //no lo uso aun
+    // No lo uso nunca. ver si es mas rapido que hacer las cuentas a mano como hice
     public static double dotProduct(double[] vector1, double[] vector2) {
         if (vector1.length != vector2.length) {
             throw new IllegalArgumentException("Los vectores deben tener la misma longitud.");
