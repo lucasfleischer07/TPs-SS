@@ -1,8 +1,8 @@
 {
-  "enclosure1X": 0.9,
-  "enclosure1Y": 0.9,
-  "enclosure2X": 0.9,
-  "enclosure2Y": 0.9,
+  "enclosure1X": 0.09,
+  "enclosure1Y": 0.09,
+  "enclosure2X": 0.09,
+  "enclosure2Y": 0.03,
   "N": 300,
   "particleRadius": 0.0015,
   "velocity": 0.01,
