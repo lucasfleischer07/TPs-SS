@@ -24,8 +24,8 @@ def parse_output_file(file_path):
     time = None
 
     for line in lines:
-        # data = line.split("\t")
-        data = line.split()
+        data = line.split("\t")
+        # data = line.split()
 
         if len(data) == 1:
             time = float(data[0])
@@ -36,7 +36,7 @@ def parse_output_file(file_path):
                 'y': float(data[1]),
                 'vx': float(data[2]),
                 'vy': float(data[3]),
-                # 'radius': float(data[4]),
+                'radius': float(data[4]),
                 # 'color': str(data[5])
             }
 

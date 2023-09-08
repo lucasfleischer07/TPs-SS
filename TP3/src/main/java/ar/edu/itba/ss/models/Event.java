@@ -1,5 +1,7 @@
 package ar.edu.itba.ss.models;
 
+import java.util.Objects;
+
 public class Event implements Comparable<Event> {
     private Particle p1, p2;
     private double time;
@@ -62,4 +64,16 @@ public class Event implements Comparable<Event> {
         return c;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Double.compare(time, event.time) == 0 && wallToCollides == event.wallToCollides && Objects.equals(p2, event.p1) && Objects.equals(p1, event.p2);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(p1, p2, time, wallToCollides);
+    }
 }

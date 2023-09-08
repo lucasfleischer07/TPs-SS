@@ -23,7 +23,7 @@ public class Collisions {
         this.totalTime = 0;
     }
 
-    public void nextEvent() {
+    public double nextEvent() {
 
         for (Particle particle: particles) {
             priorityQueue.add(particleEvent(particle));
@@ -54,6 +54,7 @@ public class Collisions {
             System.out.println("Choque contra particula");
         }
 
+        return event.getTime();
 
     }
 
@@ -66,14 +67,14 @@ public class Collisions {
         for(Particle p1: particles) {
             if(p2.equals(p1)) continue;
 
-            boolean collisionAlreadyOccurred = checkCollisionAlreadyOccurred(p1, p2);
+//            boolean collisionAlreadyOccurred = checkCollisionAlreadyOccurred(p1, p2);
 
-            if(!collisionAlreadyOccurred){
+//            if(!collisionAlreadyOccurred){
                 tc = p2.collideWithParticleTime(p1);
                 if(nextMinimalEvent == null|| tc < nextMinimalEvent.getTime()) {
                     nextMinimalEvent = new Event(p2, p1, tc);
                 }
-            }
+//            }
         }
 
         // Calculo de tc para choque con paredes

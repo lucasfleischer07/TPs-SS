@@ -44,9 +44,11 @@ public class App {
 
         Collisions collisions = new Collisions(parameters.getParticles());
 
+        double totalTime = 0;
         for(int i = 0; i <= 10; i++) {
-            collisions.nextEvent();
-            writeFiles.generateOutputFile(outputFileName, parameters.getParticles(), collisions.getTotalTime());
+            double time = collisions.nextEvent();
+            totalTime += time;
+            writeFiles.generateOutputFile(outputFileName, parameters.getParticles(), totalTime);
         }
 
     }

@@ -147,7 +147,7 @@ public class Particle {
                     auxTime = (0 + radius <= futureY && futureY <= inferiorY - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;;
                 }
                 tcMap.get(this).put(i, auxTime);
-                if(auxTime < minorTime) {
+                if(auxTime < minorTime && auxTime > 0) {
                     minorTime = auxTime;
                     collidesWall = i;
                 }
