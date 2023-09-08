@@ -92,12 +92,12 @@ public class Particle {
     // Se muestran las funciones si la particula choca con una pared, tanto para el tiempo de choque como para velocidades.
     public void impactXWall() {
         this.velX = -velX;
-        this.collisionCount++;
+//        this.collisionCount++;
     }
 
     public void impactYWall() {
         this.velY = -velY;
-        this.collisionCount++;
+//        this.collisionCount++;
     }
 
 
@@ -294,9 +294,12 @@ public class Particle {
 
         p2.setVx(p2.getVx() - jx / p2.getMass());
         p2.setVy(p2.getVy() - jy / p2.getMass());
+        this.setVx(this.getVx() + jx / this.getMass());
+        this.setVy(this.getVy() + jy / this.getMass());
 
-        this.collisionCount++;
-        p2.collisionCount++;
+
+//        this.collisionCount++;
+//        p2.collisionCount++;
 
     }
 
