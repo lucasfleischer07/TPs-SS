@@ -14,7 +14,6 @@ public class Collisions {
     private double totalTime;
     private final PriorityQueue<Event> priorityQueue;
     private final Set<ParticlePair> collidedPairs = new HashSet<>();
-    Event nextMinimalEvent = null;
     private final List<Particle> particles;
 
 
@@ -25,15 +24,14 @@ public class Collisions {
     }
 
     public void nextEvent() {
-        Event event = null;
 
         for (Particle particle: particles) {
             priorityQueue.add(particleEvent(particle));
         }
 
-        event = priorityQueue.poll();
+        Event event = priorityQueue.poll();
 
-        totalTime += event.getTime();
+        this.totalTime += event.getTime();
 
         for (Particle p : particles) {
             p.setX(p.getX() + p.getVx() * event.getTime());
@@ -62,6 +60,8 @@ public class Collisions {
 
     private Event particleEvent(Particle p2) {
         double tc;
+        Event nextMinimalEvent = null;
+
         // Calculo de tc para choque con otras particulas
         for(Particle p1: particles) {
             if(p2.equals(p1)) continue;
