@@ -140,7 +140,7 @@ public class Particle {
                 } else if(i == 2) {
                     auxTime = (superiorY + radius <= futureY && futureY <= 0.09 - radius) ?  tcMap.get(this).get(i) : Double.MAX_VALUE;
                 } else if(i == 3 || i == 5) {
-                    auxTime = (tableWidth - radius <= futureX && futureX <= 2*tableWidth  - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;
+                    auxTime = (tableWidth + radius <= futureX && futureX <= 2*tableWidth  - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;
                 } else if(i == 4) {
                     auxTime = (inferiorY + radius <= futureY && futureY <= superiorY- radius)  ? tcMap.get(this).get(i) : Double.MAX_VALUE;
                 } else if(i == 6) {

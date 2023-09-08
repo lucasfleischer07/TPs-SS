@@ -24,12 +24,15 @@ def update_particle_for_simulation(frame, particle_data, ax2d, main_height, main
     ax2d.set_xticks([0, main_width, main_width + minor_width])
     ax2d.set_yticks([0, (main_height - minor_height) / 2, (main_height - minor_height) / 2 + minor_height, main_height])
 
-    # x = [p['x'] for p in particles]  # Se crea una lista x que contiene las coordenadas x de todas las partículas en la lista particles.
-    # y = [p['y'] for p in particles]  # Same que x
-    # colors = [p['color'] for p in particles]
-    # diameters = [p['radius'] * 2 for p in particles]  # Se crea una lista diameters que contiene el diámetro (el doble del radio) de todas las partículas en la lista particles.
+    for p in particles:
+        cir = plt.Circle((p['x'], p['y']), p['radius'], color='r', fill=True)
+        ax2d.set_aspect('equal', adjustable='datalim')
+        ax2d.add_patch(cir)
 
-    ax2d.scatter(([p['x'] for p in particles]), ([p['y'] for p in particles]), s=200*0.03, c='b')
+    ax2d.set_xlabel('Position X')
+    ax2d.set_ylabel('Position Y')
+    ax2d.set_title(f'Time: ' + str(t))
+
 
 
 def main():
