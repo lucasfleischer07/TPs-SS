@@ -31,8 +31,6 @@ public class Collisions {
 
         Event event = priorityQueue.poll();
 
-        this.totalTime += event.getTime();
-
         for (Particle p : particles) {
             p.setX(p.getX() + p.getVx() * event.getTime());
             p.setY(p.getY() + p.getVy() * event.getTime());
