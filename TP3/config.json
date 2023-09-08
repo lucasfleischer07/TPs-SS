@@ -3,7 +3,7 @@
   "enclosure1Y": 0.09,
   "enclosure2X": 0.09,
   "enclosure2Y": 0.03,
-  "N": 300,
+  "N": 10,
   "particleRadius": 0.0015,
   "velocity": 0.01,
   "mass": 1,

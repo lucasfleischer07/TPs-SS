@@ -30,8 +30,7 @@ public class WriteFiles {
 
     }
 
-//    TODO: Falta adaptarlo todavia
-    public void generateOutputFile(String fileName, List<Particle> particles, int time) throws IOException {
+    public void generateOutputFile(String fileName, List<Particle> particles, double time) throws IOException {
         PrintWriter outputWriter = new PrintWriter(new FileWriter(fileName, true));
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -39,13 +38,13 @@ public class WriteFiles {
         stringBuilder.append(time).append("\n");
 
         for(Particle particle : particles) {
-            stringBuilder.append(String.format(Locale.US ,"%d\t%f\t%f\t%f\t%f\n",
-                    particle.getId(),
+            stringBuilder.append(String.format(Locale.US ,"%f\t%f\t%f\t%f\t%f\n",
+//                    particle.getId(),
                     particle.getX(),
                     particle.getY(),
                     particle.getVx(),
-                    particle.getVy()));
-
+                    particle.getVy(),
+                    particle.getRadius()));
         }
 
         outputWriter.write(stringBuilder.toString());

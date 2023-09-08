@@ -1,6 +1,7 @@
 package ar.edu.itba.ss;
 
 import ar.edu.itba.ss.models.Parameters;
+import ar.edu.itba.ss.utils.Collisions;
 import ar.edu.itba.ss.utils.ParticleGeneration;
 import ar.edu.itba.ss.utils.WriteFiles;
 import com.google.gson.JsonObject;
@@ -40,6 +41,13 @@ public class App {
 
         // En base a la info del archivo static.txt genero las particulas
         Parameters parameters = ParticleGeneration.generateParticles(staticFileName, enclosure1X, enclosure2Y);
-        System.out.println(parameters.getParticles());
+
+        Collisions collisions = new Collisions(parameters.getParticles());
+
+        for(int i = 0; i <= 10; i++) {
+            collisions.nextEvent();
+            writeFiles.generateOutputFile(outputFileName, parameters.getParticles(), collisions.getTotalTime());
+        }
+
     }
 }

@@ -1,15 +1,16 @@
 package ar.edu.itba.ss.models;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Particle {
     private final int id;
-    private double mass, radius, x, y, tc, velX, velY, inferiorY, superiorY;
+    private double mass, radius, x, y, velX, velY, inferiorY, superiorY;
     private int collisionCount;
     private final double tableWidth;
     private final double l;
+    private Map<Particle, Map<Integer, Double>> tcMap;
+    private final int WALLS_AMOUNT = 7;
+
 
     public Particle(int id, double x, double y, double mass, double velX, double velY, double radius, double tableWidth, double l) {
         this.id = id;
@@ -24,6 +25,8 @@ public class Particle {
         this.l = l;
         this.inferiorY = tableWidth/2 - l/2;
         this.superiorY = tableWidth/2 + l/2;
+        // TODO: Sacar los numeros estos hardcodeados y poner las variables bien
+        this.tcMap = new HashMap<>();
     }
 
     public int getId() {
@@ -90,93 +93,185 @@ public class Particle {
     public void impactXWall() {
         this.velX = -velX;
         this.collisionCount++;
-
     }
 
     public void impactYWall() {
         this.velY = -velY;
         this.collisionCount++;
-
     }
 
-    public double impactXWallTime() {
-        tc = Double.MAX_VALUE;
 
-        // Va a chocar con la pared derecha
-        if(velX > 0 && (inferiorY < y && superiorY > y) && (x >= tableWidth)) {
-            tc = ((2*tableWidth) - radius - x) / velX;
+/*       1
+*    ______________
+*   |              |2
+*   |              |__________
+* 0 |                   3     | 4
+*   |               __________|
+*   |            6 |       5
+*   |______________|
+*          7
+* */
+
+    public Object[] impactToWallTime() {
+        tcMap.putIfAbsent(this, new HashMap<>());
+        tcMap.get(this).put(0, (0 + radius - x) / velX);
+        tcMap.get(this).put(1, (tableWidth - radius - y) / velY);
+        tcMap.get(this).put(2, (tableWidth - radius - x) / velX);
+        tcMap.get(this).put(3, ((superiorY) - radius - y) / velY);
+        tcMap.get(this).put(4, ((2*tableWidth) - radius - x) / velX);
+        tcMap.get(this).put(5, (inferiorY + radius - y) / velY);
+        tcMap.get(this).put(6, (tableWidth - radius - x) / velX);
+        tcMap.get(this).put(7, (0 + radius - y) / velY);
+
+        double minorTime = Double.MAX_VALUE;;
+        int collidesWall = -1;
+
+        for(int i = 0; i <= WALLS_AMOUNT; i++) {
+            if(tcMap.get(this).get(i) < 0) {
+                tcMap.get(this).put(i, Double.MAX_VALUE);
+            } else {
+                double futureX = this.getX() + this.getVx() * tcMap.get(this).get(i);
+                double futureY = this.getY() + this.getVy() * tcMap.get(this).get(i);
+                double auxTime = -1;
+                if(i == 0) {
+                    auxTime = (0 + radius <= futureY && futureY <= (tableWidth - radius)) ? tcMap.get(this).get(i) : Double.MAX_VALUE;
+                } else if(i == 1 || i == 7) {
+                    auxTime = (0 + radius <= futureX && futureX <= tableWidth - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;;
+                } else if(i == 2) {
+                    auxTime = (superiorY + radius <= futureY && futureY <= 0.09 - radius) ?  tcMap.get(this).get(i) : Double.MAX_VALUE;
+                } else if(i == 3 || i == 5) {
+                    auxTime = (tableWidth - radius <= futureX && futureX <= 2*tableWidth  - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;
+                } else if(i == 4) {
+                    auxTime = (inferiorY + radius <= futureY && futureY <= superiorY- radius)  ? tcMap.get(this).get(i) : Double.MAX_VALUE;
+                } else if(i == 6) {
+                    auxTime = (0 + radius <= futureY && futureY <= inferiorY - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;;
+                }
+                tcMap.get(this).put(i, auxTime);
+                if(auxTime < minorTime) {
+                    minorTime = auxTime;
+                    collidesWall = i;
+                }
+            }
         }
 
-        if(velX > 0) {
-            tc = (tableWidth - radius - x) / velX;
-        }
-
-        //va a chocar con la pared izquierda
-        if(velX < 0) {
-            tc = (0 + radius - x) / velX;
-        }
-
-        return tc;
+        return new Object[] {minorTime, collidesWall};
     }
 
-    public double impactYWallTime() {
-        tc = Double.MAX_VALUE;
 
-        //va a chocar con la pared derecha
-        if(velY > 0 && (x >= tableWidth)) {
-            tc = ((superiorY) - radius - y) / velY;
-        }
 
-        if(velY > 0) {
-            tc = (tableWidth - radius - y) / velY;
-        }
 
-        //va a chocar con la pared izquierda
-        if(velY < 0 && (x >= tableWidth)) {
-            tc = (inferiorY + radius - y) / velY;
-        }
+//    public double impactXWallTime() {
+//        tc = Double.MAX_VALUE;
+//
+//        // Va a chocar con la pared derecha
+//        if(velX > 0 && (inferiorY < y && superiorY > y) && (x >= tableWidth)) {
+//            tc = ((2*tableWidth) - radius - x) / velX;
+//        }
+//
+//        if(velX > 0) {
+//            tc = (tableWidth - radius - x) / velX;
+//        }
+//
+//        //va a chocar con la pared izquierda
+//        if(velX < 0) {
+//            tc = (0 + radius - x) / velX;
+//        }
+//
+//        return tc;
+//    }
+//
+//
+//    public double impactYWallTime() {
+//        tc = Double.MAX_VALUE;
+//
+//        //va a chocar con la pared derecha
+//        if(velY > 0 && (x >= tableWidth)) {
+//            tc = ((superiorY) - radius - y) / velY;
+//        }
+//
+//        if(velY > 0) {
+//            tc = (tableWidth - radius - y) / velY;
+//        }
+//
+//        //va a chocar con la pared izquierda
+//        if(velY < 0 && (x >= tableWidth)) {
+//            tc = (inferiorY + radius - y) / velY;
+//        }
+//
+//        if(velY < 0) {
+//            tc = (0 + radius - y) / velY;
+//        }
+//
+//        return tc;
+//    }
 
-        if(velY < 0) {
-            tc = (0 + radius - y) / velY;
-        }
-
-        return tc;
-    }
 
     // Se muestran las funciones por si la particula choca con otra particula, tanto su tiempo de choque como velocidades.
-    public double collideWithParticleTime(Particle p2) {
+//    public double collideWithParticleTime(Particle p2) {
+//        double[] dv = {p2.getVx() - this.velX, p2.getVy() - this.velY};
+//        double[] dr = {p2.getX() - this.getX(), p2.getY() - this.getY()};
+//
+//        if(dotProduct(dv, dr) >= 0) {
+//            return Double.MAX_VALUE;
+//        }
+//
+//        double sigma = this.radius + p2.radius;
+//
+//        double dx = p2.getX() - this.getX();
+//        double dy = p2.getY() - this.getY();
+//        double dr2 = Math.pow((dx), 2) + Math.pow((dy), 2);
+//
+//        double dvelX = p2.getVx() - this.velX;
+//        double dvelY = p2.getVy() - this.velY;
+//        double dv2 = Math.pow((dvelX), 2) + Math.pow((dvelY), 2);
+//
+//        double dvdr = (dvelX * dx) + (dvelY * dy);
+//
+//        double d = Math.pow(dvdr, 2) - (dv2 * (dr2 - Math.pow(sigma, 2)));
+//
+//        if(d < 0) {
+//            return Double.MAX_VALUE;
+//        }
+//
+//        return -((dvdr + Math.sqrt(d))/dv2);
+//
+//    }
 
-        double[] dv = {p2.getVx() - this.velX, p2.getVy() - this.velY};
-        double[] dr = {p2.getX() - this.getX(), p2.getY() - this.getY()};
 
-        if(dotProduct(dv, dr) >= 0) {
-            return tc = Double.MAX_VALUE;
-        }
+    public double collideWithParticleTime(Particle b) {
+        double tc = Double.MAX_VALUE;
 
-        double sigma = this.radius + p2.radius;
+        double[] dr = {b.getX() - this.x, b.getY() - this.y};           // Vector de posicion relativa
+        double[] dv = {b.getVx() - this.velX, b.getVy() - this.velY};   // vector de velocidad relativa
 
-        double dx = p2.getX() - this.getX();
-        double dy = p2.getY() - this.getY();
-        double dr2 = Math.pow((dx), 2) + Math.pow((dy), 2);
+        double dv_dr = dotProduct(dv, dr);  // Se calcula el producto punto entre los vectores dv y dr y se almacena en la variable dv_dr.
+        // Esto se utiliza para determinar si las partículas se están alejando o acercando.
 
-        double dvelX = p2.getVx() - this.velX;
-        double dvelY = p2.getVy() - this.velY;
-        double dv2 = Math.pow((dvelX), 2) + Math.pow((dvelY), 2);
+        // Si dv_dr es mayor o igual a cero, significa que las partículas se están alejando o moviendo en la misma dirección,
+        // por lo que no habrá colisión en el futuro cercano, y se devuelve el valor. Entonces retorno infinito
+        if (dv_dr >= 0)
+            return tc;
 
-        double dvdr = (dvelX * dx) + (dvelY * dy);
+        double dv_dv = dotProduct(dv, dv);
+        double sigma = this.radius + b.getRadius();     // representa la suma de los radios de las dos partículas.
 
-        double d = Math.pow(dvdr, 2) - (dv2 * (dr2 - Math.pow(sigma, 2)));
+        // Se calcula la discriminante d de una ecuación cuadrática que se utiliza para determinar si hay una colisión
+        double d = Math.pow(dv_dr, 2) - dv_dv*(dotProduct(dr, dr) - Math.pow(sigma, 2));
 
-        if(d < 0) {
-            return tc = Double.MAX_VALUE;
-        }
+        // Si d es negativo, significa que las partículas no se cruzarán, y se devuelve el valor inicial de tc
+        if (d < 0)
+            return tc;
 
-        return  tc = -((dvdr + Math.sqrt(d))/dv2);
+        // Representa el tiempo en el futuro en el que las partículas colisionarán.
+        tc = -(dv_dr + Math.sqrt(d)) / dv_dv;
 
+        return tc;
     }
 
-    public void collideWithParticle(Particle p2) {
 
+
+
+    public void collideWithParticle(Particle p2) {
         double[] dv = {p2.getVx() - this.velX, p2.getVy() - this.velY};
         double[] dr = {p2.getX() - this.getX(), p2.getY() - this.getY()};
         double sigma = this.radius + p2.radius;
