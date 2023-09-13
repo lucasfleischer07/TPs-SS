@@ -22,12 +22,22 @@ public class WriteFiles {
         staticWriter.printf("0.0\n");
 
         Random random = new Random();
-        for(int j = 0; j < n; j++) {
-            staticWriter.printf("%f\t%f\t%f\t%d\t%f\t%f\n", particleRadius, random.nextDouble() * enclosure1X, random.nextDouble() * enclosure1Y, mass, velocity*Math.cos(random.nextDouble()), velocity*Math.sin(random.nextDouble()));
+        for (int j = 0; j < n; j++) {
+            double x, y;
+
+            // Genera coordenadas (x, y) aleatorias dentro del área definida por enclosure1X y enclosure1Y (teniendo en cuenta el radio)
+            x = particleRadius + random.nextDouble() * (enclosure1X - 2 * particleRadius);
+            y = particleRadius + random.nextDouble() * (enclosure1Y - 2 * particleRadius);
+
+            // Genera velocidades aleatorias en todas las direcciones
+            double angle = random.nextDouble() * 2 * Math.PI;
+            double velocityX = velocity * Math.cos(angle);
+            double velocityY = velocity * Math.sin(angle);
+
+            staticWriter.printf("%f\t%f\t%f\t%d\t%f\t%f\n", particleRadius, x, y, mass, velocityX, velocityY);
         }
 
         staticWriter.close();
-
     }
 
     public void generateOutputFile(String fileName, List<Particle> particles, double time) throws IOException {
