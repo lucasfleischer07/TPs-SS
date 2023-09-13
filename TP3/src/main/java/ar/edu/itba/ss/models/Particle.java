@@ -2,7 +2,7 @@ package ar.edu.itba.ss.models;
 
 import java.util.*;
 
-public class Particle {
+public class Particle implements Comparable<Particle>{
     private final int id;
     private double mass, radius, x, y, velX, velY, inferiorY, superiorY;
     private int collisionCount;
@@ -92,12 +92,12 @@ public class Particle {
     // Se muestran las funciones si la particula choca con una pared, tanto para el tiempo de choque como para velocidades.
     public void impactXWall() {
         this.velX = -velX;
-//        this.collisionCount++;
+        this.collisionCount++;
     }
 
     public void impactYWall() {
         this.velY = -velY;
-//        this.collisionCount++;
+        this.collisionCount++;
     }
 
 
@@ -138,7 +138,7 @@ public class Particle {
                 } else if(i == 1 || i == 7) {
                     auxTime = (0 + radius <= futureX && futureX <= tableWidth - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;;
                 } else if(i == 2) {
-                    auxTime = (superiorY + radius <= futureY && futureY <= 0.09 - radius) ?  tcMap.get(this).get(i) : Double.MAX_VALUE;
+                    auxTime = (superiorY + radius <= futureY && futureY <= tableWidth - radius) ?  tcMap.get(this).get(i) : Double.MAX_VALUE;
                 } else if(i == 3 || i == 5) {
                     auxTime = (tableWidth + radius <= futureX && futureX <= 2*tableWidth  - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;
                 } else if(i == 4) {
@@ -156,87 +156,6 @@ public class Particle {
 
         return new Object[] {minorTime, collidesWall};
     }
-
-
-
-
-//    public double impactXWallTime() {
-//        tc = Double.MAX_VALUE;
-//
-//        // Va a chocar con la pared derecha
-//        if(velX > 0 && (inferiorY < y && superiorY > y) && (x >= tableWidth)) {
-//            tc = ((2*tableWidth) - radius - x) / velX;
-//        }
-//
-//        if(velX > 0) {
-//            tc = (tableWidth - radius - x) / velX;
-//        }
-//
-//        //va a chocar con la pared izquierda
-//        if(velX < 0) {
-//            tc = (0 + radius - x) / velX;
-//        }
-//
-//        return tc;
-//    }
-//
-//
-//    public double impactYWallTime() {
-//        tc = Double.MAX_VALUE;
-//
-//        //va a chocar con la pared derecha
-//        if(velY > 0 && (x >= tableWidth)) {
-//            tc = ((superiorY) - radius - y) / velY;
-//        }
-//
-//        if(velY > 0) {
-//            tc = (tableWidth - radius - y) / velY;
-//        }
-//
-//        //va a chocar con la pared izquierda
-//        if(velY < 0 && (x >= tableWidth)) {
-//            tc = (inferiorY + radius - y) / velY;
-//        }
-//
-//        if(velY < 0) {
-//            tc = (0 + radius - y) / velY;
-//        }
-//
-//        return tc;
-//    }
-
-
-    // Se muestran las funciones por si la particula choca con otra particula, tanto su tiempo de choque como velocidades.
-//    public double collideWithParticleTime(Particle p2) {
-//        double[] dv = {p2.getVx() - this.velX, p2.getVy() - this.velY};
-//        double[] dr = {p2.getX() - this.getX(), p2.getY() - this.getY()};
-//
-//        if(dotProduct(dv, dr) >= 0) {
-//            return Double.MAX_VALUE;
-//        }
-//
-//        double sigma = this.radius + p2.radius;
-//
-//        double dx = p2.getX() - this.getX();
-//        double dy = p2.getY() - this.getY();
-//        double dr2 = Math.pow((dx), 2) + Math.pow((dy), 2);
-//
-//        double dvelX = p2.getVx() - this.velX;
-//        double dvelY = p2.getVy() - this.velY;
-//        double dv2 = Math.pow((dvelX), 2) + Math.pow((dvelY), 2);
-//
-//        double dvdr = (dvelX * dx) + (dvelY * dy);
-//
-//        double d = Math.pow(dvdr, 2) - (dv2 * (dr2 - Math.pow(sigma, 2)));
-//
-//        if(d < 0) {
-//            return Double.MAX_VALUE;
-//        }
-//
-//        return -((dvdr + Math.sqrt(d))/dv2);
-//
-//    }
-
 
     public double collideWithParticleTime(Particle b) {
         double tc = Double.MAX_VALUE;
@@ -269,8 +188,6 @@ public class Particle {
     }
 
 
-
-
     public void collideWithParticle(Particle p2) {
         double[] dv = {p2.getVx() - this.velX, p2.getVy() - this.velY};
         double[] dr = {p2.getX() - this.getX(), p2.getY() - this.getY()};
@@ -297,9 +214,8 @@ public class Particle {
         this.setVx(this.getVx() + jx / this.getMass());
         this.setVy(this.getVy() + jy / this.getMass());
 
-
-//        this.collisionCount++;
-//        p2.collisionCount++;
+        this.collisionCount++;
+        p2.collisionCount++;
 
     }
 
@@ -323,6 +239,7 @@ public class Particle {
         return "Particle " + id + " = {" + "x = " + x + ", y = " + y + ", radius = " + radius + ", mass = " + mass + ", velocityX = " + velX + ", velocityY = " + velY + '}';
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -334,5 +251,14 @@ public class Particle {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public int compareTo(Particle otherParticle) {
+        int xComparison = Double.compare(this.x, otherParticle.x);
+        if (xComparison != 0) {
+            return xComparison;
+        }
+        return Double.compare(this.y, otherParticle.y);
     }
 }

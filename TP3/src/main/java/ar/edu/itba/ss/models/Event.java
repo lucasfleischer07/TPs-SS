@@ -6,11 +6,16 @@ public class Event implements Comparable<Event> {
     private Particle p1, p2;
     private double time;
     private int wallToCollides;
+    private int p1CollisionCount = 0, p2CollisionCount = 0;
 
     public Event(Particle p1, Particle p2, double time) {
         this.p1 = p1;
         this.p2 = p2;
         this.time = time;
+        if (p1 != null)
+            this.p1CollisionCount = p1.getCollisionCount();
+        if (p2 != null)
+            this.p2CollisionCount = p2.getCollisionCount();
     }
 
     public Event(Particle p1, Particle p2, double time, int wallToCollides) {
@@ -18,6 +23,10 @@ public class Event implements Comparable<Event> {
         this.p2 = p2;
         this.time = time;
         this.wallToCollides = wallToCollides;
+        if (p1 != null)
+            this.p1CollisionCount = p1.getCollisionCount();
+        if (p2 != null)
+            this.p2CollisionCount = p2.getCollisionCount();
     }
 
     public Particle getP1() {
@@ -64,16 +73,20 @@ public class Event implements Comparable<Event> {
         return c;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return Double.compare(time, event.time) == 0 && wallToCollides == event.wallToCollides && Objects.equals(p2, event.p1) && Objects.equals(p1, event.p2);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Event event = (Event) o;
+//        return Double.compare(time, event.time) == 0 && wallToCollides == event.wallToCollides && Objects.equals(p2, event.p1) && Objects.equals(p1, event.p2) && Objects.equals(p1, event.p1) && Objects.equals(p2, event.p2);
+//    }
 
     @Override
     public int hashCode() {
         return Objects.hash(p1, p2, time, wallToCollides);
+    }
+
+    public boolean wasSuperveningEvent() {
+        return (p1 != null && p1CollisionCount != p1.getCollisionCount()) || (p2 != null && p2CollisionCount != p2.getCollisionCount());
     }
 }

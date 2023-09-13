@@ -12,7 +12,7 @@ import java.util.Set;
 public class Collisions {
 
     private double totalTime;
-    private final PriorityQueue<Event> priorityQueue;
+    private PriorityQueue<Event> priorityQueue;
     private final Set<ParticlePair> collidedPairs = new HashSet<>();
     private final List<Particle> particles;
 
@@ -24,12 +24,16 @@ public class Collisions {
     }
 
     public double nextEvent() {
+//        this.priorityQueue = new PriorityQueue<>();
 
         for (Particle particle: particles) {
             priorityQueue.add(particleEvent(particle));
         }
 
         Event event = priorityQueue.poll();
+
+        while (event.wasSuperveningEvent())
+            event = priorityQueue.poll();
 
         for (Particle p : particles) {
             p.setX(p.getX() + p.getVx() * event.getTime());
@@ -86,22 +90,24 @@ public class Collisions {
         return nextMinimalEvent;
     }
 
-    private boolean checkCollisionAlreadyOccurred(Particle p1, Particle p2) {
-        // Crea un objeto ParticlePair para representar la pareja de partículas p1 y p2
-        ParticlePair pair = new ParticlePair(p1, p2);
 
-        // Verifica si la pareja de partículas ya está en el conjunto de colisiones previas
-        return collidedPairs.contains(pair);
-    }
+//    private boolean checkCollisionAlreadyOccurred(Particle p1, Particle p2) {
+//        // Crea un objeto ParticlePair para representar la pareja de partículas p1 y p2
+//        ParticlePair pair = new ParticlePair(p1, p2);
+//
+//        // Verifica si la pareja de partículas ya está en el conjunto de colisiones previas
+//        return collidedPairs.contains(pair);
+//    }
+//
+//    // Método para registrar una colisión entre dos partículas
+//    private void registerCollision(Particle p1, Particle p2) {
+//        // Crea un objeto ParticlePair para representar la pareja de partículas p1 y p2
+//        ParticlePair pair = new ParticlePair(p1, p2);
+//
+//        // Agrega la pareja al conjunto de colisiones previas
+//        collidedPairs.add(pair);
+//    }
 
-    // Método para registrar una colisión entre dos partículas
-    private void registerCollision(Particle p1, Particle p2) {
-        // Crea un objeto ParticlePair para representar la pareja de partículas p1 y p2
-        ParticlePair pair = new ParticlePair(p1, p2);
-
-        // Agrega la pareja al conjunto de colisiones previas
-        collidedPairs.add(pair);
-    }
 
     public void setTotalTime(double totalTime) {
         this.totalTime = totalTime;
