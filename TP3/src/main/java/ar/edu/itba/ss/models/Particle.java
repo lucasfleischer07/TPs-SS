@@ -214,8 +214,8 @@ public class Particle implements Comparable<Particle>{
         this.setVx(this.getVx() + jx / this.getMass());
         this.setVy(this.getVy() + jy / this.getMass());
 
-        this.collisionCount++;
-        p2.collisionCount++;
+//        this.collisionCount++;
+//        p2.collisionCount++;
 
     }
 
