@@ -86,7 +86,7 @@ public class Event implements Comparable<Event> {
         return Objects.hash(p1, p2, time, wallToCollides);
     }
 
-    public boolean wasSuperveningEvent() {
-        return (p1 != null && p1CollisionCount != p1.getCollisionCount()) || (p2 != null && p2CollisionCount != p2.getCollisionCount());
-    }
+//    public boolean wasSuperveningEvent() {
+//        return (p1 != null && p1CollisionCount != p1.getCollisionCount()) || (p2 != null && p2CollisionCount != p2.getCollisionCount());
+//    }
 }

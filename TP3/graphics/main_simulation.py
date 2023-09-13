@@ -29,6 +29,8 @@ def update_particle_for_simulation(frame, particle_data, ax2d, main_height, main
         ax2d.set_aspect('equal', adjustable='datalim')
         ax2d.add_patch(cir)
 
+    # ax2d.scatter(([p['x'] for p in particles]), ([p['y'] for p in particles]), s=75, c='b')
+
     ax2d.set_xlabel('Position X')
     ax2d.set_ylabel('Position Y')
     ax2d.set_title(f'Time: ' + str(t))

@@ -157,35 +157,66 @@ public class Particle implements Comparable<Particle>{
         return new Object[] {minorTime, collidesWall};
     }
 
-    public double collideWithParticleTime(Particle b) {
-        double tc = Double.MAX_VALUE;
 
-        double[] dr = {b.getX() - this.x, b.getY() - this.y};           // Vector de posicion relativa
-        double[] dv = {b.getVx() - this.velX, b.getVy() - this.velY};   // vector de velocidad relativa
+    public double collideWithParticleTime(Particle p2) {
+        double[] dv = {p2.getVx() - this.velX, p2.getVy() - this.velY};
+        double[] dr = {p2.getX() - this.getX(), p2.getY() - this.getY()};
 
-        double dv_dr = dotProduct(dv, dr);  // Se calcula el producto punto entre los vectores dv y dr y se almacena en la variable dv_dr.
-        // Esto se utiliza para determinar si las partículas se están alejando o acercando.
+        if(dotProduct(dv, dr) >= 0) {
+            return Double.MAX_VALUE;
+        }
 
-        // Si dv_dr es mayor o igual a cero, significa que las partículas se están alejando o moviendo en la misma dirección,
-        // por lo que no habrá colisión en el futuro cercano, y se devuelve el valor. Entonces retorno infinito
-        if (dv_dr >= 0)
-            return tc;
+        double sigma = this.radius + p2.radius;
 
-        double dv_dv = dotProduct(dv, dv);
-        double sigma = this.radius + b.getRadius();     // representa la suma de los radios de las dos partículas.
+        double dx = p2.getX() - this.getX();
+        double dy = p2.getY() - this.getY();
+        double dr2 = Math.pow((dx), 2) + Math.pow((dy), 2);
 
-        // Se calcula la discriminante d de una ecuación cuadrática que se utiliza para determinar si hay una colisión
-        double d = Math.pow(dv_dr, 2) - dv_dv*(dotProduct(dr, dr) - Math.pow(sigma, 2));
+        double dvelX = p2.getVx() - this.velX;
+        double dvelY = p2.getVy() - this.velY;
+        double dv2 = Math.pow((dvelX), 2) + Math.pow((dvelY), 2);
 
-        // Si d es negativo, significa que las partículas no se cruzarán, y se devuelve el valor inicial de tc
-        if (d < 0)
-            return tc;
+        double dvdr = (dvelX * dx) + (dvelY * dy);
 
-        // Representa el tiempo en el futuro en el que las partículas colisionarán.
-        tc = -(dv_dr + Math.sqrt(d)) / dv_dv;
+        double d = Math.pow(dvdr, 2) - (dv2 * (dr2 - Math.pow(sigma, 2)));
 
-        return tc;
+        if(d < 0) {
+            return Double.MAX_VALUE;
+        }
+
+        return -((dvdr + Math.sqrt(d))/dv2);
+
     }
+
+//    public double collideWithParticleTime(Particle b) {
+//        double tc = Double.MAX_VALUE;
+//
+//        double[] dr = {b.getX() - this.x, b.getY() - this.y};           // Vector de posicion relativa
+//        double[] dv = {b.getVx() - this.velX, b.getVy() - this.velY};   // vector de velocidad relativa
+//
+//        double dv_dr = dotProduct(dv, dr);  // Se calcula el producto punto entre los vectores dv y dr y se almacena en la variable dv_dr.
+//        // Esto se utiliza para determinar si las partículas se están alejando o acercando.
+//
+//        // Si dv_dr es mayor o igual a cero, significa que las partículas se están alejando o moviendo en la misma dirección,
+//        // por lo que no habrá colisión en el futuro cercano, y se devuelve el valor. Entonces retorno infinito
+//        if (dv_dr >= 0)
+//            return tc;
+//
+//        double dv_dv = dotProduct(dv, dv);
+//        double sigma = this.radius + b.getRadius();     // representa la suma de los radios de las dos partículas.
+//
+//        // Se calcula la discriminante d de una ecuación cuadrática que se utiliza para determinar si hay una colisión
+//        double d = Math.pow(dv_dr, 2) - dv_dv*(dotProduct(dr, dr) - Math.pow(sigma, 2));
+//
+//        // Si d es negativo, significa que las partículas no se cruzarán, y se devuelve el valor inicial de tc
+//        if (d < 0)
+//            return tc;
+//
+//        // Representa el tiempo en el futuro en el que las partículas colisionarán.
+//        tc = -((dv_dr + Math.sqrt(d)) / dv_dv);
+//
+//        return tc;
+//    }
 
 
     public void collideWithParticle(Particle p2) {
@@ -201,13 +232,13 @@ public class Particle implements Comparable<Particle>{
 
         double dvdr = (dvelX * dx) + (dvelY * dy);
 
-        double j = (((2*this.mass*p2.getMass())*(dvdr))/(sigma*(this.mass+p2.getMass())));
+        double j = (2 * this.mass * p2.getMass() * (dvdr)) / (sigma * (this.mass + p2.getMass()));
 
         double jx = (j * dr[0]) / sigma;
         double jy = (j * dr[1]) / sigma;
 
-        this.velX = velX + jx / this.mass;
-        this.velY = velY + jy / this.mass;
+//        this.velX = velX + jx / this.mass;
+//        this.velY = velY + jy / this.mass;
 
         p2.setVx(p2.getVx() - jx / p2.getMass());
         p2.setVy(p2.getVy() - jy / p2.getMass());
@@ -234,11 +265,11 @@ public class Particle implements Comparable<Particle>{
         return result;
     }
 
+
     @Override
     public String toString() {
         return "Particle " + id + " = {" + "x = " + x + ", y = " + y + ", radius = " + radius + ", mass = " + mass + ", velocityX = " + velX + ", velocityY = " + velY + '}';
     }
-
 
     @Override
     public boolean equals(Object o) {

@@ -21,16 +21,11 @@ public class Collisions {
     }
 
     public double nextEvent() {
-//        this.priorityQueue = new PriorityQueue<>();
-
         for (Particle particle: particles) {
             priorityQueue.add(particleEvent(particle));
         }
 
         Event event = priorityQueue.poll();
-
-//        while (event.wasSuperveningEvent())
-//            event = priorityQueue.poll();
 
         Particle p1 = event.getP1();
         Particle p2 = event.getP2();
@@ -58,7 +53,6 @@ public class Collisions {
             }
         } else {
             p1.collideWithParticle(p2);
-            System.out.println("Choque contra particula");
         }
 
         return event.getTime();
@@ -74,14 +68,12 @@ public class Collisions {
         for(Particle p1: particles) {
             if(p2.equals(p1)) continue;
 
-//            boolean collisionAlreadyOccurred = checkCollisionAlreadyOccurred(p1, p2);
-
-//            if(!collisionAlreadyOccurred){
-                tc = p2.collideWithParticleTime(p1);
+            tc = p2.collideWithParticleTime(p1);
+            if(tc > 0) {
                 if(nextMinimalEvent == null|| tc < nextMinimalEvent.getTime()) {
                     nextMinimalEvent = new Event(p2, p1, tc);
                 }
-//            }
+            }
         }
 
         // Calculo de tc para choque con paredes
@@ -94,25 +86,6 @@ public class Collisions {
 
         return nextMinimalEvent;
     }
-
-
-//    private boolean checkCollisionAlreadyOccurred(Particle p1, Particle p2) {
-//        // Crea un objeto ParticlePair para representar la pareja de partículas p1 y p2
-//        ParticlePair pair = new ParticlePair(p1, p2);
-//
-//        // Verifica si la pareja de partículas ya está en el conjunto de colisiones previas
-//        return collidedPairs.contains(pair);
-//    }
-//
-//    // Método para registrar una colisión entre dos partículas
-//    private void registerCollision(Particle p1, Particle p2) {
-//        // Crea un objeto ParticlePair para representar la pareja de partículas p1 y p2
-//        ParticlePair pair = new ParticlePair(p1, p2);
-//
-//        // Agrega la pareja al conjunto de colisiones previas
-//        collidedPairs.add(pair);
-//    }
-
 
     public void setTotalTime(double totalTime) {
         this.totalTime = totalTime;
