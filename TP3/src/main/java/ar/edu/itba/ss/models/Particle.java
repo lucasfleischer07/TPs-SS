@@ -130,8 +130,8 @@ public class Particle implements Comparable<Particle>{
             if(tcMap.get(this).get(i) < 0) {
                 tcMap.get(this).put(i, Double.MAX_VALUE);
             } else {
-                double futureX = this.getX() + this.getVx() * tcMap.get(this).get(i);
-                double futureY = this.getY() + this.getVy() * tcMap.get(this).get(i);
+                double futureX = x + velX * tcMap.get(this).get(i);
+                double futureY = y + velY * tcMap.get(this).get(i);
                 double auxTime = -1;
                 if(i == 0) {
                     auxTime = (0 + radius <= futureY && futureY <= (tableWidth - radius)) ? tcMap.get(this).get(i) : Double.MAX_VALUE;

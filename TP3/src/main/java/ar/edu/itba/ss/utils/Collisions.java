@@ -4,10 +4,7 @@ import ar.edu.itba.ss.models.Event;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.ParticlePair;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 
 public class Collisions {
 
@@ -32,16 +29,24 @@ public class Collisions {
 
         Event event = priorityQueue.poll();
 
-        while (event.wasSuperveningEvent())
-            event = priorityQueue.poll();
+//        while (event.wasSuperveningEvent())
+//            event = priorityQueue.poll();
+
+        Particle p1 = event.getP1();
+        Particle p2 = event.getP2();
+
+        Iterator<Event> iterator = priorityQueue.iterator();
+        while (iterator.hasNext()) {
+            Event e = iterator.next();
+            if ((p1 != null && (p1.equals(e.getP1()) || p1.equals(e.getP2())) ) || (p2 != null && (p2.equals(e.getP2()) || p2.equals(e.getP1())))) {
+                iterator.remove();
+            }
+        }
 
         for (Particle p : particles) {
             p.setX(p.getX() + p.getVx() * event.getTime());
             p.setY(p.getY() + p.getVy() * event.getTime());
         }
-
-        Particle p1 = event.getP1();
-        Particle p2 = event.getP2();
 
 
         // Significa que el choque sera con una pared
