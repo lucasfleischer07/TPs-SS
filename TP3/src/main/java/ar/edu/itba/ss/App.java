@@ -37,15 +37,16 @@ public class App {
 
         // Escribo el archivo static.txt
         WriteFiles writeFiles = new WriteFiles();
-        writeFiles.generateStaticFile(staticFileName, particleRadius, n, mass, velocity, enclosure1X, enclosure1Y);
+        writeFiles.generateStaticFile(staticFileName, particleRadius, n, mass, velocity, enclosure1X, enclosure1Y, enclosure2Y);
 
         // En base a la info del archivo static.txt genero las particulas
         Parameters parameters = ParticleGeneration.generateParticles(staticFileName, enclosure1X, enclosure2Y);
 
         Collisions collisions = new Collisions(parameters.getParticles());
+        writeFiles.generateOutputFile(outputFileName, parameters.getParticles(), 0.0);
 
         double totalTime = 0;
-        for(int i = 0; i <= 70; i++) {
+        for(int i = 0; i <= 500; i++) {
             double time = collisions.nextEvent();
             totalTime += time;
             writeFiles.generateOutputFile(outputFileName, parameters.getParticles(), totalTime);

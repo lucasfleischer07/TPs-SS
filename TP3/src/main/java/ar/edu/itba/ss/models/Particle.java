@@ -91,12 +91,16 @@ public class Particle implements Comparable<Particle>{
 
     // Se muestran las funciones si la particula choca con una pared, tanto para el tiempo de choque como para velocidades.
     public void impactXWall() {
-        this.velX = -velX;
+        double auxVel = this.velX;
+        this.setVx(-auxVel);
+//        this.velX = -velX;
         this.collisionCount++;
     }
 
     public void impactYWall() {
-        this.velY = -velY;
+        double auxVel = this.velY;
+        this.setVy(-auxVel);
+//        this.velY = -velY;
         this.collisionCount++;
     }
 
@@ -188,36 +192,6 @@ public class Particle implements Comparable<Particle>{
 
     }
 
-//    public double collideWithParticleTime(Particle b) {
-//        double tc = Double.MAX_VALUE;
-//
-//        double[] dr = {b.getX() - this.x, b.getY() - this.y};           // Vector de posicion relativa
-//        double[] dv = {b.getVx() - this.velX, b.getVy() - this.velY};   // vector de velocidad relativa
-//
-//        double dv_dr = dotProduct(dv, dr);  // Se calcula el producto punto entre los vectores dv y dr y se almacena en la variable dv_dr.
-//        // Esto se utiliza para determinar si las partículas se están alejando o acercando.
-//
-//        // Si dv_dr es mayor o igual a cero, significa que las partículas se están alejando o moviendo en la misma dirección,
-//        // por lo que no habrá colisión en el futuro cercano, y se devuelve el valor. Entonces retorno infinito
-//        if (dv_dr >= 0)
-//            return tc;
-//
-//        double dv_dv = dotProduct(dv, dv);
-//        double sigma = this.radius + b.getRadius();     // representa la suma de los radios de las dos partículas.
-//
-//        // Se calcula la discriminante d de una ecuación cuadrática que se utiliza para determinar si hay una colisión
-//        double d = Math.pow(dv_dr, 2) - dv_dv*(dotProduct(dr, dr) - Math.pow(sigma, 2));
-//
-//        // Si d es negativo, significa que las partículas no se cruzarán, y se devuelve el valor inicial de tc
-//        if (d < 0)
-//            return tc;
-//
-//        // Representa el tiempo en el futuro en el que las partículas colisionarán.
-//        tc = -((dv_dr + Math.sqrt(d)) / dv_dv);
-//
-//        return tc;
-//    }
-
 
     public void collideWithParticle(Particle p2) {
         double[] dv = {p2.getVx() - this.velX, p2.getVy() - this.velY};
@@ -237,16 +211,13 @@ public class Particle implements Comparable<Particle>{
         double jx = (j * dr[0]) / sigma;
         double jy = (j * dr[1]) / sigma;
 
-//        this.velX = velX + jx / this.mass;
-//        this.velY = velY + jy / this.mass;
-
         p2.setVx(p2.getVx() - jx / p2.getMass());
         p2.setVy(p2.getVy() - jy / p2.getMass());
         this.setVx(this.getVx() + jx / this.getMass());
         this.setVy(this.getVy() + jy / this.getMass());
 
-//        this.collisionCount++;
-//        p2.collisionCount++;
+        this.collisionCount++;
+        p2.collisionCount++;
 
     }
 
