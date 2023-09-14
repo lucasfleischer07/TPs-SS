@@ -142,13 +142,13 @@ public class Particle implements Comparable<Particle>{
                 } else if(i == 1 || i == 7) {
                     auxTime = (0 + radius <= futureX && futureX <= tableWidth - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;;
                 } else if(i == 2) {
-                    auxTime = (superiorY + radius <= futureY && futureY <= tableWidth - radius) ?  tcMap.get(this).get(i) : Double.MAX_VALUE;
+                    auxTime = (superiorY - radius <= futureY && futureY <= tableWidth - radius) ?  tcMap.get(this).get(i) : Double.MAX_VALUE;
                 } else if(i == 3 || i == 5) {
-                    auxTime = (tableWidth + radius <= futureX && futureX <= 2*tableWidth  - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;
+                    auxTime = (tableWidth - radius <= futureX && futureX <= (2*tableWidth) - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;
                 } else if(i == 4) {
-                    auxTime = (inferiorY + radius <= futureY && futureY <= superiorY- radius)  ? tcMap.get(this).get(i) : Double.MAX_VALUE;
+                    auxTime = (inferiorY + radius <= futureY && futureY <= superiorY - radius)  ? tcMap.get(this).get(i) : Double.MAX_VALUE;
                 } else if(i == 6) {
-                    auxTime = (0 + radius <= futureY && futureY <= inferiorY - radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;;
+                    auxTime = (0 + radius <= futureY && futureY <= inferiorY + radius) ? tcMap.get(this).get(i) : Double.MAX_VALUE;;
                 }
                 tcMap.get(this).put(i, auxTime);
                 if(auxTime < minorTime && auxTime > 0) {
@@ -206,10 +206,10 @@ public class Particle implements Comparable<Particle>{
 
         double dvdr = (dvelX * dx) + (dvelY * dy);
 
-        double j = (2 * this.mass * p2.getMass() * (dvdr)) / (sigma * (this.mass + p2.getMass()));
+        double j = 2 * this.mass * p2.getMass() * (dvdr) / (sigma * (this.mass + p2.getMass()));
 
-        double jx = (j * dr[0]) / sigma;
-        double jy = (j * dr[1]) / sigma;
+        double jx = j * dr[0] / sigma;
+        double jy = j * dr[1] / sigma;
 
         p2.setVx(p2.getVx() - jx / p2.getMass());
         p2.setVy(p2.getVy() - jy / p2.getMass());

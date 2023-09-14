@@ -37,6 +37,7 @@ def parse_output_file(file_path):
                 'vx': float(data[2]),
                 'vy': float(data[3]),
                 'radius': float(data[4]),
+                'id': int(data[5])
             }
 
             particles_data[time].append(particle)

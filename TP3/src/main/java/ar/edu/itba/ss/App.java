@@ -37,7 +37,7 @@ public class App {
 
         // Escribo el archivo static.txt
         WriteFiles writeFiles = new WriteFiles();
-        writeFiles.generateStaticFile(staticFileName, particleRadius, n, mass, velocity, enclosure1X, enclosure1Y, enclosure2Y);
+//        writeFiles.generateStaticFile(staticFileName, particleRadius, n, mass, velocity, enclosure1X, enclosure1Y, enclosure2Y);
 
         // En base a la info del archivo static.txt genero las particulas
         Parameters parameters = ParticleGeneration.generateParticles(staticFileName, enclosure1X, enclosure2Y);

@@ -30,6 +30,9 @@ public class Collisions {
         Particle p1 = event.getP1();
         Particle p2 = event.getP2();
 
+//        while (event.wasSuperveningEvent())
+//            event = priorityQueue.poll();
+
         Iterator<Event> iterator = priorityQueue.iterator();
         while (iterator.hasNext()) {
             Event e = iterator.next();

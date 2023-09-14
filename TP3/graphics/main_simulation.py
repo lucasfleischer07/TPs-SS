@@ -29,6 +29,9 @@ def update_particle_for_simulation(frame, particle_data, ax2d, main_height, main
         ax2d.set_aspect('equal', adjustable='datalim')
         ax2d.add_patch(cir)
 
+        # Agregar el ID de la partícula como un texto en el centro del círculo
+        ax2d.annotate(str(p['id']), xy=(p['x'], p['y']), fontsize=10, ha='center', va='center')
+
     # ax2d.scatter(([p['x'] for p in particles]), ([p['y'] for p in particles]), s=75, c='b')
 
     ax2d.set_xlabel('Position X')
