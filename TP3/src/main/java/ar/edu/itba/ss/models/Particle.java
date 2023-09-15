@@ -118,7 +118,14 @@ public class Particle implements Comparable<Particle>{
 
     public Object[] impactToWallTime() {
         tcMap.putIfAbsent(this, new HashMap<>());
-        tcMap.get(this).put(0, (0 + radius - x) / velX);
+
+        if((radius - x) > 0 && velX < 0 ){
+            x = 0.0016;
+            tcMap.get(this).put(0, Double.MIN_VALUE);
+        }else{
+            tcMap.get(this).put(0, (0 + radius - x) / velX);
+        }
+
         tcMap.get(this).put(1, (tableWidth - radius - y) / velY);
         tcMap.get(this).put(2, (tableWidth - radius - x) / velX);
         tcMap.get(this).put(3, ((superiorY) - radius - y) / velY);
