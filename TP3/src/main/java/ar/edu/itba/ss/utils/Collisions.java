@@ -9,14 +9,21 @@ import java.util.*;
 public class Collisions {
 
     private double totalTime;
-    private PriorityQueue<Event> priorityQueue;
+    private TreeSet<Event> priorityQueue;
     private final Set<ParticlePair> collidedPairs = new HashSet<>();
     private final List<Particle> particles;
 
 
     public Collisions(List<Particle> particles) {
         this.particles = particles;
-        this.priorityQueue = new PriorityQueue<>();
+        this.priorityQueue = new TreeSet<> ((o1,  o2) -> {
+            int c = 0;
+            if (o1.getTime() > o2.getTime())
+                c = 1;
+            else if (o1.getTime() < o2.getTime())
+                c = -1;
+            return c;
+        });
         this.totalTime = 0;
     }
 
@@ -25,27 +32,28 @@ public class Collisions {
             priorityQueue.add(particleEvent(particle));
         }
 
-        Event event = priorityQueue.poll();
+        Event auxEvent = priorityQueue.pollFirst();
+
+        TreeSet<Event> newPriorityQueue = new TreeSet<>(priorityQueue.comparator());
+        while (!priorityQueue.isEmpty()) {
+            Event e = priorityQueue.pollFirst();
+            if (Math.abs(auxEvent.getTime() - e.getTime()) >= 0.1) {
+                newPriorityQueue.add(e);
+            }
+        }
+
+        
+        // Reemplace el TreeSet original con el nuevo TreeSet
+        priorityQueue = newPriorityQueue;
+        Event event = newPriorityQueue.pollFirst();
 
         Particle p1 = event.getP1();
         Particle p2 = event.getP2();
-
-//        while (event.wasSuperveningEvent())
-//            event = priorityQueue.poll();
-
-        Iterator<Event> iterator = priorityQueue.iterator();
-        while (iterator.hasNext()) {
-            Event e = iterator.next();
-            if ((p1 != null && (p1.equals(e.getP1()) || p1.equals(e.getP2())) ) || (p2 != null && (p2.equals(e.getP2()) || p2.equals(e.getP1())))) {
-                iterator.remove();
-            }
-        }
 
         for (Particle p : particles) {
             p.setX(p.getX() + p.getVx() * event.getTime());
             p.setY(p.getY() + p.getVy() * event.getTime());
         }
-
 
         // Significa que el choque sera con una pared
         if(p2 == null) {
