@@ -1,0 +1,18 @@
+@startuml
+!include Particle.puml
+!include Collision.puml
+!include WriteFiles.puml
+!include ParticleGeneration.puml
+
+
+class App{
+public {static} void main(String[] args)
+}
+
+App *-- WriteFiles
+App *-- ParticleGeneration
+App *-up- Collision
+Collision *-left- Particle
+
+
+@enduml

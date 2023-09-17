@@ -1,0 +1,38 @@
+@startuml
+
+class Particle implements Comparable{
+-double x
+-double y
+-double velx
+-double vely
+-double radius
+-double mass
+-final int {static} WALLS_AMOUNT
+
++Particle(double x, double y, double velX, double velY, double radius, double mass)
++void impactToWallTime(int i, double[][] tc, List<Particle> particleList, double tableWidth, double l)
++double collideWithParticleTime(Particle p2)
++public void collideWithParticle(Particle p2)
++double getX()
++double getY()
++double getVelX()
++double getVely()
++double getRadius()
++double getMass()
++void setX()
++void setY()
++void setVx()
++void setVy()
++{static} double dotProduct(double[] vector1, double[] vector2)
++boolean equals(Object o)
++int hashCode()
+
+
+}
+
+interface Comparable{
++int compareTo(Object o)
+}
+
+
+@enduml

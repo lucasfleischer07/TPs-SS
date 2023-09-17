@@ -1,0 +1,20 @@
+@startuml
+
+class Collision{
+-final List<Particle> particles
+-final double[ ][ ] tc
+-final double tableWidth
+-final double l
+-double actualTime = 0
+-int collisionP1 = -1
+-int collisionP2 = -1
+-final int WALLS_AMOUNT = 8
+
++Collision(List<Particle> particles, double tableWidth, double l)
++void setFuturePositions(Particle p, double minTc)
++Object[ ] nextIteration()
+
+}
+
+
+@enduml
