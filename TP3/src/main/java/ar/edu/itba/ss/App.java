@@ -1,15 +1,13 @@
 package ar.edu.itba.ss;
 
 import ar.edu.itba.ss.models.Parameters;
-import ar.edu.itba.ss.utils.Collisions;
+import ar.edu.itba.ss.utils.Collision;
 import ar.edu.itba.ss.utils.ParticleGeneration;
 import ar.edu.itba.ss.utils.WriteFiles;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -34,23 +32,31 @@ public class App {
         double particleRadius = configObject.get("particleRadius").getAsDouble();
         double velocity = configObject.get("velocity").getAsDouble();
         int mass = configObject.get("mass").getAsInt();
+        int iterationsAmount = configObject.get("iterations").getAsInt();
 
-        // Escribo el archivo static.txt
         WriteFiles writeFiles = new WriteFiles();
-//        writeFiles.generateStaticFile(staticFileName, particleRadius, n, mass, velocity, enclosure1X, enclosure1Y, enclosure2Y);
 
-        // En base a la info del archivo static.txt genero las particulas
-        Parameters parameters = ParticleGeneration.generateParticles(staticFileName, enclosure1X, enclosure2Y);
+        double[] lValues = {0.03, 0.05, 0.07, 0.09};
+        for(double l : lValues) {
+            // Escribo el archivo static.txt
+            writeFiles.generateStaticFile(staticFileName + l + ".txt", particleRadius, n, mass, velocity, enclosure1X, enclosure1Y, l);
 
-        Collisions collisions = new Collisions(parameters.getParticles());
-        writeFiles.generateOutputFile(outputFileName, parameters.getParticles(), 0.0);
+            // En base a la info del archivo static.txt genero las particulas
+            Parameters parameters = ParticleGeneration.generateParticles(staticFileName + l + ".txt", enclosure1X, l);
+            Collision collision = new Collision(parameters.getParticles(), enclosure1X, l);
 
-        double totalTime = 0;
-        for(int i = 0; i <= 500; i++) {
-            double time = collisions.nextEvent();
-            totalTime += time;
-            writeFiles.generateOutputFile(outputFileName, parameters.getParticles(), totalTime);
+            long elapsedTime = 0;
+            Object[] actualTime;
+            for(int i = 1; i <= iterationsAmount; i++) {
+                long startTime = System.currentTimeMillis();
+                actualTime = collision.nextIteration();
+                long endTime = System.currentTimeMillis();
+                elapsedTime = elapsedTime + endTime - startTime;
+                writeFiles.generateOutputFile(outputFileName + l + ".txt", parameters.getParticles(), (double) actualTime[0], (int) actualTime[1], actualTime[2].toString());
+            }
         }
+
+        writeFiles.generateDataFile(n, iterationsAmount, particleRadius, mass, velocity, enclosure1X, enclosure1Y, enclosure2X);
 
     }
 }

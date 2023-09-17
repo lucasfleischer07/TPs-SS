@@ -17,7 +17,6 @@ public class ParticleGeneration {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(staticFileName))) {
             String line;
-            AtomicInteger particleId = new AtomicInteger(0);
 
             // Saltear la primera línea del archivo
             reader.readLine();
@@ -30,7 +29,8 @@ public class ParticleGeneration {
                 for (int i = 0; i < values.length; i++) {
                     valuesInDoubles[i] = Double.parseDouble(values[i]);
                 }
-                parameters.addParticle(new Particle(particleId.getAndAdd(1), valuesInDoubles[1], valuesInDoubles[2], valuesInDoubles[3], valuesInDoubles[4], valuesInDoubles[5], valuesInDoubles[0], enclosure1X, enclosure2Y));
+                parameters.addParticle(new Particle(valuesInDoubles[0], valuesInDoubles[1], valuesInDoubles[2], valuesInDoubles[3], valuesInDoubles[4], valuesInDoubles[5]));
+//                parameters.addParticle(new Particle(valuesInDoubles[0], valuesInDoubles[1], valuesInDoubles[2], valuesInDoubles[3], valuesInDoubles[4], valuesInDoubles[5], enclosure1X, enclosure2Y));
             }
 
         } catch (IOException e) {

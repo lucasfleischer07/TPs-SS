@@ -8,26 +8,26 @@ public class Event implements Comparable<Event> {
     private int wallToCollides;
     private int p1CollisionCount = 0, p2CollisionCount = 0;
 
-    public Event(Particle p1, Particle p2, double time) {
-        this.p1 = p1;
-        this.p2 = p2;
-        this.time = time;
-        if (p1 != null)
-            this.p1CollisionCount = p1.getCollisionCount();
-        if (p2 != null)
-            this.p2CollisionCount = p2.getCollisionCount();
-    }
-
-    public Event(Particle p1, Particle p2, double time, int wallToCollides) {
-        this.p1 = p1;
-        this.p2 = p2;
-        this.time = time;
-        this.wallToCollides = wallToCollides;
-        if (p1 != null)
-            this.p1CollisionCount = p1.getCollisionCount();
-        if (p2 != null)
-            this.p2CollisionCount = p2.getCollisionCount();
-    }
+//    public Event(Particle p1, Particle p2, double time) {
+//        this.p1 = p1;
+//        this.p2 = p2;
+//        this.time = time;
+//        if (p1 != null)
+//            this.p1CollisionCount = p1.getCollisionCount();
+//        if (p2 != null)
+//            this.p2CollisionCount = p2.getCollisionCount();
+//    }
+//
+//    public Event(Particle p1, Particle p2, double time, int wallToCollides) {
+//        this.p1 = p1;
+//        this.p2 = p2;
+//        this.time = time;
+//        this.wallToCollides = wallToCollides;
+//        if (p1 != null)
+//            this.p1CollisionCount = p1.getCollisionCount();
+//        if (p2 != null)
+//            this.p2CollisionCount = p2.getCollisionCount();
+//    }
 
     public Particle getP1() {
         return p1;

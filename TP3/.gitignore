@@ -43,3 +43,5 @@ src/main/resources/*
 graphics/__pycache__/*
 graphics/animation.mp4
 graphics/*.txt
+graphics/animations/*.gif
+graphics/images/*.png

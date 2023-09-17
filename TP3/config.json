@@ -4,10 +4,11 @@
   "enclosure2X": 0.09,
   "enclosure2Y": 0.03,
   "N": 200,
+  "iterations": 20000,
   "particleRadius": 0.0015,
   "velocity": 0.01,
   "mass": 1,
   "vaStationaryT": 1500,
-  "staticFileName": "src/main/resources/static.txt",
-  "outputFileName": "src/main/resources/output.txt"
+  "staticFileName": "src/main/resources/static",
+  "outputFileName": "src/main/resources/output"
 }
