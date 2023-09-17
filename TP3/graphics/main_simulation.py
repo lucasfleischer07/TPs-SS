@@ -1,66 +1,66 @@
 import matplotlib.pyplot as plt
-from matplotlib import animation
-from matplotlib.collections import EllipseCollection
+import numpy as np
+from matplotlib.animation import FuncAnimation
+from parse_files import get_parameters, read_lines
 
-from graphics.parse_files import parse_config_json, parse_output_file
+
+def update_particle_positions(frame, skip_iteration, n, table_width, l, file_lines, ax):
+    ax.clear()
+
+    first_file_line = skip_iteration * frame * (n+2)
+    time = float(file_lines[first_file_line].split()[0])
+
+    particles_data = []
+    for i in range(n):
+        particles_data.append(file_lines[first_file_line + 2 + i].split())
+
+    particles_data = np.array(particles_data, dtype=float)
+    ax.scatter(particles_data[:, 0], particles_data[:, 1], s=50, c='b')
+
+    # Puntos de inicio y fin para cada línea en un formato más compacto
+    lines = [
+        ([0, 0], [0, table_width]),
+        ([0, table_width], [0, 0]),
+        ([table_width, table_width], [0, (table_width - l) / 2]),
+        ([table_width, table_width * 2], [(table_width - l) / 2, (table_width - l) / 2]),
+        ([table_width * 2, table_width * 2], [(table_width - l) / 2, (table_width - l) / 2 + l]),
+        ([table_width * 2, table_width], [(table_width - l) / 2 + l, (table_width - l) / 2 + l]),
+        ([table_width, table_width], [(table_width - l) / 2 + l, table_width]),
+        ([table_width, 0], [table_width, table_width]),
+    ]
+
+    for start, end in lines:
+        ax.plot(start, end, color='b')
+
+    ax.set_xticks([0, table_width, table_width + table_width])
+    ax.set_yticks([0, (table_width - l) / 2, (table_width - l) / 2 + l, table_width])
+
+    ax.set_title('Time = ' + "{:.3f}".format(time) + 's')
 
 
-def update_particle_for_simulation(frame, particle_data, ax2d, main_height, main_width, minor_height, minor_width):
-    # Esta línea obtiene una lista de todas las claves del diccionario events, convierte esa lista en una lista ordenada, y luego selecciona la clave en la posición frame. Esto significa que t ahora contiene la clave correspondiente al paso en la animación que se debe representar en el gráfico.
-    t = list(particle_data.keys())[frame]
-    particles = particle_data[t]
+def generate_animation(l, skip_iteration, n, iterations, table_width, output_base_path):
+    file_lines = read_lines(output_base_path + str(l) + '.txt')
 
-    ax2d.clear()
+    fig, ax = plt.subplots(figsize=(10, 10))
+    ax.set_aspect('equal', adjustable='box')
 
-    ax2d.plot([0, 0], [0, main_height], color='b')  # 0
-    ax2d.plot([0, main_width], [0, 0], color='b')  # 1
-    ax2d.plot([main_width, main_width], [0, (main_height - minor_height) / 2], color='b')  # 2
-    ax2d.plot([main_width, main_width + minor_width], [(main_height - minor_height) / 2, (main_height - minor_height) / 2], color='b')  # 3
-    ax2d.plot([main_width + minor_width, main_width + minor_width], [(main_height - minor_height) / 2, (main_height - minor_height) / 2 + minor_height], color='b')  # 4
-    ax2d.plot([main_width + minor_width, main_width], [(main_height - minor_height) / 2 + minor_height, (main_height - minor_height) / 2 + minor_height], color='b')  # 5
-    ax2d.plot([main_width, main_width], [(main_height - minor_height) / 2 + minor_height, main_height], color='b')  # 6
-    ax2d.plot([main_width, 0], [main_height, main_height], color='b')  # 7
-
-    ax2d.set_xticks([0, main_width, main_width + minor_width])
-    ax2d.set_yticks([0, (main_height - minor_height) / 2, (main_height - minor_height) / 2 + minor_height, main_height])
-
-    for p in particles:
-        cir = plt.Circle((p['x'], p['y']), p['radius'], color='r', fill=True)
-        ax2d.set_aspect('equal', adjustable='datalim')
-        ax2d.add_patch(cir)
-
-        # Agregar el ID de la partícula como un texto en el centro del círculo
-        ax2d.annotate(str(p['id']), xy=(p['x'], p['y']), fontsize=10, ha='center', va='center')
-
-    # ax2d.scatter(([p['x'] for p in particles]), ([p['y'] for p in particles]), s=75, c='b')
-
-    ax2d.set_xlabel('Position X')
-    ax2d.set_ylabel('Position Y')
-    ax2d.set_title(f'Time: ' + str(t))
-
+    animation = FuncAnimation(fig, frames=int(iterations/skip_iteration), func=update_particle_positions, fargs=(skip_iteration, n, table_width, l, file_lines, ax), interval=100)
+    plt.tight_layout()
+    animation.save('animations/animation_' + str(l) + '.gif')
+    return animation
 
 
 def main():
-    config_json_path = "../config.json"
-    static_file_path = "../src/main/resources/static.txt"
-    output_file_path = "../src/main/resources/output.txt"
-    # output_file_path_aux = "output.txt"
+    output_base_path = '../src/main/resources/output'
+    parameters = get_parameters()
 
-    # Crea la figura y el eje
-    fig = plt.figure()
-    ax2d = fig.add_subplot(111)
+    n = parameters["n"]
+    iterations = parameters["iterations"]
+    table_width = parameters["table_width"]
+    skip_iteration = 100
 
-    N, particleRadius, enclosure1X, enclosure1Y, enclosure2X, L = parse_config_json(config_json_path)
-    particle_data = parse_output_file(output_file_path)
-
-    # Llama a la función de actualización de la trama
-    anim = animation.FuncAnimation(fig, update_particle_for_simulation, fargs=(particle_data, ax2d, enclosure1Y, enclosure1X, L, enclosure2X), frames=len(particle_data))
-
-    # Save animation as mp4
-    Writer = animation.writers['ffmpeg']
-    writer = Writer(fps=20, metadata=dict(artist='Me'), bitrate=1800)
-
-    anim.save('animation.mp4', writer=writer)
+    for i in [0.03, 0.05, 0.07, 0.09]:
+        generate_animation(i, skip_iteration, n, iterations, table_width, output_base_path)
 
 
 if __name__ == "__main__":

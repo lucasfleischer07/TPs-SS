@@ -64,7 +64,7 @@ public class Collision {
             particles.get(minTcP1).collideWithParticle(particles.get(minTcP2));
         }
 
-        return new Object[]{actualTime, collisionP1, (collisionP2 >= particles.size() ? "P" + collisionP2 % particles.size() : collisionP2)};
+        return new Object[]{actualTime, collisionP1, (collisionP2 >= particles.size() ? "W" + collisionP2 % particles.size() : collisionP2)};
 
     }
 
