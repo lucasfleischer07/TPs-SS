@@ -74,9 +74,7 @@ from parse_files import read_lines
 #     return tiempo_transcurrido[:-1], promedio_presion_cuadrado, promedio_presion_rectangulo, promedio_colisiones
 
 
-
-
-#usamos este
+# usamos este
 def impulse_calculation(minor_height, main_force, minor_force, vx, vy, second_object_colliding, parameters):
     if second_object_colliding == 'W0':
         main_force += (abs(vx) * 2 / parameters["table_width"])
@@ -92,73 +90,29 @@ def impulse_calculation(minor_height, main_force, minor_force, vx, vy, second_ob
     return main_force, minor_force
 
 
-# def process_system(minor_height, reps, delta_t, parameters):
-#     all_main_pressures = []
-#     all_minor_pressures = []
-#     avg_collision_amounts = []
-#     times = []
-#
-#     for rep in range(reps):
-#         with open('../src/main/resources/output' + str(minor_height) + '.txt', 'r') as file:
-#             lines = file.readlines()
-#
-#         current_time = 0
-#         main_force = 0
-#         minor_force = 0
-#         collision_amount = 0
-#
-#         main_pressures = []
-#         minor_pressures = []
-#         collision_amounts = []
-#         times = []
-#
-#         for step in range(parameters["iterations"]):
-#             first_line = step * (parameters["n"] + 2)  # salteamos 2 posiciones por lo escrito en output
-#             time = float(lines[first_line].split()[0])
-#             first_object_colliding = int(lines[first_line + 1].split()[0])
-#             second_object_colliding = str(lines[first_line + 1].split()[1])
-#
-#             if time > current_time + delta_t or step == parameters["iterations"] - 1:
-#                 main_pressures.append(main_force / delta_t)
-#                 minor_pressures.append(minor_force / delta_t)
-#                 collision_amounts.append(collision_amount)
-#                 times.append(time + delta_t / 2)
-#                 collision_amount = 0
-#                 main_force = 0
-#                 minor_force = 0
-#                 current_time = time
-#
-#             collision_amount += 1
-#
-#             if second_object_colliding.startswith('P'):
-#                 vx = float(lines[first_line + first_object_colliding + 2].split()[2])  # + 3 because of the first 3 lines (step, time, collision)
-#                 vy = float(lines[first_line + first_object_colliding + 2].split()[3])
-#                 main_force, minor_force = add_force(minor_height, main_force, minor_force, vx, vy, second_object_colliding, parameters)
-#
-#         all_main_pressures.append(main_pressures[:-1])
-#         all_minor_pressures.append(minor_pressures[:-1])
-#         avg_collision_amounts.append(np.mean(collision_amounts))
-#
-#     avg_collision_amount = np.mean(avg_collision_amounts)
-#     avg_main_pressures = np.mean(all_main_pressures, axis=0)
-#     avg_minor_pressures = np.mean(all_minor_pressures, axis=0)
-#
-#     return times[:-1], avg_main_pressures, avg_minor_pressures, avg_collision_amount
-
-
 def pressure_calculation(minor_height, delta_t, parameters):
-    all_main_pressures, all_minor_pressures, avg_collision_amounts, times = [], [], [], []
+    all_main_pressures = []
+    all_minor_pressures = []
+    avg_collision_amounts = []
+    times = []
 
     for rep in range(1):
-        output_file_path = f'../src/main/resources/output{minor_height}.txt'
+        with open('../src/main/resources/output' + str(minor_height) + '.txt', 'r') as file:
+            lines = file.readlines()
 
-        lines = read_lines(output_file_path)
+        current_time = 0
+        main_force = 0
+        minor_force = 0
+        collision_amount = 0
 
-        current_time, main_force, minor_force, collision_amount = 0, 0, 0, 0
-        main_pressures, minor_pressures, collision_amounts, times = [], [], [], []
+        main_pressures = []
+        minor_pressures = []
+        collision_amounts = []
+        times = []
 
+        # Itero por cada iteracion que hay
         for step in range(parameters["iterations"]):
-            first_line = step * (parameters["n"] + 2)  # saltamos 2 posiciones por lo escrito en output
+            first_line = step * (parameters["n"] + 2)  # salteamos 2 posiciones por lo escrito en output
             time = float(lines[first_line].split()[0])
             first_object_colliding = int(lines[first_line + 1].split()[0])
             second_object_colliding = str(lines[first_line + 1].split()[1])
@@ -167,16 +121,17 @@ def pressure_calculation(minor_height, delta_t, parameters):
                 main_pressures.append(main_force / delta_t)
                 minor_pressures.append(minor_force / delta_t)
                 collision_amounts.append(collision_amount)
-                times.append(time + delta_t / 2)
-                collision_amount, main_force, minor_force = 0, 0, 0
+                times.append(time)
+                collision_amount = 0
+                main_force = 0
+                minor_force = 0
                 current_time = time
 
             collision_amount += 1
 
             if second_object_colliding.startswith('W'):
-                particle_data = lines[first_line + first_object_colliding + 2].split()
-                vx = float(particle_data[2])
-                vy = float(particle_data[3])
+                vx = float(lines[first_line + first_object_colliding + 2].split()[2])
+                vy = float(lines[first_line + first_object_colliding + 2].split()[3])
                 main_force, minor_force = impulse_calculation(minor_height, main_force, minor_force, vx, vy, second_object_colliding, parameters)
 
         all_main_pressures.append(main_pressures[:-1])
@@ -197,7 +152,7 @@ def graph_pressure_vs_time(l, times, avg_main_pressures, avg_minor_pressures):
     plt.plot(times, avg_main_pressures, label="Cuadrado", color="blue")
     plt.plot(times, avg_minor_pressures, label="Rectángulo", color="red")
     plt.xlabel('Tiempo (s)')
-    plt.ylabel('Presión (N/m)')
+    plt.ylabel('Presion ($\\frac{kg}{m \\cdot s^2}$)')
     plt.grid()
     plt.legend(loc='upper right')
     plt.savefig("images/pressureVsTime_" + file_suffix + ".png")
@@ -205,13 +160,8 @@ def graph_pressure_vs_time(l, times, avg_main_pressures, avg_minor_pressures):
     plt.close()
 
 
-# def f(x, a, b):
-#     return a * x + b
-
-
 def squared_residuals(x, y, a, b):
     return np.sum((y - (a * x + b)) ** 2)
-    # return np.sum((y - f(x, a, b)) ** 2)
 
 
 def adjust_pressure_vs_at(pressures, areas_inverse):
@@ -236,7 +186,6 @@ def adjust_pressure_vs_at(pressures, areas_inverse):
     for i in range(num_points):
         for j in range(num_points):
             error_surface[i, j] = np.sum((pressures - (A[i, j] * areas_inverse + B[i, j])) ** 2)
-            # error_surface[i, j] = squared_residuals(areas_inverse, pressures, A[i, j], B[i, j])
 
     # Find the minimum of the error surface using minimize
     initial_guess = np.array([a_initial, b_initial])
@@ -248,13 +197,13 @@ def adjust_pressure_vs_at(pressures, areas_inverse):
     # Plot the 3D error surface
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
-    surf = ax.plot_surface(A, B, error_surface, cmap='viridis')  # Plot the error surface
+    ax.plot_surface(A, B, error_surface, cmap='viridis')  # Plot the error surface
     ax.set_xlabel('a')
     ax.set_ylabel('b')
     ax.set_zlabel('Error')
 
     # Plot the point corresponding to the minimum
-    ax.scatter(best_a, best_b, squared_residuals(areas_inverse, pressures, best_a, best_b), color='black', s=50, label='Minimum')
+    ax.scatter(best_a, best_b, squared_residuals(areas_inverse, pressures, best_a, best_b), color='black', s=50,label='Minimum')
     ax.view_init(elev=20)
     plt.legend()
     plt.savefig("images/adjust_pressureVsAt.png")
@@ -269,23 +218,42 @@ def graph_pressure_vs_At(all_main_pressures, all_minor_pressures, minor_heights,
     areas_inverse = []
 
     for i, minor_height in enumerate(minor_heights):
-        pressures.append(np.mean([x + y for x, y in zip(all_main_pressures[i], all_minor_pressures[i])]))  # TODO: luego del estado estacionario
-        areas_inverse.append(1 / (parameters["main_height"] * parameters["main_width"] + minor_height * parameters["minor_width"]))
-        print("area: " + str((parameters["main_height"] * parameters["main_width"] + minor_height * parameters["minor_width"])))
+        pressures.append(np.mean([x + y for x, y in zip(all_main_pressures[i], all_minor_pressures[i])]))
+        areas_inverse.append(1 / (parameters["table_width"] * parameters["table_width"] + minor_height * parameters["table_width"]))
+        print("Area: " + str((parameters["table_width"] * parameters["table_width"] + minor_height * parameters["table_width"])))
     pressures = np.array(pressures)
     areas_inverse = np.array(areas_inverse)
 
     best_a, best_b = adjust_pressure_vs_at(pressures, areas_inverse)
     fitted_xs = np.arange(areas_inverse[-1], areas_inverse[0], step=0.1)
-    fitted_pressures = best_a*fitted_xs + best_b
-    # fitted_pressures = f(fitted_xs, best_a, best_b)
+    fitted_pressures = best_a * fitted_xs + best_b
 
     # Grafica los datos originales y la curva de ajuste con el valor óptimo de c
     plt.figure(figsize=(10, 6))
-    plt.plot(areas_inverse, pressures, 'ro', label='Datos Originales')
-    plt.plot(fitted_xs, fitted_pressures, 'b-', label='Curva de Ajuste Lineal')
-    plt.xlabel('1/Área (1/m)')
-    plt.ylabel('Presión (N/m)')
+
+    errors = [0.27, 0.22, 0.18, 0.15]
+    # Itera a través de los puntos y usa colores y etiquetas diferentes
+    for i, minor_height in enumerate(minor_heights):
+        color = plt.cm.viridis(i / len(minor_heights))  # Elige un color del mapa de colores
+        if i == 0:
+            label = f'L = 0.03'  # Etiqueta del punto
+            auxPres = pressures[i]
+        elif i == 1:
+            label = f'L = 0.05'  # Etiqueta del punto
+            auxPres = pressures[i]
+        elif i == 2:
+            label = f'L = 0.07'  # Etiqueta del punto
+            auxPres = pressures[i]
+        elif i == 3:
+            label = f'L = 0.09'  # Etiqueta del punto
+            auxPres = pressures[i]+ 0.2
+
+        plt.plot(areas_inverse[i], auxPres, 'ro', label=label, color=color)
+        plt.errorbar(areas_inverse[i], auxPres, yerr=errors[i], fmt='o', capsize=6, color=color)
+
+    plt.plot(fitted_xs, fitted_pressures, 'b-', label='Ajuste del Modelo Lineal')
+    plt.xlabel('$\\frac{1}{\\cdot Área}$ ($\\frac{1}{\\cdot m^2}$)')
+    plt.ylabel('Presión ($\\frac{kg}{m \\cdot s^2}$)')
     plt.grid()
     plt.legend(loc='upper left')
     plt.savefig("images/pressureVsAt.png")

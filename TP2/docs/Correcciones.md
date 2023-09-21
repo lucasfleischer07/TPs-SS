@@ -1,3 +1,5 @@
+***NOTA DEL TRABAJO = 8***
+
 **PRESENTACION (los # indican el numero de diapositiva)**
 
 #2

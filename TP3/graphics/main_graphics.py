@@ -9,9 +9,10 @@ def main():
 
     times, main_pressures_dict, minor_pressures_dict = [], [], []
     parameters = get_parameters()
+    delta_t = 0.45
 
     for l in [0.03, 0.05, 0.07, 0.09]:
-        times, avg_main_pressures, avg_minor_pressures, avg_collision_amount = graphics.pressure_calculation(l, 1.8, parameters)
+        times, avg_main_pressures, avg_minor_pressures, avg_collision_amount = graphics.pressure_calculation(l, delta_t, parameters)
         main_pressures_dict.append(avg_main_pressures)
         minor_pressures_dict.append(avg_minor_pressures)
 
