@@ -12,7 +12,52 @@ import java.util.Locale;
 
 public class DampedPointOscillator {
 
-    //TODO GEAR ALG Y VERLET
+    public static void GearPredictorCorrectorAlgorithm(FileWriter outputWriter, double x, double velocity, double k, double gamma, double dt, double mass, double accelerationComp) throws IOException {
+        File timeF = new File("./src/main/resources/time_gear.txt");
+        FileWriter timeOW = new FileWriter(timeF, true);
+        long start = System.nanoTime();
+        double initialTime = 0, finalTime = 5, error = 0;
+        int i;
+
+        //aceleracion = fuerza/masa = (-kr - gammav) /m PAGINA 30 TEORICA
+        //paso a paso voy integrando la posicion por velocidad y la vel por aceleracion.
+        double acceleration = (-k*x-gamma*velocity)/mass;
+        double x3 = (-k*velocity - gamma*acceleration)/mass;
+        double x4 = (-k*acceleration - gamma*x3)/mass;
+        double x5 = (-k*x3 - gamma*x4)/mass;
+
+
+        for (i = 0; initialTime < finalTime; i++) {
+            error += Math.pow(analyticSolutionComparison(accelerationComp, gamma, mass, initialTime, k) - x, 2);
+
+            //utilizamos el algoritmo para hacer la correccion de las variables.
+            double[] gearResultList = GearPredictorCorrector(x, velocity, acceleration, x3, x4, x5, dt, mass, k, gamma);
+            x = gearResultList[0];
+            acceleration = gearResultList[1];
+            acceleration = gearResultList[2];
+            x3 = gearResultList[3];
+            x4 = gearResultList[4];
+            x5 = gearResultList[5];
+
+            if (Configuration.isDebug()) {
+                System.out.printf("t=%.2f -> x=%.2f ; v=%.2f\n", initialTime, x, velocity);
+            }
+            if (i % Configuration.getOutputIntervalTime() == 0) {
+                outputWriter.write(String.format(Locale.US, "%.8f\n%.8f %.8f\n", initialTime, x, velocity));
+            }
+
+            initialTime += dt;
+        }
+
+        //calculamos el MEAN error
+        double duration = (System.nanoTime()-start)/Math.pow(10,9);
+        System.out.printf(Locale.US, "Gear Took %g seconds\n%n", duration);
+        timeOW.write(String.format(Locale.US, "%g\n", duration));
+        timeOW.close();
+        error += Math.pow(analyticSolutionComparison(accelerationComp, gamma, mass, initialTime, k) - x, 2);
+        double finalError = error/i;
+        System.out.println(finalError);
+    }
 
     public static void BeemanAlgorithm(FileWriter outputFileWriter, double x, double v, double k, double gamma, double dt, double mass, double acceleration) throws IOException {
         File timeFile = new File("./src/main/resources/time_beeman.txt");
@@ -59,7 +104,7 @@ public class DampedPointOscillator {
     }
 
 
-    public static double[] GearPredictorCorrectorAlgorithm(double x, double vel, double aceleration, double x3, double x4, double x5, double dt, double mass, double k, double gamma) {
+    public static double[] GearPredictorCorrector(double x, double vel, double acceleration, double x3, double x4, double x5, double dt, double mass, double k, double gamma) {
         //notacion: rp = dpr/dtq
         //la primer derivada de la posicion es la velocidad
         // la segunda derivada de la posicion es la aceletacion
@@ -68,9 +113,9 @@ public class DampedPointOscillator {
         double[] coefficients = {3 / 16.0, 251 / 360.0, 1, 11 / 18.0, 1 / 6.0, 1 / 60.0};
 
         //1)predecir: vamos hasta orden 5
-        double xPredict = x + vel * dt + aceleration * Math.pow(dt, 2) / factorialNumber(2) + x3 * Math.pow(dt, 3) / factorialNumber(3) + x4 * Math.pow(dt, 4) / factorialNumber(4) + x5 * Math.pow(dt, 5) / factorialNumber(5);
-        double x1Predict = vel + aceleration * dt + x3 * Math.pow(dt, 2) / factorialNumber(2) + x4 * Math.pow(dt, 3) / factorialNumber(3) + x5 * Math.pow(dt, 4) / factorialNumber(4);
-        double x2Predict = aceleration + x3 * dt + x4 * Math.pow(dt, 2) / factorialNumber(2) + x5 * Math.pow(dt, 3) / factorialNumber(3);
+        double xPredict = x + vel * dt + acceleration * Math.pow(dt, 2) / factorialNumber(2) + x3 * Math.pow(dt, 3) / factorialNumber(3) + x4 * Math.pow(dt, 4) / factorialNumber(4) + x5 * Math.pow(dt, 5) / factorialNumber(5);
+        double x1Predict = vel + acceleration * dt + x3 * Math.pow(dt, 2) / factorialNumber(2) + x4 * Math.pow(dt, 3) / factorialNumber(3) + x5 * Math.pow(dt, 4) / factorialNumber(4);
+        double x2Predict = acceleration + x3 * dt + x4 * Math.pow(dt, 2) / factorialNumber(2) + x5 * Math.pow(dt, 3) / factorialNumber(3);
         double x3Predict = x3 + x4 * dt + x5 * Math.pow(dt, 2) / factorialNumber(2);
         double x4Predict = x4 + x5 * dt;
         double x5Predict = x5;
@@ -94,21 +139,24 @@ public class DampedPointOscillator {
     public static void VerletAlgorithm(FileWriter outputFileWriter, double x, double v, double k, double gamma, double dt, double mass, double acceleration) throws IOException {
         File timeFile = new File("./src/main/resources/time_verlet.txt");
         FileWriter timeFileWriter = new FileWriter(timeFile, true);
-        long startTime = System.nanoTime();
-        double t = 0, tf = 5;
 
-        double initialForce = -k*x - gamma*v;
-        double prevX = Euler.positionFromEuler(x, v, initialForce, -dt, mass);
-        double difference = 0;
+        long startTime = System.nanoTime();
+        double t = 0, tf = 5, error = 0;
+
         int i;
+        double initialForce = -k*x - gamma*v;
+        double previousX = Euler.positionFromEuler(x, v, initialForce, -dt, mass);
+
         for (i = 0; t < tf; i++) {
-            difference += Math.pow(analyticSolutionComparison(acceleration, gamma, mass, t, k) - x, 2);
+            error += Math.pow(analyticSolutionComparison(acceleration, gamma, mass, t, k) - x, 2);
             double force = -k*x - gamma * v;
             double auxX = x;
 
-            // TODO: Ver cual de los 2 metodos usar para la posicion
-            x = Verlet.positionFromVerlet2(x, force, prevX, dt, mass, gamma, k);
-            v = Verlet.velocityFromVerlet(x, prevX, dt);
+            // Buscamos las posicion con Verlet
+            x = Verlet.positionFromVerlet2(x, force, previousX, dt, mass, gamma, k);
+
+            // Buscamos la velocidad con Verlet
+            v = Verlet.velocityFromVerlet(x, previousX, dt);
 
             if (Configuration.isDebug()) {
                 System.out.printf("t=%.2f -> x=%.2f ; v=%.2f\n", t, x, v);
@@ -117,7 +165,7 @@ public class DampedPointOscillator {
                 outputFileWriter.write(String.format(Locale.US, "%.8f\n%.8f %.8f\n", t, x, v));
             }
 
-            prevX = auxX;
+            previousX = auxX;
             t += dt;
         }
 
@@ -125,10 +173,11 @@ public class DampedPointOscillator {
         System.out.printf(Locale.US, "Verlet Took %g seconds\n%n", endTime);
         timeFileWriter.write(String.format(Locale.US, "%g\n", endTime));
         timeFileWriter.close();
-        difference += Math.pow(analyticSolutionComparison(acceleration, gamma, mass, t, k) - x, 2);
-        double error = difference/i;
-        System.out.println(error);
+        error += Math.pow(analyticSolutionComparison(acceleration, gamma, mass, t, k) - x, 2);
+        double finalError = error/i;
+        System.out.println(finalError);
     }
+
 
     private static double analyticSolutionComparison(double acceleration, double gamma, double mass, double time, double k) {
         return acceleration*Math.exp(-time*(gamma/(2*mass)))*Math.cos(Math.pow(k/mass - Math.pow(gamma, 2)/(4*Math.pow(mass,2)),0.5)*time);

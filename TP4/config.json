@@ -6,7 +6,9 @@
   "particleRadius": 0.0015,
   "velocity": 0.01,
   "mass": 1,
+  "outputIntervalTime": 10,
   "vaStationaryT": 1500,
   "staticFileName": "src/main/resources/static.txt",
-  "outputFileNameEx1": "src/main/resources/output_ex1.txt"
+  "outputFileNameEx1": "src/main/resources/output_ex1.txt",
+  "debug": false
 }

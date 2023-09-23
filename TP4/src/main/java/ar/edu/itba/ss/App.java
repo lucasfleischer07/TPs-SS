@@ -1,6 +1,6 @@
 package ar.edu.itba.ss;
 
-
+import ar.edu.itba.ss.utils.Configuration;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -26,10 +26,9 @@ public class App {
         File outputFile = new File(outputFileNameEx1);
         FileWriter outputFileWriterEx1 = new FileWriter(outputFile, true);
 
-        int exerciseNumber =  configObject.get("exerciseNumber").getAsInt();
-        double dt =  configObject.get("dt").getAsDouble();
+        double dt =  Configuration.getSimulationTime();
 
-        if(exerciseNumber == 1) {
+        if(Configuration.getExercise() == 1) {
             // Parameters
             double m = 70;
             double k = Math.pow(10, 4);
@@ -40,7 +39,9 @@ public class App {
             double x = 1;
             double v = -A*gamma / (2*m);
 
-//            DampedPointOscillator.GearPredictorCorrectorAlgorithm(x, v, k, gamma, dt, m, A, outputFileWriterEx1);
+            DampedPointOscillator.VerletAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A);
+            DampedPointOscillator.BeemanAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A);
+            DampedPointOscillator.GearPredictorCorrectorAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A);
 
         }
 
