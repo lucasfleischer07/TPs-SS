@@ -1,0 +1,12 @@
+{
+  "exerciseNumber": 1,
+  "dt": 0.001,
+  "N": 400,
+  "iterations": 30000,
+  "particleRadius": 0.0015,
+  "velocity": 0.01,
+  "mass": 1,
+  "vaStationaryT": 1500,
+  "staticFileName": "src/main/resources/static",
+  "outputFileName": "src/main/resources/output"
+}
