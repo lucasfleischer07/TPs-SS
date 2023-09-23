@@ -22,7 +22,6 @@ public class App {
         String outputFileNameEx1 = configObject.get("outputFileNameEx1").getAsString();
 
         Files.deleteIfExists(Paths.get(outputFileNameEx1));
-
         File outputFile = new File(outputFileNameEx1);
         FileWriter outputFileWriterEx1 = new FileWriter(outputFile, true);
 
@@ -42,7 +41,6 @@ public class App {
             DampedPointOscillator.VerletAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A);
             DampedPointOscillator.BeemanAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A);
             DampedPointOscillator.GearPredictorCorrectorAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A);
-
         }
 
     }

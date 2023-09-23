@@ -12,7 +12,7 @@ import java.util.Locale;
 
 public class DampedPointOscillator {
 
-    public static void GearPredictorCorrectorAlgorithm(FileWriter outputWriter, double x, double velocity, double k, double gamma, double dt, double mass, double accelerationComp) throws IOException {
+    public static void GearPredictorCorrectorAlgorithm(FileWriter outputFileWriter, double x, double velocity, double k, double gamma, double dt, double mass, double accelerationComp) throws IOException {
         File timeF = new File("./src/main/resources/time_gear.txt");
         FileWriter timeOW = new FileWriter(timeF, true);
         long start = System.nanoTime();
@@ -26,14 +26,13 @@ public class DampedPointOscillator {
         double x4 = (-k*acceleration - gamma*x3)/mass;
         double x5 = (-k*x3 - gamma*x4)/mass;
 
-
         for (i = 0; initialTime < finalTime; i++) {
             error += Math.pow(analyticSolutionComparison(accelerationComp, gamma, mass, initialTime, k) - x, 2);
 
             //utilizamos el algoritmo para hacer la correccion de las variables.
             double[] gearResultList = GearPredictorCorrector(x, velocity, acceleration, x3, x4, x5, dt, mass, k, gamma);
             x = gearResultList[0];
-            acceleration = gearResultList[1];
+            velocity = gearResultList[1];
             acceleration = gearResultList[2];
             x3 = gearResultList[3];
             x4 = gearResultList[4];
@@ -43,7 +42,8 @@ public class DampedPointOscillator {
                 System.out.printf("t=%.2f -> x=%.2f ; v=%.2f\n", initialTime, x, velocity);
             }
             if (i % Configuration.getOutputIntervalTime() == 0) {
-                outputWriter.write(String.format(Locale.US, "%.8f\n%.8f %.8f\n", initialTime, x, velocity));
+                outputFileWriter.write(String.format(Locale.US, "%f\n%f %f\n", initialTime, x, velocity));
+                outputFileWriter.flush();
             }
 
             initialTime += dt;
@@ -87,7 +87,8 @@ public class DampedPointOscillator {
             }
 
             if (i % Configuration.getOutputIntervalTime() == 0) {
-                outputFileWriter.write(String.format(Locale.US, "%.8f\n%.8f %.8f\n", initialTime, x, v));
+                outputFileWriter.write(String.format(Locale.US, "%f\n%f %f\n", initialTime, x, v));
+                outputFileWriter.flush();
             }
 
             prevA = a;
@@ -163,6 +164,7 @@ public class DampedPointOscillator {
             }
             if (i % Configuration.getOutputIntervalTime() == 0) {
                 outputFileWriter.write(String.format(Locale.US, "%.8f\n%.8f %.8f\n", t, x, v));
+                outputFileWriter.flush();
             }
 
             previousX = auxX;
