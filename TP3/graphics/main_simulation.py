@@ -15,7 +15,7 @@ def update_particle_positions(frame, skip_iteration, n, table_width, l, file_lin
         particles_data.append(file_lines[first_file_line + 2 + i].split())
 
     particles_data = np.array(particles_data, dtype=float)
-    ax.scatter(particles_data[:, 0], particles_data[:, 1], s=50, c='b')
+    ax.scatter(particles_data[:, 0], particles_data[:, 1], s=75, c='b')
 
     # Puntos de inicio y fin para cada línea en un formato más compacto
     lines = [

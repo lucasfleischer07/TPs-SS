@@ -1,5 +1,4 @@
 import graphics
-from graphics import *
 from parse_files import get_parameters
 
 def main():
@@ -9,7 +8,7 @@ def main():
 
     times, main_pressures_dict, minor_pressures_dict = [], [], []
     parameters = get_parameters()
-    delta_t = 0.45
+    delta_t = 0.2
 
     for l in [0.03, 0.05, 0.07, 0.09]:
         times, avg_main_pressures, avg_minor_pressures, avg_collision_amount = graphics.pressure_calculation(l, delta_t, parameters)
