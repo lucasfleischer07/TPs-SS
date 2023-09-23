@@ -7,6 +7,6 @@
   "velocity": 0.01,
   "mass": 1,
   "vaStationaryT": 1500,
-  "staticFileName": "src/main/resources/static",
-  "outputFileName": "src/main/resources/output"
+  "staticFileName": "src/main/resources/static.txt",
+  "outputFileNameEx1": "src/main/resources/output_ex1.txt"
 }
