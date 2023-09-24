@@ -8,11 +8,15 @@ import ar.edu.itba.ss.utils.Configuration;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public class DampedPointOscillator {
 
-    public static void GearPredictorCorrectorAlgorithm(FileWriter outputFileWriter, double x, double velocity, double k, double gamma, double dt, double mass, double accelerationComp) throws IOException {
+    public static void GearPredictorCorrectorAlgorithm(FileWriter outputFileWriter, double x, double velocity, double k, double gamma, double dt, double mass, double accelerationComp, boolean mseFileGraph) throws IOException {
         File timeF = new File("./src/main/resources/time_gear.txt");
         FileWriter timeOW = new FileWriter(timeF, true);
         long start = System.nanoTime();
@@ -26,8 +30,11 @@ public class DampedPointOscillator {
         double x4 = (-k*acceleration - gamma*x3)/mass;
         double x5 = (-k*x3 - gamma*x4)/mass;
 
+        List<Double> errorList = new ArrayList<>();
+
         for (i = 0; initialTime < finalTime; i++) {
             error += Math.pow(analyticSolutionComparison(accelerationComp, gamma, mass, initialTime, k) - x, 2);
+            errorList.add(error);
 
             //utilizamos el algoritmo para hacer la correccion de las variables.
             double[] gearResultList = GearPredictorCorrector(x, velocity, acceleration, x3, x4, x5, dt, mass, k, gamma);
@@ -41,12 +48,13 @@ public class DampedPointOscillator {
             if (Configuration.isDebug()) {
                 System.out.printf("t=%.2f -> x=%.2f ; v=%.2f\n", initialTime, x, velocity);
             }
-            if (i % Configuration.getOutputIntervalTime() == 0) {
+            if (i % Configuration.getOutputIntervalTime() == 0 && !mseFileGraph) {
                 outputFileWriter.write(String.format(Locale.US, "%f\n%f %f\n", initialTime, x, velocity));
                 outputFileWriter.flush();
             }
 
             initialTime += dt;
+
         }
 
         //calculamos el MEAN error
@@ -56,10 +64,15 @@ public class DampedPointOscillator {
         timeOW.close();
         error += Math.pow(analyticSolutionComparison(accelerationComp, gamma, mass, initialTime, k) - x, 2);
         double finalError = error/i;
+        if(mseFileGraph) {
+            PrintWriter printWriter = new PrintWriter(outputFileWriter);
+            printWriter.printf("%.10e\n", finalError);
+            printWriter.flush();
+        }
         System.out.println(finalError);
     }
 
-    public static void BeemanAlgorithm(FileWriter outputFileWriter, double x, double v, double k, double gamma, double dt, double mass, double acceleration) throws IOException {
+    public static void BeemanAlgorithm(FileWriter outputFileWriter, double x, double v, double k, double gamma, double dt, double mass, double acceleration, boolean mseFileGraph) throws IOException {
         File timeFile = new File("./src/main/resources/time_beeman.txt");
         FileWriter timeFileWriter = new FileWriter(timeFile, true);
         long start = System.nanoTime();
@@ -86,7 +99,7 @@ public class DampedPointOscillator {
                 System.out.printf("t=%.2f -> x=%.2f ; v=%.2f\n", initialTime, x, v);
             }
 
-            if (i % Configuration.getOutputIntervalTime() == 0) {
+            if (i % Configuration.getOutputIntervalTime() == 0 && !mseFileGraph) {
                 outputFileWriter.write(String.format(Locale.US, "%f\n%f %f\n", initialTime, x, v));
                 outputFileWriter.flush();
             }
@@ -101,6 +114,12 @@ public class DampedPointOscillator {
         timeFileWriter.close();
         difference += Math.pow(analyticSolutionComparison(acceleration, gamma, mass, initialTime, k) - x, 2);
         double error = difference/i;
+        if(mseFileGraph) {
+            PrintWriter printWriter = new PrintWriter(outputFileWriter);
+            printWriter.printf("%.10e\t", error);
+            printWriter.flush();
+        }
+
         System.out.println(error);
     }
 
@@ -137,7 +156,7 @@ public class DampedPointOscillator {
         return new double[]{xCorrected, velCorrected, accelerationCorrected, x3Corrected, x4Corrected, x5Corrected};
     }
 
-    public static void VerletAlgorithm(FileWriter outputFileWriter, double x, double v, double k, double gamma, double dt, double mass, double acceleration) throws IOException {
+    public static void VerletAlgorithm(FileWriter outputFileWriter, double x, double v, double k, double gamma, double dt, double mass, double acceleration, boolean mseFileGraph) throws IOException {
         File timeFile = new File("./src/main/resources/time_verlet.txt");
         FileWriter timeFileWriter = new FileWriter(timeFile, true);
 
@@ -162,7 +181,7 @@ public class DampedPointOscillator {
             if (Configuration.isDebug()) {
                 System.out.printf("t=%.2f -> x=%.2f ; v=%.2f\n", t, x, v);
             }
-            if (i % Configuration.getOutputIntervalTime() == 0) {
+            if (i % Configuration.getOutputIntervalTime() == 0 && !mseFileGraph) {
                 outputFileWriter.write(String.format(Locale.US, "%.8f\n%.8f %.8f\n", t, x, v));
                 outputFileWriter.flush();
             }
@@ -177,6 +196,12 @@ public class DampedPointOscillator {
         timeFileWriter.close();
         error += Math.pow(analyticSolutionComparison(acceleration, gamma, mass, t, k) - x, 2);
         double finalError = error/i;
+        if(mseFileGraph) {
+            PrintWriter printWriter = new PrintWriter(outputFileWriter);
+            printWriter.printf("%.10e\t", finalError);
+            printWriter.flush();
+        }
+
         System.out.println(finalError);
     }
 

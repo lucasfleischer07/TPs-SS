@@ -1,6 +1,6 @@
 {
   "exerciseNumber": 1,
-  "dt": 0.001,
+  "dt": 0.000001,
   "N": 400,
   "iterations": 30000,
   "particleRadius": 0.0015,
@@ -10,5 +10,6 @@
   "vaStationaryT": 1500,
   "staticFileName": "src/main/resources/static.txt",
   "outputFileNameEx1": "src/main/resources/output_ex1.txt",
-  "debug": false
+  "debug": false,
+  "mseEx1Graph": true
 }

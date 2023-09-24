@@ -13,7 +13,7 @@ public class Configuration {
 
     private static double simulationTime;
     private static int outputIntervalTime, exercise;
-    private static boolean debug;
+    private static boolean debug, mseEx1Graph;
     private static String staticFile, outputFile;
 
     static {
@@ -29,6 +29,7 @@ public class Configuration {
             debug = configObject.get("debug").getAsBoolean();
             staticFile = configObject.get("staticFileName").getAsString();
             outputFile = configObject.get("outputFileNameEx1").getAsString();
+            mseEx1Graph = configObject.get("mseEx1Graph").getAsBoolean();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,5 +82,13 @@ public class Configuration {
 
     public static void setOutputFile(String outputFile) {
         Configuration.outputFile = outputFile;
+    }
+
+    public static boolean isMseEx1Graph() {
+        return mseEx1Graph;
+    }
+
+    public static void setMseEx1Graph(boolean mseEx1Graph) {
+        Configuration.mseEx1Graph = mseEx1Graph;
     }
 }

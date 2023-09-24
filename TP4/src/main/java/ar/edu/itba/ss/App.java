@@ -8,6 +8,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 
 public class App {
     public static void main(String[] args) throws IOException {
@@ -38,9 +39,31 @@ public class App {
             double x = 1;
             double v = -A*gamma / (2*m);
 
-            DampedPointOscillator.VerletAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A);
-            DampedPointOscillator.BeemanAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A);
-            DampedPointOscillator.GearPredictorCorrectorAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A);
+            if(!Configuration.isMseEx1Graph()) {
+                DampedPointOscillator.VerletAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A, Configuration.isMseEx1Graph());
+                DampedPointOscillator.BeemanAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A, Configuration.isMseEx1Graph());
+                DampedPointOscillator.GearPredictorCorrectorAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A, Configuration.isMseEx1Graph());
+            } else {
+                double[] dtTimes = {0.000001, 0.00001, 0.0001, 0.001, 0.01};
+                Files.deleteIfExists(Paths.get("src/main/resources/mseDtTimesEx1.txt"));
+                for(double auxDt : dtTimes) {
+                    File outputMSEDtTimesFile = new File("src/main/resources/mseDtTimesEx1.txt");
+                    FileWriter outputFileWriterMSEDtTimesEx1 = new FileWriter(outputMSEDtTimesFile, true);
+//                    Formato del archivo:
+//                    dt1
+//                    error1Verlet    error1Beeman   error1Gear
+//                    dt2
+//                    error2Verlet    error2Beeman   error2Gear
+//                    dt3
+//                    error3Verlet    error3Beeman   error3Gear
+                    outputFileWriterMSEDtTimesEx1.write(String.format(Locale.US, "%f\n", auxDt));
+                    DampedPointOscillator.VerletAlgorithm(outputFileWriterMSEDtTimesEx1, x, v, k, gamma, auxDt, m, A, Configuration.isMseEx1Graph());
+                    DampedPointOscillator.BeemanAlgorithm(outputFileWriterMSEDtTimesEx1, x, v, k, gamma, auxDt, m, A, Configuration.isMseEx1Graph());
+                    DampedPointOscillator.GearPredictorCorrectorAlgorithm(outputFileWriterMSEDtTimesEx1, x, v, k, gamma, auxDt, m, A, Configuration.isMseEx1Graph());
+                }
+
+            }
+
         }
 
     }
