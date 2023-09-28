@@ -1,14 +1,12 @@
 package ar.edu.itba.ss.models;
 
 public class Verlet {
-    public static double positionFromVerlet(double x, double prevX, double dt, double m, double f) {
-        return 2*x - prevX + (Math.pow(dt,2)/m)*f;
+    public static double positionFromVerlet(double x, double previousX, double dt, double mass, double f) {
+        return 2*x - previousX + (Math.pow(dt,2)/mass)*f;
     }
 
-    public static double positionFromVerlet2(double x, double force, double prevX, double dt, double m, double gamma, double k){
-        double numerator = 2*x - x*(Math.pow(dt, 2) * k) / m + prevX * (dt*gamma / (2*m) - 1);
-        double denominator = 1 + gamma*dt/(2*m);
-        return numerator/denominator;
+    public static double positionFromVerlet2(double x, double force, double previousX, double dt, double mass, double gamma, double k){
+        return (2*x - x*(Math.pow(dt, 2) * k) / mass + previousX * (dt*gamma / (2*mass) - 1))/(1 + gamma*dt/(2*mass));
     }
 
     public static double velocityFromVerlet(double nextPosition, double prevPosition, double dt) {

@@ -11,5 +11,5 @@
   "staticFileName": "src/main/resources/static.txt",
   "outputFileNameEx1": "src/main/resources/output_ex1.txt",
   "debug": false,
-  "mseEx1Graph": true
+  "mseEx1Graph": false
 }
