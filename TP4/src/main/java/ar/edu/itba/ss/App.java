@@ -1,6 +1,9 @@
 package ar.edu.itba.ss;
 
+import ar.edu.itba.ss.models.Parameters;
 import ar.edu.itba.ss.utils.Configuration;
+import ar.edu.itba.ss.utils.GenerateParticle;
+import ar.edu.itba.ss.utils.WriteFiles;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -8,6 +11,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.InvalidParameterException;
 import java.util.Locale;
 
 public class App {
@@ -64,6 +68,20 @@ public class App {
 
             }
 
+        } else if(Configuration.getExercise() == 2) {
+            int n = Configuration.getN();
+            int iterations = Configuration.getIterations();
+            double mass = Configuration.getMass();
+            double particleRadius = Configuration.getParticleRadius();
+            double circleRadius = Configuration.getCircleRadius();
+
+            WriteFiles writeFiles = new WriteFiles();
+            writeFiles.generateStaticFile(staticFileName, particleRadius, n, mass, 0.01, circleRadius);
+
+            Parameters parameters = GenerateParticle.generateParticles(staticFileName);
+
+        } else {
+            throw new InvalidParameterException("Invalid exercise number");
         }
 
     }

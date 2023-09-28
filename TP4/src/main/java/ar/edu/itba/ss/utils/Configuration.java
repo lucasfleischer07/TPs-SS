@@ -11,8 +11,8 @@ import java.nio.file.Paths;
 
 public class Configuration {
 
-    private static double simulationTime;
-    private static int outputIntervalTime, exercise;
+    private static double simulationTime, particleRadius, circleRadius, mass;
+    private static int outputIntervalTime, exercise, iterations, n;
     private static boolean debug, mseEx1Graph;
     private static String staticFile, outputFile;
 
@@ -23,9 +23,14 @@ public class Configuration {
             JsonParser jsonParser = new JsonParser();
             JsonObject configObject = jsonParser.parse(reader).getAsJsonObject();
 
+            particleRadius = configObject.get("particleRadius").getAsDouble();
+            circleRadius = configObject.get("circleRadius").getAsDouble();
+            mass = configObject.get("mass").getAsDouble();
             simulationTime = configObject.get("dt").getAsDouble();
             outputIntervalTime = configObject.get("outputIntervalTime").getAsInt();
+            iterations = configObject.get("iterations").getAsInt();
             exercise = configObject.get("exerciseNumber").getAsInt();
+            n = configObject.get("N").getAsInt();
             debug = configObject.get("debug").getAsBoolean();
             staticFile = configObject.get("staticFileName").getAsString();
             outputFile = configObject.get("outputFileNameEx1").getAsString();
@@ -90,5 +95,45 @@ public class Configuration {
 
     public static void setMseEx1Graph(boolean mseEx1Graph) {
         Configuration.mseEx1Graph = mseEx1Graph;
+    }
+
+    public static double getParticleRadius() {
+        return particleRadius;
+    }
+
+    public static void setParticleRadius(double particleRadius) {
+        Configuration.particleRadius = particleRadius;
+    }
+
+    public static double getCircleRadius() {
+        return circleRadius;
+    }
+
+    public static void setCircleRadius(double circleRadius) {
+        Configuration.circleRadius = circleRadius;
+    }
+
+    public static double getMass() {
+        return mass;
+    }
+
+    public static void setMass(double mass) {
+        Configuration.mass = mass;
+    }
+
+    public static int getIterations() {
+        return iterations;
+    }
+
+    public static void setIterations(int iterations) {
+        Configuration.iterations = iterations;
+    }
+
+    public static int getN() {
+        return n;
+    }
+
+    public static void setN(int n) {
+        Configuration.n = n;
     }
 }

@@ -1,3 +1,18 @@
+import json
+
+
+def parse_config_json(file_path):
+    with open(file_path, 'r') as file:
+        config = json.load(file)
+
+        N = int(config["N"])
+        particleRadius = config["particleRadius"]
+        circleRadius = config["circleRadius"]
+        iterations = config["iterations"]
+
+
+        return N, particleRadius, circleRadius, iterations
+
 def parse_output_file(output_path, integration_methods):
     # Devuelvo un diccionario donde la clave es el metodo de integracion y el valor es otro diccionario donde tengo
     # la posicion para cada metodo de integracion
@@ -43,3 +58,9 @@ def read_mse_txt_file(filename, integration_methods):
             data[current_method][values[0]] = values[1:]
 
     return data
+
+def read_lines(file_path):
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+    return lines

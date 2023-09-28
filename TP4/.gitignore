@@ -42,3 +42,5 @@ build/
 *.txt
 
 graphics/__pycache__/*
+
+graphics/animations/*
