@@ -13,32 +13,31 @@ def parse_config_json(file_path):
 
         return N, particleRadius, circleRadius, iterations
 
-def parse_output_file(output_path, integration_methods):
-    # Devuelvo un diccionario donde la clave es el metodo de integracion y el valor es otro diccionario donde tengo
-    # la posicion para cada metodo de integracion
-
-    with open(output_path, 'r') as file:
+def parse_output_file(file_path):
+    with open(file_path, 'r') as file:
         lines = file.readlines()
 
-        method_idx = -1
+    particles_data = {}
+    time = None
 
-        positions = {}
-        time = None
+    for line in lines:
+        data = line.split("\t")
 
-        for line in lines:
-            data = line.split()
+        if len(data) == 1:
+            time = float(data[0])
+            particles_data[time] = []
+        else:
+            particle = {
+                'x': float(data[0]),
+                'y': float(data[1]),
+                'vx': float(data[2]),
+                'vy': float(data[3]),
+                'radius': float(data[4]),
+            }
 
-            if len(data) == 1:
-                time = float(data[0])
+            particles_data[time].append(particle)
 
-                if time == 0:
-                    method_idx += 1
-                    positions[integration_methods[method_idx]] = {}
-            else:
-                # velocity = float(data[1])
-                positions[integration_methods[method_idx]][time] = float(data[0])
-
-    return positions
+    return particles_data
 
 def read_mse_txt_file(filename, integration_methods):
     data = {}

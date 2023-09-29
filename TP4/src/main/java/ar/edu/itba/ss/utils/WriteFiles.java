@@ -26,12 +26,28 @@ public void generateStaticFile(String staticFileName, double particleRadius, int
     List<Particle> particles = new ArrayList<>();
 
     for (int j = 0; j < n; j++) {
-        double angle = random.nextDouble() * 2 * Math.PI;
-        double x = circleRadius * Math.cos(angle);
-        double y = circleRadius * Math.sin(angle);
+        boolean isOverlap;
+        double x, y;
+        System.out.println(j);
+
+        do {
+            isOverlap = false;
+            double angle = random.nextDouble() * 2 * Math.PI;
+            x = circleRadius * Math.cos(angle);
+            y = circleRadius * Math.sin(angle);
+
+            // Verifica si la nueva partícula se superpone con alguna partícula existente
+            for (Particle existingParticle : particles) {
+                double distance = Math.sqrt(Math.pow(x - existingParticle.getX(), 2) + Math.pow(y - existingParticle.getY(), 2));
+                if (distance < 2 * particleRadius) {
+                    isOverlap = true;
+                    break; // Superposición, regenera las coordenadas
+                }
+            }
+        } while (isOverlap);
 
         // Genera velocidades aleatorias en todas las direcciones
-        angle = random.nextDouble() * 2 * Math.PI;
+        double angle = random.nextDouble() * 2 * Math.PI;
         double velocityX = velocity * Math.cos(angle);
         double velocityY = velocity * Math.sin(angle);
 
