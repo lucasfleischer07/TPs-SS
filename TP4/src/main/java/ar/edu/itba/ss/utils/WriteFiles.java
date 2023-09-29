@@ -28,8 +28,6 @@ public void generateStaticFile(String staticFileName, double particleRadius, int
     for (int j = 0; j < n; j++) {
         boolean isOverlap;
         double x, y;
-        System.out.println(j);
-
         do {
             isOverlap = false;
             double angle = random.nextDouble() * 2 * Math.PI;
@@ -45,6 +43,8 @@ public void generateStaticFile(String staticFileName, double particleRadius, int
                 }
             }
         } while (isOverlap);
+        System.out.println(j);
+
 
         // Genera velocidades aleatorias en todas las direcciones
         double angle = random.nextDouble() * 2 * Math.PI;
