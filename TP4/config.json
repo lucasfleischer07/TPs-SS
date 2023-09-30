@@ -1,10 +1,10 @@
 {
   "exerciseNumber": 2,
   "dt": 0.000001,
-  "N": 25,
+  "N": 22,
   "iterations": 1,
   "particleRadius": 0.0225,
-  "circleRadius": 0.2149,
+  "lineLength": 1.35,
   "velocity": 0.01,
   "mass": 0.025,
   "outputIntervalTime": 10,

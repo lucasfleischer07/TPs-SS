@@ -6,12 +6,11 @@ import com.google.gson.JsonParser;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Configuration {
 
-    private static double simulationTime, particleRadius, circleRadius, mass;
+    private static double simulationTime, particleRadius, lineLength, mass;
     private static int outputIntervalTime, exercise, iterations, n;
     private static boolean debug, mseEx1Graph;
     private static String staticFile, outputFile;
@@ -24,7 +23,7 @@ public class Configuration {
             JsonObject configObject = jsonParser.parse(reader).getAsJsonObject();
 
             particleRadius = configObject.get("particleRadius").getAsDouble();
-            circleRadius = configObject.get("circleRadius").getAsDouble();
+            lineLength = configObject.get("lineLength").getAsDouble();
             mass = configObject.get("mass").getAsDouble();
             simulationTime = configObject.get("dt").getAsDouble();
             outputIntervalTime = configObject.get("outputIntervalTime").getAsInt();
@@ -105,12 +104,12 @@ public class Configuration {
         Configuration.particleRadius = particleRadius;
     }
 
-    public static double getCircleRadius() {
-        return circleRadius;
+    public static double getLineLength() {
+        return lineLength;
     }
 
-    public static void setCircleRadius(double circleRadius) {
-        Configuration.circleRadius = circleRadius;
+    public static void setLineLength(double lineLength) {
+        Configuration.lineLength = lineLength;
     }
 
     public static double getMass() {

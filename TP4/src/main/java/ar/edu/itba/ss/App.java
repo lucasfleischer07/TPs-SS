@@ -9,7 +9,6 @@ import com.google.gson.JsonParser;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidParameterException;
 import java.util.Locale;
@@ -73,10 +72,10 @@ public class App {
             int iterations = Configuration.getIterations();
             double mass = Configuration.getMass();
             double particleRadius = Configuration.getParticleRadius();
-            double circleRadius = Configuration.getCircleRadius();
+            double lineLength = Configuration.getLineLength();
 
             WriteFiles writeFiles = new WriteFiles();
-            writeFiles.generateStaticFile(staticFileName, particleRadius, n, mass, 0.01, circleRadius);
+            writeFiles.generateStaticFile(staticFileName, particleRadius, n, mass, 0.01, lineLength);
 
             Parameters parameters = GenerateParticle.generateParticles(staticFileName);
 
