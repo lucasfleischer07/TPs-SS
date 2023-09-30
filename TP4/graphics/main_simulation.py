@@ -130,7 +130,7 @@ def main():
 
         if dt == (1.0E-4):
             particle_data = parse_output_file(output_base_path + "_" + str(n) + "_1.0E-4" + ".txt")
-        elif dt == (1.0E-4):
+        elif dt == (1.0E-5):
             particle_data = parse_output_file(output_base_path + "_" + str(n) + "_1.0E-5" + ".txt")
         else:
             particle_data = parse_output_file(output_base_path + "_" + str(n) + "_" + str(dt) + ".txt")

@@ -145,6 +145,27 @@ public class Particle implements Comparable<Particle> {
         this.forceY = forceY;
     }
 
+    public boolean collidesWith(Particle p, Double dt) {
+        double deltaRx = this.getX() - p.getX();
+        double deltaVx = this.getVelX() - p.getVelX();
+
+        double sigma = this.radius + p.getRadius();
+
+        double dvdr = (deltaRx * deltaVx);
+        if (dvdr >= 0) {
+            return false;
+        }
+
+        double dvdv = (deltaVx * deltaVx);
+        double drdr = (deltaRx * deltaRx);
+        double d = Math.pow(dvdr, 2) - dvdv * (drdr - Math.pow(sigma, 2));
+        if (d < 0) {
+            return false;
+        }
+
+        return (-(dvdr + Math.sqrt(d)) / dvdv ) < dt;
+    }
+
     @Override
     public String toString() {
         return "{ " + x + ", " + y + " }";
