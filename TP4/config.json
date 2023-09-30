@@ -1,5 +1,5 @@
 {
-  "exerciseNumber": 2,
+  "exerciseNumber": 1,
   "dt": 0.000001,
   "N": 22,
   "iterations": 1,
@@ -9,8 +9,10 @@
   "mass": 0.025,
   "outputIntervalTime": 10,
   "vaStationaryT": 1500,
-  "staticFileName": "src/main/resources/static_ex2.txt",
-  "outputFileNameEx1": "src/main/resources/output_ex1.txt",
+  "outputFileNameEx1": "src/main/resources/ex1/output_ex1.txt",
+  "mscErrorFileNameEx1": "src/main/resources/ex1/mse_dt_times_ex1.txt",
+  "staticFileNameEx2": "src/main/resources/ex2/static_ex2",
+  "outputFileNameEx2": "src/main/resources/ex2/output_ex2",
   "debug": false,
   "mseEx1Graph": false
 }

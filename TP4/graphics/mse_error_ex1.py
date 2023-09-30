@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 def main():
     # Abre el archivo de texto para lectura
-    with open("../src/main/resources/mseDtTimesEx1.txt", "r") as file:
+    with open("../src/main/resources/ex1/mse_dt_times_ex1.txt", "r") as file:
         lines = file.readlines()
 
     # Inicializa listas para almacenar los valores

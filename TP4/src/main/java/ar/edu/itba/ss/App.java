@@ -21,17 +21,12 @@ public class App {
         JsonParser jsonParser = new JsonParser();
         JsonObject configObject = jsonParser.parse(reader).getAsJsonObject();
 
-        //  Geteo la informacion del config.json
-        String staticFileName = configObject.get("staticFileName").getAsString();
-        String outputFileNameEx1 = configObject.get("outputFileNameEx1").getAsString();
-
-        Files.deleteIfExists(Paths.get(outputFileNameEx1));
-        File outputFile = new File(outputFileNameEx1);
-        FileWriter outputFileWriterEx1 = new FileWriter(outputFile, true);
-
-        double dt =  Configuration.getSimulationTime();
-
         if(Configuration.getExercise() == 1) {
+            String outputFileNameEx1 = Configuration.getOutputFileNameEx1();
+            Files.deleteIfExists(Paths.get(outputFileNameEx1));
+            File outputFile = new File(outputFileNameEx1);
+            FileWriter outputFileWriterEx1 = new FileWriter(outputFile, true);
+
             // Parameters
             double m = 70;
             double k = Math.pow(10, 4);
@@ -41,6 +36,8 @@ public class App {
             // Initial conditions
             double x = 1;
             double v = -A*gamma / (2*m);
+            double dt =  Configuration.getSimulationTime();
+
 
             if(!Configuration.isMseEx1Graph()) {
                 DampedPointOscillator.VerletAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A, Configuration.isMseEx1Graph());
@@ -48,9 +45,11 @@ public class App {
                 DampedPointOscillator.GearPredictorCorrectorAlgorithm(outputFileWriterEx1, x, v, k, gamma, dt, m, A, Configuration.isMseEx1Graph());
             } else {
                 double[] dtTimes = {0.000001, 0.00001, 0.0001, 0.001, 0.01};
-                Files.deleteIfExists(Paths.get("src/main/resources/mseDtTimesEx1.txt"));
+                String mscErrorFileNameEx1 = Configuration.getMscErrorFileNameEx1();
+
+                Files.deleteIfExists(Paths.get(mscErrorFileNameEx1));
                 for(double auxDt : dtTimes) {
-                    File outputMSEDtTimesFile = new File("src/main/resources/mseDtTimesEx1.txt");
+                    File outputMSEDtTimesFile = new File(mscErrorFileNameEx1);
                     FileWriter outputFileWriterMSEDtTimesEx1 = new FileWriter(outputMSEDtTimesFile, true);
 //                    Formato del archivo:
 //                    dt1
@@ -68,6 +67,9 @@ public class App {
             }
 
         } else if(Configuration.getExercise() == 2) {
+            String staticFileNameEx2 = Configuration.getStaticFileNameEx2();
+            String outputFileNameEx2 = Configuration.getOutputFileNameEx2();
+
             int n = Configuration.getN();
             int iterations = Configuration.getIterations();
             double mass = Configuration.getMass();
@@ -75,9 +77,13 @@ public class App {
             double lineLength = Configuration.getLineLength();
 
             WriteFiles writeFiles = new WriteFiles();
-            writeFiles.generateStaticFile(staticFileName, particleRadius, n, mass, 0.01, lineLength);
 
-            Parameters parameters = GenerateParticle.generateParticles(staticFileName);
+            double[] dtValues = {0.1, 0.01, 0.001, 0.0001, 0.00001};
+            for(double dt : dtValues) {
+                // * Cambiar generateStaticFile por generateStaticFile2 si se quieren hacer 25 o mas particulas
+                writeFiles.generateStaticFile(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
+                Parameters parameters = GenerateParticle.generateParticles(staticFileNameEx2 + "_" + n + "_" + dt + ".txt");
+            }
 
         } else {
             throw new InvalidParameterException("Invalid exercise number");

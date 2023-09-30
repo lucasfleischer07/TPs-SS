@@ -13,7 +13,7 @@ public class Configuration {
     private static double simulationTime, particleRadius, lineLength, mass;
     private static int outputIntervalTime, exercise, iterations, n;
     private static boolean debug, mseEx1Graph;
-    private static String staticFile, outputFile;
+    private static String outputFileNameEx1, mscErrorFileNameEx1, staticFileNameEx2, outputFileNameEx2;
 
     static {
         try {
@@ -31,8 +31,10 @@ public class Configuration {
             exercise = configObject.get("exerciseNumber").getAsInt();
             n = configObject.get("N").getAsInt();
             debug = configObject.get("debug").getAsBoolean();
-            staticFile = configObject.get("staticFileName").getAsString();
-            outputFile = configObject.get("outputFileNameEx1").getAsString();
+            outputFileNameEx1 = configObject.get("outputFileNameEx1").getAsString();
+            mscErrorFileNameEx1 = configObject.get("mscErrorFileNameEx1").getAsString();
+            staticFileNameEx2 = configObject.get("staticFileNameEx2").getAsString();
+            outputFileNameEx2 = configObject.get("outputFileNameEx2").getAsString();
             mseEx1Graph = configObject.get("mseEx1Graph").getAsBoolean();
 
         } catch (Exception e) {
@@ -72,20 +74,36 @@ public class Configuration {
         Configuration.debug = debug;
     }
 
-    public static String getStaticFile() {
-        return staticFile;
+    public static String getStaticFileNameEx2() {
+        return staticFileNameEx2;
     }
 
-    public static void setStaticFile(String staticFile) {
-        Configuration.staticFile = staticFile;
+    public static void setStaticFileNameEx2(String staticFileNameEx2) {
+        Configuration.staticFileNameEx2 = staticFileNameEx2;
     }
 
-    public static String getOutputFile() {
-        return outputFile;
+    public static String getOutputFileNameEx2() {
+        return outputFileNameEx2;
     }
 
-    public static void setOutputFile(String outputFile) {
-        Configuration.outputFile = outputFile;
+    public static void setOutputFileNameEx2(String outputFileNameEx2) {
+        Configuration.outputFileNameEx2 = outputFileNameEx2;
+    }
+
+    public static String getOutputFileNameEx1() {
+        return outputFileNameEx1;
+    }
+
+    public static void setOutputFileNameEx1(String outputFileNameEx1) {
+        Configuration.outputFileNameEx1 = outputFileNameEx1;
+    }
+
+    public static String getMscErrorFileNameEx1() {
+        return mscErrorFileNameEx1;
+    }
+
+    public static void setMscErrorFileNameEx1(String mscErrorFileNameEx1) {
+        Configuration.mscErrorFileNameEx1 = mscErrorFileNameEx1;
     }
 
     public static boolean isMseEx1Graph() {

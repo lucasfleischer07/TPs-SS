@@ -12,7 +12,7 @@ from graphics.utils import calculate_analytical_positions
 # from parse_files import parse_output_file
 
 def main():
-    output_file_path = "../src/main/resources/output_ex1.txt"
+    output_file_path = "../src/main/resources/ex1/output_ex1.txt"
 
     methods_to_use = ["Verlet", "Beeman", "Gear Predictor Corrector"]
 

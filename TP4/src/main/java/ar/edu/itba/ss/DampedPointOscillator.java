@@ -17,7 +17,7 @@ import java.util.Locale;
 public class DampedPointOscillator {
 
     public static void GearPredictorCorrectorAlgorithm(FileWriter outputFileWriter, double x, double velocity, double k, double gamma, double dt, double mass, double accelerationComp, boolean mseFileGraph) throws IOException {
-        File timeF = new File("./src/main/resources/time_gear.txt");
+        File timeF = new File("./src/main/resources/ex1/time_gear.txt");
         FileWriter timeOW = new FileWriter(timeF, true);
         long start = System.nanoTime();
         double initialTime = 0, finalTime = 5, error = 0;
@@ -73,7 +73,7 @@ public class DampedPointOscillator {
     }
 
     public static void BeemanAlgorithm(FileWriter outputFileWriter, double x, double v, double k, double gamma, double dt, double mass, double acceleration, boolean mseFileGraph) throws IOException {
-        File timeFile = new File("./src/main/resources/time_beeman.txt");
+        File timeFile = new File("./src/main/resources/ex1/time_beeman.txt");
         FileWriter timeFileWriter = new FileWriter(timeFile, true);
         long start = System.nanoTime();
 
@@ -157,7 +157,7 @@ public class DampedPointOscillator {
     }
 
     public static void VerletAlgorithm(FileWriter outputFileWriter, double x, double v, double k, double gamma, double dt, double mass, double acceleration, boolean mseFileGraph) throws IOException {
-        File timeFile = new File("./src/main/resources/time_verlet.txt");
+        File timeFile = new File("./src/main/resources/ex1/time_verlet.txt");
         FileWriter timeFileWriter = new FileWriter(timeFile, true);
 
         long startTime = System.nanoTime();
