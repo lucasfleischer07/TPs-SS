@@ -13,7 +13,7 @@ public class Configuration {
     private static double simulationTime, particleRadius, lineLength, mass;
     private static int outputIntervalTime, exercise, iterations, n;
     private static boolean debug, mseEx1Graph;
-    private static String outputFileNameEx1, mscErrorFileNameEx1, staticFileNameEx2, outputFileNameEx2;
+    private static String outputFileNameEx1, mscErrorFileNameEx1, staticFileNameEx2, outputFileNameEx2, integrationMethod;
 
     static {
         try {
@@ -35,6 +35,7 @@ public class Configuration {
             mscErrorFileNameEx1 = configObject.get("mscErrorFileNameEx1").getAsString();
             staticFileNameEx2 = configObject.get("staticFileNameEx2").getAsString();
             outputFileNameEx2 = configObject.get("outputFileNameEx2").getAsString();
+            integrationMethod = configObject.get("integrationMethod").getAsString();
             mseEx1Graph = configObject.get("mseEx1Graph").getAsBoolean();
 
         } catch (Exception e) {
@@ -152,5 +153,13 @@ public class Configuration {
 
     public static void setN(int n) {
         Configuration.n = n;
+    }
+
+    public static String getIntegrationMethod() {
+        return integrationMethod;
+    }
+
+    public static void setIntegrationMethod(String integrationMethod) {
+        Configuration.integrationMethod = integrationMethod;
     }
 }

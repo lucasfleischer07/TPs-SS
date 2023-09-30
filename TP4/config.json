@@ -1,7 +1,8 @@
 {
-  "exerciseNumber": 1,
+  "exerciseNumber": 2,
+  "integrationMethod": "gear",
   "dt": 0.000001,
-  "N": 22,
+  "N": 3,
   "iterations": 1,
   "particleRadius": 0.0225,
   "lineLength": 1.35,

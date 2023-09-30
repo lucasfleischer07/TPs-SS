@@ -75,14 +75,24 @@ public class App {
             double mass = Configuration.getMass();
             double particleRadius = Configuration.getParticleRadius();
             double lineLength = Configuration.getLineLength();
+            double tf = 180;
 
             WriteFiles writeFiles = new WriteFiles();
 
-            double[] dtValues = {0.1, 0.01, 0.001, 0.0001, 0.00001};
+            double[] dtValues = {1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5};
             for(double dt : dtValues) {
                 // * Cambiar generateStaticFile por generateStaticFile2 si se quieren hacer 25 o mas particulas
                 writeFiles.generateStaticFile(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
                 Parameters parameters = GenerateParticle.generateParticles(staticFileNameEx2 + "_" + n + "_" + dt + ".txt");
+                writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", parameters.getParticles(), 0.0);
+
+                Collision collision = new Collision(parameters.getParticles(), dt);
+
+                for(double i = 0; i <= tf; i += collision.getTotalTime()) {
+                    collision.nextCollision();
+                    writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", collision.getParticles(), collision.getTotalTime());
+                    System.out.println(i);
+                }
             }
 
         } else {

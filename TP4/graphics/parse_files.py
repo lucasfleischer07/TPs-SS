@@ -7,11 +7,11 @@ def parse_config_json(file_path):
 
         N = int(config["N"])
         particleRadius = config["particleRadius"]
-        circleRadius = config["circleRadius"]
+        lineLength = config["lineLength"]
         iterations = config["iterations"]
 
+        return N, particleRadius, lineLength, iterations
 
-        return N, particleRadius, circleRadius, iterations
 
 def parse_output_file(file_path):
     with open(file_path, 'r') as file:
@@ -32,7 +32,9 @@ def parse_output_file(file_path):
                 'y': float(data[1]),
                 'vx': float(data[2]),
                 'vy': float(data[3]),
-                'radius': float(data[4]),
+                'fx': float(data[4]),
+                'fy': float(data[5]),
+                'radius': float(data[6]),
             }
 
             particles_data[time].append(particle)
@@ -57,6 +59,7 @@ def read_mse_txt_file(filename, integration_methods):
             data[current_method][values[0]] = values[1:]
 
     return data
+
 
 def read_lines(file_path):
     with open(file_path, 'r') as file:
