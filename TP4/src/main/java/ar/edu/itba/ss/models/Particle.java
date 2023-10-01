@@ -169,19 +169,19 @@ public class Particle implements Comparable<Particle> {
 
         double sigma = this.radius + p.getRadius();
 
-        double dvdr = (deltaRx * deltaVx);
-        if (dvdr >= 0) {
+        double dv_dr = (deltaRx * deltaVx);
+        if (dv_dr >= 0) {
             return false;
         }
 
-        double dvdv = (deltaVx * deltaVx);
-        double drdr = (deltaRx * deltaRx);
-        double d = Math.pow(dvdr, 2) - dvdv * (drdr - Math.pow(sigma, 2));
+        double dv2 = (deltaVx * deltaVx);
+        double dr2 = (deltaRx * deltaRx);
+        double d = Math.pow(dv_dr, 2) - dv2 * (dr2 - Math.pow(sigma, 2));
         if (d < 0) {
             return false;
         }
 
-        return (-(dvdr + Math.sqrt(d)) / dvdv ) < dt;
+        return (-(dv_dr + Math.sqrt(d)) / dv2 ) < dt;
     }
 
     @Override

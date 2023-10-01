@@ -2,7 +2,7 @@
   "exerciseNumber": 2,
   "integrationMethod": "gear",
   "dt": 0.000001,
-  "N": 5,
+  "N": 25,
   "iterations": 1,
   "particleRadius": 2.25,
   "lineLength": 135,
