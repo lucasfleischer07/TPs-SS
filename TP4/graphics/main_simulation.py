@@ -145,6 +145,5 @@ def main():
         anim.save('animations/animation_' + str(n) + '_' + str(dt) + '.mp4', writer=writer)
 
 
-
 if __name__ == "__main__":
     main()
