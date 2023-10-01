@@ -202,11 +202,25 @@ public class Particle implements Comparable<Particle> {
         return Objects.hash(x, y);
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Particle particle = (Particle) o;
+//        return Objects.equals(x, particle.x) && Objects.equals(y, particle.y);
+//    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Particle particle = (Particle) o;
-        return Objects.equals(x, particle.x) && Objects.equals(y, particle.y);
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        Particle other = (Particle) o;
+        if (id != other.id)
+            return false;
+        return true;
     }
 }

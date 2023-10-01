@@ -41,6 +41,7 @@ public class Collision {
         return k * (Math.abs(p1.getX()-p2.getX()) - (2*p1.getRadius())) * (Math.signum(p1.getX()-p2.getX()));
     }
 
+
     private double getPropulsionForce(Particle p) {
         return (p.getU() - p.getVelX());
     }
@@ -50,7 +51,10 @@ public class Collision {
     private double particleMovementEquation(Particle p, List<Particle> particles) {
         double colisionForceSum = 0.0;
         for(Particle otherParticle: particles) {
-            if(otherParticle != p && p.collidesWith(otherParticle, dt)) {
+//            if(otherParticle != p && p.collidesWith(otherParticle, dt)) {
+//                colisionForceSum += getCollisionForce(otherParticle, p);
+//            }
+            if(!otherParticle.equals(p) && p.collidesWith(otherParticle, dt)) {
                 colisionForceSum += getCollisionForce(otherParticle, p);
             }
         }
@@ -98,12 +102,14 @@ public class Collision {
         double r4p = r4 + r5 * dt;
         double r5p = r5;
 
-        double aux = rp % L;
-        if (aux < 0){
-            aux += L;
-        }
+//        double aux = rp % L;
+//        if (aux < 0){
+//            aux += L;
+//        }
 
-        return new double[]{aux, r1p, r2p, r3p, r4p, r5p};
+//        return new double[]{aux, r1p, r2p, r3p, r4p, r5p};
+        return new double[]{rp, r1p, r2p, r3p, r4p, r5p};
+
     }
 
 

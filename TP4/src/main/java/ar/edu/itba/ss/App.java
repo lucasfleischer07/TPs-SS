@@ -84,7 +84,7 @@ public class App {
             for(double dt : dtValues) {
                 System.out.println("------------------ STARTING WITH DT = " + dt + "------------------");
                 // * Cambiar generateStaticFile por generateStaticFile2 si se quieren hacer 25 o mas particulas
-//                writeFiles.generateStaticFile(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
+                writeFiles.generateStaticFile(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
                 Parameters parameters = GenerateParticle.generateParticles(staticFileNameEx2 + "_" + n + "_" + dt + ".txt");
                 writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", parameters.getParticles(), 0.0);
 
