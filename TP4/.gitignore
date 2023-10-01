@@ -41,6 +41,6 @@ build/
 
 *.txt
 
-graphics/__pycache__/*
+graphics/__pycache__/parse_files.cpython-310.pyc
 
 graphics/animations/*

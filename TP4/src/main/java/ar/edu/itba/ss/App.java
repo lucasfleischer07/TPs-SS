@@ -85,6 +85,7 @@ public class App {
                 System.out.println("------------------ STARTING WITH DT = " + dt + "------------------");
                 // * Cambiar generateStaticFile por generateStaticFile2 si se quieren hacer 25 o mas particulas
                 writeFiles.generateStaticFile(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
+//                writeFiles.generateStaticFile2(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
                 Parameters parameters = GenerateParticle.generateParticles(staticFileNameEx2 + "_" + n + "_" + dt + ".txt");
                 writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", parameters.getParticles(), 0.0);
 
@@ -93,45 +94,14 @@ public class App {
                 for(double i = 0; i < tf; i += dt) {
                     collision.nextCollision();
                     if(currentTime > DT_MAX) {
-                        System.out.println("DT value = " + dt + ", i value = " + i + ", from " + tf);
                         writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", collision.getParticles(), collision.getTotalTime());
                         currentTime = 0.0;
                     } else {
                         currentTime += dt;
                     }
-//                    System.out.println(i);
                 }
                 System.out.println("------------------ FINISHING WITH DT = " + dt + "------------------");
             }
-
-
-//            String staticFileNameEx2 = Configuration.getStaticFileNameEx2();
-//            String outputFileNameEx2 = Configuration.getOutputFileNameEx2();
-//
-//            int n = Configuration.getN();
-//            int iterations = Configuration.getIterations();
-//            double mass = Configuration.getMass();
-//            double particleRadius = Configuration.getParticleRadius();
-//            double lineLength = Configuration.getLineLength();
-//            double tf = 180;
-//
-//            WriteFiles writeFiles = new WriteFiles();
-//
-//            double[] dtValues = {1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5};
-//            for(double dt : dtValues) {
-//                // * Cambiar generateStaticFile por generateStaticFile2 si se quieren hacer 25 o mas particulas
-//                writeFiles.generateStaticFile(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
-//                System.out.println("-----------------------Particle generation finished-----------------------");
-//                Parameters parameters = GenerateParticle.generateParticles(staticFileNameEx2 + "_" + n + "_" + dt + ".txt");
-////                writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", parameters.getParticles(), 0.0);
-//                final File outFile = new File(outputFileNameEx2 + "_" + n + "_" + dt + ".txt");
-//
-//                System.out.println("-----------------------Collision started-----------------------");
-//                Collision2.run(parameters.getParticles(), lineLength,  tf, dt, 0.1, outFile);
-//
-//                System.out.println("-----------------------Collision finished-----------------------");
-//            }
-
         } else {
             throw new InvalidParameterException("Invalid exercise number");
         }

@@ -84,7 +84,7 @@ from parse_files import read_lines, parse_config_json, parse_output_file
 
 
 # Para dibujar la simulacion con la linea
-def update_particle_positions(frame, particle_data, ax, lineLength, particleRadius):
+def update_particle_positions(frame, particle_data, ax, lineLength, particleRadius, dt):
     ax.clear()
 
     particles = particle_data[frame]
@@ -114,7 +114,7 @@ def update_particle_positions(frame, particle_data, ax, lineLength, particleRadi
     ax.set_ylim(-particleRadius, particleRadius)
     ax.set_aspect('equal', adjustable='datalim')
 
-    print(frame)
+    print("dt = " + str(dt) + ", Frame = " + str(frame))
 
     ax.set_title('Time = ' + "{:.3f}".format(frame) + 's')
 
@@ -137,7 +137,7 @@ def main():
             particle_data = parse_output_file(output_base_path + "_" + str(n) + "_" + str(dt) + ".txt")
 
         # Llama a la función de actualización de la trama
-        anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, lineLength, particleRadius), frames=list(particle_data.keys()), repeat=False, interval=1)
+        anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, lineLength, particleRadius, dt), frames=list(particle_data.keys()), repeat=False, interval=1)
 
         # Save animation as mp4
         Writer = animation.writers['ffmpeg']
