@@ -28,13 +28,12 @@ def parse_output_file(file_path):
             particles_data[time] = []
         else:
             particle = {
-                'x': float(data[0]),
-                'y': float(data[1]),
-                'vx': float(data[2]),
-                'vy': float(data[3]),
-                'fx': float(data[4]),
-                'fy': float(data[5]),
-                'radius': float(data[6]),
+                'id': float(data[0]),
+                'x': float(data[1]),
+                'y': float(data[2]),
+                'vx': float(data[3]),
+                'vy': float(data[4]),
+                'radius': float(data[7]),
             }
 
             particles_data[time].append(particle)
