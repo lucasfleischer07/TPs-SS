@@ -40,6 +40,7 @@ def parse_output_file(file_path):
 
     return particles_data
 
+
 def read_mse_txt_file(filename, integration_methods):
     data = {}
     current_method = None

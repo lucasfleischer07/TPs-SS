@@ -76,30 +76,47 @@ public class App {
             double mass = Configuration.getMass();
             double particleRadius = Configuration.getParticleRadius();
             double lineLength = Configuration.getLineLength();
-            double tf = 180;
+            // Le pongo ese decima sino me saltea pasos, medio raro pero anda asi
+            double tf = 180.001;
 
             WriteFiles writeFiles = new WriteFiles();
 
             double[] dtValues = {1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5};
+            writeFiles.generateStaticFile(staticFileNameEx2 + "_" + n + ".txt", particleRadius, n, mass, lineLength);
+
             for(double dt : dtValues) {
                 System.out.println("------------------ STARTING WITH DT = " + dt + "------------------");
                 // * Cambiar generateStaticFile por generateStaticFile2 si se quieren hacer 25 o mas particulas
-                writeFiles.generateStaticFile(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
+//                writeFiles.generateStaticFile(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
 //                writeFiles.generateStaticFile2(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
-                Parameters parameters = GenerateParticle.generateParticles(staticFileNameEx2 + "_" + n + "_" + dt + ".txt");
+                Parameters parameters = GenerateParticle.generateParticles(staticFileNameEx2 + "_" + n + ".txt");
                 writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", parameters.getParticles(), 0.0);
 
                 Collision collision = new Collision(parameters.getParticles(), dt);
-                double currentTime = 0.0;
-                for(double i = 0; i < tf; i += dt) {
+
+                double currentTime = dt;
+                int iterationPerFrame = (int) Math.ceil(DT_MAX/dt);
+                int frame = 0;
+                while (currentTime<= tf) {
+                    frame++;
                     collision.nextCollision();
-                    if(currentTime > DT_MAX) {
+                    if(frame == iterationPerFrame) {
                         writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", collision.getParticles(), collision.getTotalTime());
-                        currentTime = 0.0;
-                    } else {
-                        currentTime += dt;
+                        frame = 0;
                     }
+                    currentTime += dt;
+
                 }
+
+//                for(double i = 0; i < tf; i += dt) {
+//                    collision.nextCollision();
+//                    if(currentTime > DT_MAX) {
+//                        writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", collision.getParticles(), collision.getTotalTime());
+//                        currentTime = 0.0;
+//                    } else {
+//                        currentTime += dt;
+//                    }
+//                }
                 System.out.println("------------------ FINISHING WITH DT = " + dt + "------------------");
             }
         } else {
