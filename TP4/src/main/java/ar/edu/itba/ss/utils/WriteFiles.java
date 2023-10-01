@@ -46,7 +46,7 @@ public class WriteFiles {
                 }
             } while (isOverlap);
 
-            System.out.println("Particle " + j + " generated");
+//            System.out.println("Particle " + j + " generated");
 
             // Velocidad aleatoria en dirección positiva o negativa en x
             double u = (Math.random() * 3) + 9; // Genera un número aleatorio entre 9 y 12
@@ -59,7 +59,7 @@ public class WriteFiles {
             staticWriter.printf("%f\t%f\t%f\t%f\t%f\t%f\t%f\n", x, y, velocityX, velocityY, u, particleRadius, mass);
 
             // Agrega la nueva partícula a la lista de partículas existentes
-            particles.add(new Particle(x, y, velocityX, velocityY, u, particleRadius, mass, 0.0, 0.0));
+            particles.add(new Particle(j+1, x, y, velocityX, velocityY, u, particleRadius, mass, 0.0, 0.0));
         }
 
         staticWriter.close();
@@ -99,7 +99,7 @@ public class WriteFiles {
             staticWriter.printf("%f\t%f\t%f\t%f\t%f\t%f\t%f\n", x, y, velocityX, velocityY, u, particleRadius, mass);
 
             // Agrega la nueva partícula a la lista de partículas existentes
-            particles.add(new Particle(x, y, velocityX, velocityY, u, particleRadius, mass, 0.0, 0.0));
+            particles.add(new Particle(j+1, x, y, velocityX, velocityY, u, particleRadius, mass, 0.0, 0.0));
         }
 
         staticWriter.close();
@@ -113,7 +113,8 @@ public class WriteFiles {
         stringBuilder.append(time).append("\n");
 
         for(Particle particle : particles) {
-            stringBuilder.append(String.format(Locale.US ,"%f\t%f\t%f\t%f\t%f\t%f\t%f\n",
+            stringBuilder.append(String.format(Locale.US ,"%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n",
+                    particle.getId(),
                     particle.getX(),
                     particle.getY(),
                     particle.getVelX(),

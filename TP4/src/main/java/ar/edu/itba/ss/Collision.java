@@ -19,14 +19,8 @@ public class Collision {
     private final double dt;
     private double totalTime;
 //    datos de consigna
-
-//    private double L = 135;
     private double L = Configuration.getLineLength();
-
-//    private double r = 2.25;
     private double r = Configuration.getParticleRadius();
-
-//    private double k = 2500;
     private double k = 2500;
 
 
@@ -38,42 +32,36 @@ public class Collision {
     }
 
     public void nextCollision() {
-        if(!Configuration.getIntegrationMethod().equals("gear")) {
-            System.out.println("Hola");
-        } else {
-            particles = gearNextCollision();
-        }
-
+        particles = gearNextCollision();
         totalTime += dt;
     }
 
     //fuerza entre choque de particulas
     private double getCollisionForce(Particle p1, Particle p2) {
-        return k * (Math.abs(p1.getX()-p2.getX()) - (2*r)) * (Math.signum(p2.getX()-p1.getX()));
+        return k * (Math.abs(p1.getX()-p2.getX()) - (2*p1.getRadius())) * (Math.signum(p1.getX()-p2.getX()));
     }
 
     private double getPropulsionForce(Particle p) {
-        return (p.getU()-p.getVelX());
+        return (p.getU() - p.getVelX());
     }
 
     //va a devolver a aceleración por eso se divide la fuerza por la masa al retornar
     //va a ser la sumatoria de la propulsion de la partícula más la sumatoria de la fuerza de colision
     private double particleMovementEquation(Particle p, List<Particle> particles) {
-        double colisionForceSum = 0;
+        double colisionForceSum = 0.0;
         for(Particle otherParticle: particles) {
-            //chequeo que no sea la misma partícula
-            if(otherParticle != p && otherParticle.collidesWith(p, dt)) {
-                colisionForceSum += getCollisionForce(p, otherParticle);
+            if(otherParticle != p && p.collidesWith(otherParticle, dt)) {
+                colisionForceSum += getCollisionForce(otherParticle, p);
             }
         }
-        return (getPropulsionForce(p) + colisionForceSum)/p.getMass();
+        return (getPropulsionForce(p) + colisionForceSum) / p.getMass();
     }
 
 
     private List<Particle> gearNextCollision() {
         List<Particle> newParticles = new ArrayList<>();
         for(Particle p1 : particles) {
-            Particle newParticle = new Particle(p1.getX(), p1.getY(), p1.getVelX(), p1.getVelY(), p1.getU(), p1.getRadius(), p1.getMass(), p1.getForceX(), p1.getForceY(), p1.getX2(), p1.getX3(), p1.getX4(), p1.getX5());
+            Particle newParticle = new Particle(p1.getId(), p1.getX(), p1.getY(), p1.getVelX(), p1.getVelY(), p1.getU(), p1.getRadius(), p1.getMass(), p1.getForceX(), p1.getForceY(), p1.getX2(), p1.getX3(), p1.getX4(), p1.getX5());
 
             //predecimos las nuevas derivadas hasta orden 5
             double[] predictionPositionX = getPredictor(newParticle.getX() % L, p1.getVelX(), p1.getX2(), p1.getX3(), p1.getX4(), p1.getX5());
@@ -88,7 +76,7 @@ public class Collision {
 
             //llamar al corrector
             double[] gearCoefficients = {3/20.0, 251/360.0, 1, 11/18.0, 1/6.0, 1/60.0};
-            newParticle.setX(predictionPositionX[0] + gearCoefficients[0] * deltaR2);
+            newParticle.setX((predictionPositionX[0] + gearCoefficients[0] * deltaR2) % L);
             newParticle.setVelX(predictionPositionX[1] + gearCoefficients[1] * deltaR2 / dt);
             newParticle.setX2(predictionPositionX[2] + gearCoefficients[2] * deltaR2 * factorialNumber(2) / Math.pow(dt, 2));
             newParticle.setX3(predictionPositionX[3] + gearCoefficients[3] * deltaR2 * factorialNumber(3) / Math.pow(dt, 3));
@@ -103,14 +91,19 @@ public class Collision {
 
 
     private double[] getPredictor(double r, double r1, double r2, double r3, double r4, double r5) {
-        double rp = (r + r1 * dt + r2 * Math.pow(dt, 2) / factorialNumber(2) + r3 * Math.pow(dt, 3) / factorialNumber(3) + r4 * Math.pow(dt, 4) / factorialNumber(4) + r5 * Math.pow(dt, 5) / factorialNumber(5)) % L;
+        double rp = r + r1 * dt + r2 * Math.pow(dt, 2) / factorialNumber(2) + r3 * Math.pow(dt, 3) / factorialNumber(3) + r4 * Math.pow(dt, 4) / factorialNumber(4) + r5 * Math.pow(dt, 5) / factorialNumber(5);
         double r1p = r1 + r2 * dt + r3 * Math.pow(dt, 2) / factorialNumber(2) + r4 * Math.pow(dt, 3) / factorialNumber(3) + r5 * Math.pow(dt, 4) / factorialNumber(4);
         double r2p = r2 + r3 * dt + r4 * Math.pow(dt, 2) / factorialNumber(2) + r5 * Math.pow(dt, 3) / factorialNumber(3);
         double r3p = r3 + r4 * dt + r5 * Math.pow(dt, 2) / factorialNumber(2);
         double r4p = r4 + r5 * dt;
         double r5p = r5;
 
-        return new double[]{rp, r1p, r2p, r3p, r4p, r5p};
+        double aux = rp % L;
+        if (aux < 0){
+            aux += L;
+        }
+
+        return new double[]{aux, r1p, r2p, r3p, r4p, r5p};
     }
 
 

@@ -1,13 +1,17 @@
 package ar.edu.itba.ss.models;
 
+import ar.edu.itba.ss.utils.Configuration;
+
 import java.util.Objects;
 
 public class Particle implements Comparable<Particle> {
+    private int id;
     private double x, y, x2, x3, x4, x5;            // coordenadas de la particula
     private double radius, mass, forceX, forceY;    // radio y masa de la particula
     private double velX, velY, u;      // velicidad en x e y de la particula
 
-    public Particle(double x, double y, double velX, double velY, double u, double radius, double mass, double forceX, double forceY) {
+    public Particle(int id, double x, double y, double velX, double velY, double u, double radius, double mass, double forceX, double forceY) {
+        this.id = id;
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -24,7 +28,8 @@ public class Particle implements Comparable<Particle> {
         this.x5 = 0;
     }
 
-    public Particle(double x, double y, double velX, double velY, double u, double radius, double mass, double forceX, double forceY, double x2, double x3, double x4, double x5) {
+    public Particle(int id, double x, double y, double velX, double velY, double u, double radius, double mass, double forceX, double forceY, double x2, double x3, double x4, double x5) {
+        this.id = id;
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -46,7 +51,12 @@ public class Particle implements Comparable<Particle> {
     }
 
     public void setX(double x) {
-        this.x = x;
+        double l = Configuration.getLineLength();
+        double aux = x % l;
+        if (aux < 0){
+            aux +=l;
+        }
+        this.x = aux;
     }
 
     public double getY() {
@@ -143,6 +153,14 @@ public class Particle implements Comparable<Particle> {
 
     public void setForceY(double forceY) {
         this.forceY = forceY;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public boolean collidesWith(Particle p, Double dt) {

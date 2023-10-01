@@ -22,14 +22,16 @@ public class GenerateParticle {
             reader.readLine();
 
             //  Itero sobre cada linea del archivo que existe
+            int j = 0;
             while ((line = reader.readLine()) != null) {
+                j++;
                 //  Meto los valores de cada linea en un string
                 String[] values = line.split("\t");
                 double[] valuesInDoubles = new double[values.length];
                 for (int i = 0; i < values.length; i++) {
                     valuesInDoubles[i] = Double.parseDouble(values[i]);
                 }
-                parameters.addParticle(new Particle(valuesInDoubles[0], valuesInDoubles[1], valuesInDoubles[2], valuesInDoubles[3], valuesInDoubles[4], valuesInDoubles[5], valuesInDoubles[6], 0.0, 0.0));
+                parameters.addParticle(new Particle(j, valuesInDoubles[0], valuesInDoubles[1], valuesInDoubles[2], valuesInDoubles[3], valuesInDoubles[4], valuesInDoubles[5], valuesInDoubles[6], 0.0, 0.0));
             }
 
         } catch (IOException e) {
