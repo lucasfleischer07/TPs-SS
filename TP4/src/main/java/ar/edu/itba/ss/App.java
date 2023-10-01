@@ -82,7 +82,7 @@ public class App {
             WriteFiles writeFiles = new WriteFiles();
 
             double[] dtValues = {1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5};
-            writeFiles.generateStaticFile(staticFileNameEx2 + "_" + n + ".txt", particleRadius, n, mass, lineLength);
+            writeFiles.generateStaticFile2(staticFileNameEx2 + "_" + n + ".txt", particleRadius, n, mass, lineLength);
 
             for(double dt : dtValues) {
                 System.out.println("------------------ STARTING WITH DT = " + dt + "------------------");
@@ -107,16 +107,6 @@ public class App {
                     currentTime += dt;
 
                 }
-
-//                for(double i = 0; i < tf; i += dt) {
-//                    collision.nextCollision();
-//                    if(currentTime > DT_MAX) {
-//                        writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", collision.getParticles(), collision.getTotalTime());
-//                        currentTime = 0.0;
-//                    } else {
-//                        currentTime += dt;
-//                    }
-//                }
                 System.out.println("------------------ FINISHING WITH DT = " + dt + "------------------");
             }
         } else {

@@ -7,7 +7,7 @@ def main():
     N_values = [5, 10, 15, 20, 25, 30]
     config_json_path = "../config.json"
     output_base_path = '../src/main/resources/ex2/output_ex2'
-    dt_values = [1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5]
+    dt_values = [1.0E-3]
     n, particleRadius, lineLength, iterations = parse_config_json(config_json_path)
     phi_dt_difference = {}
     color_list = ['b', 'g', 'r', 'c', 'y', 'm']
@@ -38,14 +38,14 @@ def main():
             plt.plot([i * 0.1 for i in range(0, 1801)], aux_vels, linestyle='-', color=color_list[index - 1],label=f'N= {N}')
             index += 1
 
-        # print(phi_dt_difference)
-        plt.xlabel('Tiempo')
-        plt.ylabel('Velocidad Promedio')
-        plt.legend()
-        plt.grid(True)
-        plt.savefig(f"graphs/ej_2_1_1_{dt}.png")
+    # print(phi_dt_difference)
+    plt.xlabel('Tiempo')
+    plt.ylabel('Velocidad Promedio')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig('graphs/ej_2_2_1.png')
 
-        plt.cla()
+    plt.cla()
 
 
 if __name__ == "__main__":

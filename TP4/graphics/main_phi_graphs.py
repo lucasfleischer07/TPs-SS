@@ -41,7 +41,6 @@ def main():
                 x_difference += min(abs(next_particle['x'] - current_particle['x']), lineLength - abs(next_particle['x'] - current_particle['x']))
 
             aux_phi.append(x_difference)
-
         phi_dt_difference[index] = aux_phi
         # plt.scatter([i*0.1 for i in range(0, 1801)], aux_phi, marker='o', linestyle='-', color=color_list[index-1],label=f'K= {index}')
         plt.plot([i * 0.1 for i in range(0, 1801)], aux_phi, linestyle='-', color=color_list[index - 1],label=f'K= {index}')
@@ -52,7 +51,7 @@ def main():
     plt.ylabel('Φ(t)')
     plt.legend()
     plt.grid(True)
-    plt.savefig('graphs/ej_2_1_1.png')
+    plt.savefig('graphs/ej_2_1.png')
 
     plt.cla()
 
