@@ -82,7 +82,7 @@ public class App {
             WriteFiles writeFiles = new WriteFiles();
 
             double[] dtValues = {1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5};
-            writeFiles.generateStaticFile2(staticFileNameEx2 + "_" + n + ".txt", particleRadius, n, mass, lineLength);
+//            writeFiles.generateStaticFile2(staticFileNameEx2 + "_" + n + ".txt", particleRadius, n, mass, lineLength);
 
             for(double dt : dtValues) {
                 System.out.println("------------------ STARTING WITH DT = " + dt + "------------------");
@@ -91,6 +91,8 @@ public class App {
 //                writeFiles.generateStaticFile2(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
                 Parameters parameters = GenerateParticle.generateParticles(staticFileNameEx2 + "_" + n + ".txt");
                 writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", parameters.getParticles(), 0.0);
+                // Descomentar para correr el grafico de phi (genera los archivos para eso)
+                writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + "_no_periodic_position.txt", parameters.getParticles(), 0.0);
 
                 Collision collision = new Collision(parameters.getParticles(), dt);
 
@@ -102,6 +104,8 @@ public class App {
                     collision.nextCollision();
                     if(frame == iterationPerFrame) {
                         writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", collision.getParticles(), collision.getTotalTime());
+                        // Descomentar para correr el grafico de phi (genera los archivos para eso)
+//                        writeFiles.generateOutputFile2(outputFileNameEx2 + "_" + n + "_" + dt + "_no_periodic_position.txt", collision.getParticles(), collision.getTotalTime());
                         frame = 0;
                     }
                     currentTime += dt;
