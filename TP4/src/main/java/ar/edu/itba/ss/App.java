@@ -92,7 +92,7 @@ public class App {
                 Parameters parameters = GenerateParticle.generateParticles(staticFileNameEx2 + "_" + n + ".txt");
                 writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", parameters.getParticles(), 0.0);
                 // Descomentar para correr el grafico de phi (genera los archivos para eso)
-                writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + "_no_periodic_position.txt", parameters.getParticles(), 0.0);
+//                writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + "_no_periodic_position.txt", parameters.getParticles(), 0.0);
 
                 Collision collision = new Collision(parameters.getParticles(), dt);
 
