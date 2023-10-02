@@ -11,6 +11,7 @@ def main():
     n, particleRadius, lineLength, iterations = parse_config_json(config_json_path)
     phi_dt_difference = {}
     color_list = ['b', 'g', 'r', 'c', 'y', 'm']
+    # color_list = ['navy', 'darkgreen', 'maroon', 'teal', 'gold', 'purple']
 
     for dt in dt_values:
         index = 0
@@ -34,23 +35,16 @@ def main():
                 aux_vels.append(vel_difference/N)
 
             phi_dt_difference[index] = aux_vels
-            # plt.scatter([i*0.1 for i in range(0, 1801)], aux_phi, marker='o', linestyle='-', color=color_list[index-1],label=f'K= {index}')
-            if N==15:
-                plt.plot([i * 0.1 for i in range(0, 1801)], aux_vels, linestyle='-', color=color_list[index-1],
-                         label=f'N= {N}')
-            elif N==25:
-                plt.plot([i * 0.1 for i in range(0, 1801)], aux_vels, linestyle='-', color=color_list[index-1],
-                         label=f'N= {N}')
-            else:
-                plt.plot([i * 0.1 for i in range(0, 1801)], aux_vels, linestyle='-', color=color_list[index - 1],label=f'N= {N}')
+            # plt.scatter([i*0.1 for i in range(0, 1801)], aux_vels, marker='o', linestyle='-', color=color_list[index-1],label=f'N= {N}')
+            plt.plot([i * 0.1 for i in range(0, 1801)], aux_vels, linestyle='-', color=color_list[index - 1],label=f'N= {N}')
             index += 1
 
         # print(phi_dt_difference)
-        plt.xlabel('Tiempo')
-        plt.ylabel('Velocidad Promedio')
+        plt.xlabel('Tiempo (s)')
+        plt.ylabel('Velocidad Promedio ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
         plt.legend()
         plt.grid(True)
-        plt.savefig(f"graphs/ej_2_1_1_{dt}.png")
+        plt.savefig(f"graphs/ej_2_2_1_n_25_dt_{dt}_flor.png")
 
         plt.cla()
 
