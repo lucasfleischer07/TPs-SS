@@ -4,7 +4,7 @@ from graphics.parse_files import parse_config_json, parse_output_file
 
 
 def main():
-    N_values = [5, 10, 15, 20, 25, 30]
+    N_values = [5,10,15,20,25,30]
     config_json_path = "../config.json"
     output_base_path = '../src/main/resources/ex2/output_ex2'
     dt_values = [1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5]
@@ -35,7 +35,14 @@ def main():
 
             phi_dt_difference[index] = aux_vels
             # plt.scatter([i*0.1 for i in range(0, 1801)], aux_phi, marker='o', linestyle='-', color=color_list[index-1],label=f'K= {index}')
-            plt.plot([i * 0.1 for i in range(0, 1801)], aux_vels, linestyle='-', color=color_list[index - 1],label=f'N= {N}')
+            if N==15:
+                plt.plot([i * 0.1 for i in range(0, 1801)], aux_vels, linestyle='-', color=color_list[index-1],
+                         label=f'N= {N}')
+            elif N==25:
+                plt.plot([i * 0.1 for i in range(0, 1801)], aux_vels, linestyle='-', color=color_list[index-1],
+                         label=f'N= {N}')
+            else:
+                plt.plot([i * 0.1 for i in range(0, 1801)], aux_vels, linestyle='-', color=color_list[index - 1],label=f'N= {N}')
             index += 1
 
         # print(phi_dt_difference)
@@ -50,3 +57,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+

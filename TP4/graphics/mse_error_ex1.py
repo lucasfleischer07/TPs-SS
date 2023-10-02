@@ -25,8 +25,8 @@ def main():
     plt.loglog(t, mse_output_beeman, linestyle='-', marker='o', label='Beeman')
     plt.loglog(t, mse_output_gear, linestyle='-', marker='o', label='Gear Corrector Predictor')
 
-    plt.xlabel("Tiempo (s)", fontsize=15)
-    plt.ylabel("MSE", fontsize=15)
+    plt.xlabel("Tiempo (s)")
+    plt.ylabel("MSE")
 
     plt.legend()
     plt.tight_layout()
