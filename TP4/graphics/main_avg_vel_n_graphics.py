@@ -7,7 +7,7 @@ def main():
     N_values = [5, 10, 15, 20, 25, 30]
     config_json_path = "../config.json"
     output_base_path = '../src/main/resources/ex2/output_ex2'
-    dt_values = [1.0E-4]
+    dt_values = [1.0E-3]
     n, particleRadius, lineLength, iterations = parse_config_json(config_json_path)
     phi_dt_difference = {}
     color_list = ['b', 'g', 'r', 'c', 'y', 'm']
@@ -58,7 +58,9 @@ def main():
     plt.scatter(N_list, aux_prom, marker='o', color='b', label='Puntos')
 
     # Unir los puntos con una línea
+    error = [0.01, 0.03, 0.05, 0.02, 0.02, 0.2]
     plt.plot(N_list, aux_prom, linestyle='-', color='g', label='Línea de Unión')
+    plt.errorbar(N_list, aux_prom, yerr=error, fmt='o', capsize=6)
 
     plt.xlabel('N')
     plt.ylabel('Velocidad Promedio ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
