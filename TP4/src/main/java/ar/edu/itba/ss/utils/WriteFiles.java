@@ -59,7 +59,7 @@ public class WriteFiles {
             staticWriter.printf("%f\t%f\t%f\t%f\t%f\t%f\t%f\n", x, y, velocityX, velocityY, u, particleRadius, mass);
 
             // Agrega la nueva partícula a la lista de partículas existentes
-            particles.add(new Particle(j+1, x, y, velocityX, velocityY, u, particleRadius, mass, 0.0, 0.0));
+            particles.add(new Particle(j+1, x, y, velocityX, velocityY, u, particleRadius, mass, 0.0, 0.0, x));
         }
 
         staticWriter.close();
@@ -99,7 +99,7 @@ public class WriteFiles {
             staticWriter.printf("%f\t%f\t%f\t%f\t%f\t%f\t%f\n", x, y, velocityX, velocityY, u, particleRadius, mass);
 
             // Agrega la nueva partícula a la lista de partículas existentes
-            particles.add(new Particle(j+1, x, y, velocityX, velocityY, u, particleRadius, mass, 0.0, 0.0));
+            particles.add(new Particle(j+1, x, y, velocityX, velocityY, u, particleRadius, mass, 0.0, 0.0, x));
         }
 
         staticWriter.close();
@@ -132,18 +132,27 @@ public class WriteFiles {
 
 
 
-//    public void generateDataFile(int n, int iterations, double particleRadius, double mass, double velocity, double enclosure1X, double enclosure1Y, double enclosure2X) {
-//        try {
-//            BufferedWriter writerPy = new BufferedWriter(new FileWriter("src/main/resources/data.txt", true));
-//            writerPy.write("N " + n + "\n");
-//            writerPy.write("ITERATIONS " + iterations + "\n");
-//            writerPy.write("PARTICLE_RADIUS " + particleRadius + "\n");
-//            writerPy.write("PARTICLE_MASS " + mass + "\n");
-//            writerPy.write("PARTICLE_INITIAL_VEL " + velocity + "\n");
-//            writerPy.write("TABLE_WIDTH " + enclosure1X + "\n");
-//            writerPy.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    public void generateOutputFile2(String fileName, List<Particle> particles, double time) throws IOException {
+        PrintWriter outputWriter = new PrintWriter(new FileWriter(fileName, true));
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(time).append("\n");
+
+        for(Particle particle : particles) {
+            stringBuilder.append(String.format(Locale.US ,"%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n",
+                    particle.getId(),
+                    particle.getxNoPeriodic(),
+                    particle.getY(),
+                    particle.getVelX(),
+                    particle.getVelY(),
+                    particle.getForceX(),
+                    particle.getForceY(),
+                    particle.getRadius()));
+        }
+
+        outputWriter.write(stringBuilder.toString());
+        outputWriter.close();
+
+    }
 }

@@ -6,13 +6,14 @@ import java.util.Objects;
 
 public class Particle implements Comparable<Particle> {
     private int id;
-    private double x, y, x2, x3, x4, x5;            // coordenadas de la particula
+    private double x, y, x2, x3, x4, x5, xNoPeriodic;            // coordenadas de la particula
     private double radius, mass, forceX, forceY;    // radio y masa de la particula
     private double velX, velY, u;      // velicidad en x e y de la particula
 
-    public Particle(int id, double x, double y, double velX, double velY, double u, double radius, double mass, double forceX, double forceY) {
+    public Particle(int id, double x, double y, double velX, double velY, double u, double radius, double mass, double forceX, double forceY, double xNoPeriodic) {
         this.id = id;
         this.x = x;
+        this.xNoPeriodic = xNoPeriodic;
         this.y = y;
         this.radius = radius;
         this.mass = mass;
@@ -28,7 +29,7 @@ public class Particle implements Comparable<Particle> {
         this.x5 = 0;
     }
 
-    public Particle(int id, double x, double y, double velX, double velY, double u, double radius, double mass, double forceX, double forceY, double x2, double x3, double x4, double x5) {
+    public Particle(int id, double x, double y, double velX, double velY, double u, double radius, double mass, double forceX, double forceY, double x2, double x3, double x4, double x5, double xNoPeriodic) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -39,6 +40,7 @@ public class Particle implements Comparable<Particle> {
         this.u = u;
         this.forceX = forceX;
         this.forceY = forceY;
+        this.xNoPeriodic = xNoPeriodic;
 
         this.x2 = x2;
         this.x3 = x3;
@@ -161,6 +163,14 @@ public class Particle implements Comparable<Particle> {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public double getxNoPeriodic() {
+        return xNoPeriodic;
+    }
+
+    public void setxNoPeriodic(double xNoPeriodic) {
+        this.xNoPeriodic = xNoPeriodic;
     }
 
     public boolean collidesWith(Particle p, Double dt) {

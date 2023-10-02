@@ -31,7 +31,7 @@ public class GenerateParticle {
                 for (int i = 0; i < values.length; i++) {
                     valuesInDoubles[i] = Double.parseDouble(values[i]);
                 }
-                parameters.addParticle(new Particle(j, valuesInDoubles[0], valuesInDoubles[1], valuesInDoubles[2], valuesInDoubles[3], valuesInDoubles[4], valuesInDoubles[5], valuesInDoubles[6], 0.0, 0.0));
+                parameters.addParticle(new Particle(j, valuesInDoubles[0], valuesInDoubles[1], valuesInDoubles[2], valuesInDoubles[3], valuesInDoubles[4], valuesInDoubles[5], valuesInDoubles[6], 0.0, 0.0, valuesInDoubles[0]));
             }
 
         } catch (IOException e) {
