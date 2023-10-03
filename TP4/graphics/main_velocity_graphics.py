@@ -17,6 +17,7 @@ def main():
         index = 0
         for N in N_values:
             if dt == (1.0E-4):
+                # current_dt_particle_data = parse_output_file(output_base_path + "_" + str(N) + "_1.0E-4" + ".txt")
                 current_dt_particle_data = parse_output_file(output_base_path + "_" + str(N) + "_1.0E-4" + ".txt")
             elif dt == (1.0E-5):
                 current_dt_particle_data = parse_output_file(output_base_path + "_" + str(N) + "_1.0E-5" + ".txt")
@@ -44,8 +45,8 @@ def main():
         plt.ylabel('Velocidad Promedio ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
         plt.legend()
         plt.grid(True)
-        plt.savefig(f"graphs/ej_2_2_1_n_25_dt_{dt}_flor.png")
-
+        # plt.savefig(f"graphs/ej_2_2_1_n_25_dt_{dt}.png")
+        plt.savefig(f"graphs/ej_2_3_n_25_dt_{dt}.png")
         plt.cla()
 
 

@@ -105,6 +105,47 @@ public class WriteFiles {
         staticWriter.close();
     }
 
+    // * Genera Particulas una al lado de la otra con velocidad creciente
+    public void generateStaticFile3(String staticFileName, double particleRadius, int n, double mass, double lineLength) throws IOException {
+        // Creo los archivos para poder escribirlos
+        File file = new File(staticFileName);
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+
+        PrintWriter staticWriter = new PrintWriter(new FileWriter(file));
+        staticWriter.printf("0.0\n");
+
+        List<Particle> particles = new ArrayList<>();
+        double requiredSpacing = 2 * particleRadius; // Espacio requerido para cada partícula
+
+        if (requiredSpacing * n > lineLength) {
+            throw new IllegalArgumentException("No es posible colocar " + n + " partículas en un espacio de longitud " + lineLength + " con un radio de " + particleRadius);
+        }
+
+        double unusedSpace = lineLength - (requiredSpacing * n); // Espacio no utilizado
+        double spacing = unusedSpace > 0 ? unusedSpace / (n - 1) : 0; // Espacio adicional entre partículas
+        double minU = 9.0; // Valor mínimo de velocidad
+        double maxU = 12.0; // Valor máximo de velocidad
+        double uStep = (maxU - minU) / (n - 1); // Incremento de velocidad entre partículas
+
+        for (int j = 0; j < n; j++) {
+            double x = j * (requiredSpacing + spacing); // Coordenada (x) con espacio adicional
+            double y = 0; // Coordenada y en 0 ya que las partículas se mueven solo en x
+            double u = minU + (j * uStep); // Velocidad aumenta gradualmente
+            double velocityX = u;
+            double velocityY = 0.0; // Velocidad aleatoria en dirección positiva o negativa en x
+
+            staticWriter.printf("%f\t%f\t%f\t%f\t%f\t%f\t%f\n", x, y, velocityX, velocityY, u, particleRadius, mass);
+
+            // Agrega la nueva partícula a la lista de partículas existentes
+            particles.add(new Particle(j+1, x, y, velocityX, velocityY, u, particleRadius, mass, 0.0, 0.0, x));
+        }
+
+        staticWriter.close();
+    }
+
 
     public void generateOutputFile(String fileName, List<Particle> particles, double time) throws IOException {
         PrintWriter outputWriter = new PrintWriter(new FileWriter(fileName, true));
@@ -128,9 +169,6 @@ public class WriteFiles {
         outputWriter.close();
 
     }
-
-
-
 
 
     public void generateOutputFile2(String fileName, List<Particle> particles, double time) throws IOException {

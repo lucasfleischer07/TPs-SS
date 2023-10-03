@@ -65,7 +65,8 @@ def main():
     plt.xlabel('N')
     plt.ylabel('Velocidad Promedio ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
     plt.grid(True)
-    plt.savefig('graphs/ej_2_2_1_prom_vel.png')
+    # plt.savefig('graphs/ej_2_2_1_prom_vel.png')
+    plt.savefig('graphs/ej_2_3_prom_vel.png')
     plt.show()
 
 
