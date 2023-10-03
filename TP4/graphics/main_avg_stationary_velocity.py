@@ -3,8 +3,8 @@ import numpy as np
 
 
 def main():
-    n = 20
-    stationary = 130
+    n = 30
+    stationary = 120
     filename = f'../src/main/resources/ex2/output_ex2_{n}_0.001.txt'
 
     with open(filename, 'r') as archive:
@@ -23,21 +23,27 @@ def main():
 
     archive.close()
 
-    hist, bin_edges = np.histogram(velocities, bins=20, density=True)
+    num_bins = int(np.sqrt(len(velocities)))  # Puedes ajustar este factor según tu preferencia
+    hist, bin_edges = np.histogram(velocities, bins=num_bins, density=True)
+    # hist, bin_edges = np.histogram(velocities, bins=20, density=True)
 
     bin_centers = 0.5 * (bin_edges[1:] + bin_edges[:-1])
 
     plt.figure(figsize=(8, 6))
-    plt.plot(bin_centers, hist, 'k-', linewidth=2, label='Stationary distribution')
+    plt.plot(bin_centers, hist, 'b-', linewidth=2, label='Stationary distribution')
 
     # Agregar la recta y=1/3 desde el punto en el que la velocidad es 9
     x_recta = np.linspace(9, max(bin_centers), 100)  # Valores de x desde 9 hasta el máximo
     y_recta = np.full_like(x_recta, 1 / 3)  # Array de 1/3 del mismo tamaño que x
     plt.plot(x_recta, y_recta, 'r--', label='Initial distribution')  # Agregar la recta
+    plt.ylabel('Densidad de probabilidad ($\\frac{{\mathrm{1}}}{{\mathrm{cm/s}}})$')
+    plt.xlabel('Velocidad ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
 
     plt.grid(True)
     plt.legend()
     plt.savefig(f'./graphs/pdf_{n}.png')
+
+    print(np.trapz(hist, bin_centers))
 
 
 if __name__ == "__main__":
