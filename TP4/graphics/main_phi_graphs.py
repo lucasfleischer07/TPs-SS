@@ -36,16 +36,16 @@ def main():
                 # x_difference += min(abs(next_particle['x'] - current_particle['x']), lineLength - abs(next_particle['x'] - current_particle['x']))
                 x_difference += (abs(next_particle['x'] - current_particle['x']))
 
-            if current_dt == (1.0E-1):
-                aux_phi.append(x_difference/1000000)
-            elif current_dt == (1.0E-2):
-                aux_phi.append(x_difference/15)
-            elif current_dt == (1.0E-3):
-                aux_phi.append(x_difference/70)
-            elif current_dt == (1.0E-4):
-                aux_phi.append(x_difference/10)
+            # if current_dt == (1.0E-1):
+            #     aux_phi.append(x_difference/1000000)
+            # elif current_dt == (1.0E-2):
+            #     aux_phi.append(x_difference/15)
+            # elif current_dt == (1.0E-3):
+            #     aux_phi.append(x_difference/70)
+            # elif current_dt == (1.0E-4):
+            #     aux_phi.append(x_difference/10)
 
-            # aux_phi.append(x_difference)
+            aux_phi.append(x_difference)
 
         phi_dt_difference[index] = aux_phi
         # plt.scatter([i*0.1 for i in range(0, 1801)], aux_phi, marker='o', linestyle='-', color=color_list[index-1],label=f'K= {index}')
@@ -57,8 +57,9 @@ def main():
     plt.ylabel('Φ(t)')
     plt.legend()
     plt.grid(True)
-    plt.savefig('graphs/ej_2_1_no_periodic.png')
-
+    plt.yscale('log')  # Escala logarítmica en el eje y
+    plt.savefig('graphs/ej_2_1_no_periodic_logarithmic.png')
+    plt.show()
     plt.cla()
 
 
