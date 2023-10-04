@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import math
 
 def main():
     n = 30
@@ -23,7 +23,9 @@ def main():
 
     archive.close()
 
-    num_bins = int(np.sqrt(len(velocities)))  # Puedes ajustar este factor según tu preferencia
+    tmp = int(np.log2(len(velocities)))
+
+    num_bins = int(np.sqrt(len(velocities)))
     hist, bin_edges = np.histogram(velocities, bins=num_bins, density=True)
     # hist, bin_edges = np.histogram(velocities, bins=20, density=True)
 
@@ -41,7 +43,7 @@ def main():
 
     plt.grid(True)
     plt.legend()
-    plt.savefig(f'./graphs/pdf_{n}.png')
+    plt.savefig(f'./graphs/bins.png')
 
     print(np.trapz(hist, bin_centers))
 

@@ -1,0 +1,18 @@
+@startuml
+!include GearAlgorithm.puml
+!include OneDimensionalSystem.puml
+!include Particle.puml
+!include WriteFiles.puml
+
+skinparam backgroundColor transparent
+
+class App{
+public {static} void main(String[] args)
+}
+
+App *-- WriteFiles
+App *--OneDimensionalSystem
+OneDimensionalSystem *-- GearAlgorithm
+GearAlgorithm *-- Particle
+OneDimensionalSystem *-- Particle
+@enduml
