@@ -1,0 +1,41 @@
+@startuml
+class Particle implements Comparable{
+-int id
+-double x, y, x2, x3, x4, x5, xNoPeriodic
+-double radius, mass, forceX, forceY
+-double velX, velY, u
+
++Particle(int id, double x, double y, double velX, double velY, double u, double radius, double mass, double forceX, double forceY, double xNoPeriodic)
++double getX()
++setX(double x)
++double getY()
++void setY(double y)
++double getRadius()
++double getMass()
++double getVelX()
++void setVelX(double velX)
++double getVelY()
++double getU()
++double getX2()
++void setX2(double x2)
++double getX3()
++void setX3(double x3)
++double getX4()
++void setX4(double x4)
++double getX5()
++void setX5(double x5)
++double getForceX()
++double getForceY()
++int getId()
++double getxNoPeriodic()
++void setxNoPeriodic(double xNoPeriodic)
++boolean collidesWith(Particle p, Double dt)
++boolean equals(Object o)
++int hashCode()
++int compareTo(Particle p2)
+}
+
+interface Comparable{
++int compareTo(Object o)
+}
+@enduml

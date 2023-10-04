@@ -1,0 +1,12 @@
+@startuml
+class GearAlgorithm{
+-List<Particle> particles
+-double dt
+
++GearAlgorithm(List<Particles> particles, double dt)
++List<Particle> apply()
+-double[ ] predict(double r, double r1, double r2, double r3, double r4, double r5, double rNoPeriodic)
+-double evaluate(double acceleration)
+-Particle correct(double r[ ], deltaR2)
+}
+@enduml

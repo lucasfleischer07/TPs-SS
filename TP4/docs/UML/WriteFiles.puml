@@ -1,0 +1,6 @@
+@startuml
+class WriteFiles{
++void void generateStaticFile(String staticFileName, double particleRadius, int n, double mass, double lineLength)
++void void generateOutputFile(String fileName, List<Particle> particles, double time)
+}
+@enduml

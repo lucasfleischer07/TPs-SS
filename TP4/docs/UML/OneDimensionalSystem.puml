@@ -1,0 +1,20 @@
+@startuml
+class OneDimensionalSystem{
+-List<Particle> particles
+-double dt
+-double L
+-double r
+-double k
+-GearAlgorithm gear
+
++OneDimensionalSystem(List<Particle> particles, double dt)
++void NextIteration()
++List<Particle> getParticles()
++double getTotalTime()
+-double getCollisionForce(Particle p1, Particle p2)
+-double getPropulsionForce(Particle p)
+-double particleMovementEquation(Particle p, List<Particle> particles)
+-{static}int factorialNumber(int n)
+
+}
+@enduml
