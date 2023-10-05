@@ -87,7 +87,7 @@ def main():
     density_list = []  # Lista para almacenar todas las densidades
     velocity_list = []  # Lista para almacenar todas las velocidades
     color_list = ['m', 'b', 'g', 'r', 'c', 'y']
-    window_size = 2000  # Tamaño de la ventana para el promedio móvil
+    window_size = 500  # Tamaño de la ventana para el promedio móvil
 
     for N in N_values:
         current_dt = dt_value
@@ -140,12 +140,13 @@ def main():
     #         velocity_list[i] = velocity_list[i] - 0.15
 
     plt.figure(figsize=(10, 6))
-    plt.scatter(density_list, velocity_list, marker='o', color=color_list[1], s=1)
-    # plt.plot(density_list, velocity_list, marker='o', color=color_list[1], lw=2.5, markersize=1)
+    plt.scatter(sorted_density, sorted_velocity, marker='o', color=color_list[4], s=1, label='Densidades individuales')
+    plt.scatter(density_list, velocity_list, marker='o', color=color_list[1], s=1, label='Densidades con promedio de ventana')
 
-    plt.xlabel('Densidad (${\mathrm{cm}})$')
+    plt.xlabel('Densidad ($\\frac{{\mathrm{1}}}{{\mathrm{cm}}})$')
     plt.ylabel('Velocidad ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
     plt.grid(True)
+    plt.legend(scatterpoints=1, markerscale=7)
     plt.savefig("graphs/ex2_4_0.001_smoothed_sorted.png")
     plt.show()
 

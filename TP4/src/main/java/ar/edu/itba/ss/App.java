@@ -85,13 +85,13 @@ public class App {
 //           * Cambiar generateStaticFile por generateStaticFile2 si se quieren hacer 25 o mas particulas
 //           * Cambiar por  generateStaticFile3 si se quiere hacer el item 2.3
 //            writeFiles.generateStaticFile(staticFileNameEx2 + "_" + n + "_" + dt + ".txt", particleRadius, n, mass, lineLength);
-//            writeFiles.generateStaticFile2(staticFileNameEx2 + "_" + n + ".txt", particleRadius, n, mass, lineLength);
-            writeFiles.generateStaticFile3(staticFileNameEx2 + "_" + n + ".txt", particleRadius, n, mass, lineLength);
+            writeFiles.generateStaticFile2(staticFileNameEx2 + "_" + n + "_item4.txt", particleRadius, n, mass, lineLength);
+//            writeFiles.generateStaticFile3(staticFileNameEx2 + "_" + n + ".txt", particleRadius, n, mass, lineLength);
 
             for(double dt : dtValues) {
                 System.out.println("------------------ STARTING WITH DT = " + dt + "------------------");
-                Parameters parameters = GenerateParticle.generateParticles(staticFileNameEx2 + "_" + n + ".txt");
-                writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", parameters.getParticles(), 0.0);
+                Parameters parameters = GenerateParticle.generateParticles(staticFileNameEx2 + "_" + n + "_item4.txt");
+                writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + "_item4.txt", parameters.getParticles(), 0.0);
                 // Descomentar para correr el grafico de phi (genera los archivos para eso). El primero para el item 2.1 t el segundo para el item 2.3
 //                writeFiles.generateOutputFile2(outputFileNameEx2 + "_" + n + "_" + dt + "_no_periodic_position.txt", parameters.getParticles(), 0.0);
 //                writeFiles.generateOutputFile2(outputFileNameEx2 + "_" + n + "_" + dt + "_no_periodic_position_ex_2.3.txt", parameters.getParticles(), 0.0);
@@ -105,7 +105,7 @@ public class App {
                     frame++;
                     collision.nextCollision();
                     if(frame == iterationPerFrame) {
-                        writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + ".txt", collision.getParticles(), collision.getTotalTime());
+                        writeFiles.generateOutputFile(outputFileNameEx2 + "_" + n + "_" + dt + "_item4.txt", collision.getParticles(), collision.getTotalTime());
                         // Descomentar para correr el grafico de phi (genera los archivos para eso). El primero para el item 2.1 t el segundo para el item 2.3
 //                        writeFiles.generateOutputFile2(outputFileNameEx2 + "_" + n + "_" + dt + "_no_periodic_position.txt", collision.getParticles(), collision.getTotalTime());
 //                        writeFiles.generateOutputFile2(outputFileNameEx2 + "_" + n + "_" + dt + "_no_periodic_position_ex_2.3.txt", collision.getParticles(), collision.getTotalTime());

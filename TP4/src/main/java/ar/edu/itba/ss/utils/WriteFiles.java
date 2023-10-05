@@ -128,7 +128,7 @@ public class WriteFiles {
         double spacing = unusedSpace > 0 ? unusedSpace / (n - 1) : 0; // Espacio adicional entre partículas
         double minU = 9.0; // Valor mínimo de velocidad
         double maxU = 12.0; // Valor máximo de velocidad
-        double uStep = (maxU - minU) / (n - 1); // Incremento de velocidad entre partículas
+        double uStep = (maxU - minU) / (n ); // Incremento de velocidad entre partículas
 
         for (int j = 0; j < n; j++) {
             double x = j * (requiredSpacing + spacing); // Coordenada (x) con espacio adicional
