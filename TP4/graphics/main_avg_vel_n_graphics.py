@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-
+import numpy as np
 from graphics.parse_files import parse_config_json, parse_output_file
 
 
@@ -11,10 +11,12 @@ def main():
     n, particleRadius, lineLength, iterations = parse_config_json(config_json_path)
     phi_dt_difference = {}
     color_list = ['b', 'g', 'r', 'c', 'y', 'm']
+    particle_vel_dict = {}
 
     for dt in dt_values:
         index = 0
         for N in N_values:
+            particle_vel_dict[N] = []
             if dt == (1.0E-4):
                 current_dt_particle_data = parse_output_file(output_base_path + "_" + str(N) + "_1.0E-4" + ".txt")
             elif dt == (1.0E-5):
@@ -32,6 +34,8 @@ def main():
                 for current_particle in current_dt_particle_data[i]:
                     # print("Current particle id = " + str(current_particle['id']) + ", Next particle id = " + str(next_particle['id']))
                     vel_difference += current_particle['vx']
+                    aux = current_particle['vx']
+                    particle_vel_dict[N].append(aux)
 
                 aux_vels.append(vel_difference/N)
 
@@ -46,19 +50,24 @@ def main():
     promedio_vel_list = list(promedio_vel_dict.values())
 
     aux_prom = []
-    for i in range(len(N_values)):
+    error = []
+    for i, N in zip(range(len(N_values)), N_values):
         if i == 2:
             aux_prom.append(promedio_vel_list[4])
+            # error.append(np.std(particle_vel_dict[25]))
         elif i == 4:
             aux_prom.append(promedio_vel_list[2])
+            # error.append(np.std(particle_vel_dict[N_values[15]]))
         else:
             aux_prom.append(promedio_vel_list[i])
+        # aux_prom.append(promedio_vel_list[i])
+        error.append(np.std(particle_vel_dict[N_values[i]]))
 
     # Dibujar un punto por cada valor de N en el gráfico de dispersión
     plt.scatter(N_list, aux_prom, marker='o', color='b', label='Puntos')
 
     # Unir los puntos con una línea
-    error = [0.01, 0.03, 0.05, 0.02, 0.02, 0.2]
+    # error = [0.01, 0.03, 0.05, 0.02, 0.02, 0.2]
     plt.plot(N_list, aux_prom, linestyle='-', color='g', label='Línea de Unión')
     plt.errorbar(N_list, aux_prom, yerr=error, fmt='o', capsize=6)
 
