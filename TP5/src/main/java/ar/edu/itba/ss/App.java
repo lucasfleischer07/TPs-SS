@@ -12,7 +12,7 @@ public class App {
         List<Particle> particles = GenerateParticle.generateParticles(Configuration.getStaticFile());
         int iterations = (int)(Configuration.getIterations() / Configuration.getDt());
 
-        Simulation simulation = new Simulation();
+        Simulation simulation = new Simulation(Configuration.getW(), Configuration.getL() + Configuration.getL()/10, 0.0, Configuration.getL()/10, Configuration.getD());
         List<Particle> reInjectParticles;
 
         // ------------ Este es el item a que pide varias w ------------------------
@@ -29,8 +29,6 @@ public class App {
                 for(Particle particle : particles) {
                     particle.resetForce();
                 }
-
-
 
                 reInjectParticles = simulation.update();
             }

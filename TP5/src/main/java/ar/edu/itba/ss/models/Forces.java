@@ -47,11 +47,7 @@ public class Forces {
         double forceT3 = getTangencialForceT3(superposition,relativeTangencialVelocityX * -normalVersorY + relativeTangencialVelocityY * normalVersorX);
 
         // TODO: Falta multiplicar por los vectores normales correspondientes a cada eje (hacerlo en el maul despues de llamara  esto)
-        if(forceT1 < forceT3) {
-            return forceT1;
-        } else {
-            return forceT3;
-        }
+        return Math.min(forceT1, forceT3);
     }
 
 

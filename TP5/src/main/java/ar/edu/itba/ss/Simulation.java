@@ -2,7 +2,6 @@ package ar.edu.itba.ss;
 
 import ar.edu.itba.ss.models.CellIndex;
 import ar.edu.itba.ss.models.Forces;
-import ar.edu.itba.ss.models.Pair;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.utils.Configuration;
 
@@ -17,9 +16,7 @@ public class Simulation {
     //Trabajando desde [0;77] para no caer en numeros negativos.
     private static final double DIMENSION_Y = Configuration.getL() + DIMENSION_Y_EXTRA_SPACE;
     private static final double DIMENSION_X = Configuration.getW();
-
     private final CellIndex[][] cellIndexes;
-
 
     private static final int ROWS_SILO = 30;
     private static final int ROWS = 33;
@@ -27,8 +24,6 @@ public class Simulation {
 
     private static final double DIMENSION_Y_CELL = DIMENSION_Y/(double) ROWS;
     private static final double DIMENSION_X_CELL = DIMENSION_X/(double) COLS;
-
-
 
     private final double leftLimitHole;
     private final double rightLimitHole;
@@ -43,7 +38,7 @@ public class Simulation {
     private static final double RightNormalVectorY = 0.0;
 
 
-    public Simulation(double topRightLimitX, double bottomLeftLimitX, double topRightLimitY, double bottomLeftLimitY, double holeSize) {
+    public Simulation(double topRightLimitX, double topRightLimitY, double bottomLeftLimitX, double bottomLeftLimitY, double holeSize) {
         cellIndexes = new CellIndex[ROWS][COLS];
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
@@ -64,6 +59,8 @@ public class Simulation {
 
     public void movement(double t, double w) {
         movement = Configuration.getA() * Math.sin(w * t);
+        bottomLeftLimitY = bottomLeftLimitInitialY + movement;
+        topRightLimitY = topRightLimitInitialY + movement;
         // TODO: Falta meter lo de cambiar los limites para ovito y ver como lo hacemos con MathplotLib
     }
 
@@ -83,19 +80,17 @@ public class Simulation {
     }
 
 
-
     public List<Particle> update() {
         List<Particle> particleList = new ArrayList<>();
         Particle aux;
 
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-
                 for (int k = 0; k < cellIndexes[i][j].getParticles().size(); k++) {
                     aux = updateCellNumber(cellIndexes[i][j].getParticles().get(k), i, j);
-                    if (aux != null)
+                    if (aux != null) {
                         particleList.add(aux);
-
+                    }
                 }
             }
         }
@@ -185,76 +180,128 @@ public class Simulation {
     public void updateForces() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                List<Particle> neighbours = getNeighboursCellIndex(row, col);
-                List<Particle> current = cellIndexes[row][col].getParticles();
+                List<Particle> neighboursList = getNeighboursCellIndex(row, col);
+                List<Particle> currentParticleList = cellIndexes[row][col].getParticles();
 
                 // TODO: Cambiar esta sintaxis del for (para este y para las de abajo)
-                current.forEach(
-                        p -> {
-                            // Add gravity
-                            p.addToForce(0.0, p.getMass() * Forces.GRAVITY);
+//                current.forEach(
+//                        p -> {
+//                            // Add gravity
+//                            p.addToForce(0.0, p.getMass() * Forces.GRAVITY);
+//
+//                            current.forEach(n -> {
+//                                double diff = Math.sqrt(Math.pow(p.getX() - n.getX(), 2) + Math.pow(p.getY() - n.getY(), 2));
+//                                double superposition = p.getRadius() + n.getRadius() - diff;
+//
+//                                if (superposition > 0 && !n.equals(p)) {
+//                                    double normalVersorX = (n.getX() - p.getX()) / diff;
+//                                    double normalVersorY = (n.getY() - p.getY()) / diff;
+//
+//                                    // TODO: Aca puede que sea en vez de la particula p, n sea n, p. Nose bien como diferenciarlo
+//                                    // Asumo que tiene que coincidir con el que esta mas abajo
+//                                    double normalForce = getNormalForce(superposition, p, n);
+//                                    p.addToForce(normalForce * normalVersorX,normalForce * normalVersorY);
+//
+//                                    double relativeVelocityX = Forces.getRelativeVelocityX(p, n);
+//                                    double relativeVelocityY = Forces.getRelativeVelocityY(p, n);
+//                                    double tangencialForce = getTangencialForce(superposition, relativeVelocityX, relativeVelocityY, normalVersorX, normalVersorX, p, n);
+//                                    p.addToForce(tangencialForce * -normalVersorY, tangencialForce * normalVersorX);
+//                                }
+//                            });
+//
+//                            // Add particle forces
+//                            neighbours.forEach(
+//                                    n -> {
+//                                        double diff = Math.sqrt(Math.pow(p.getX() - n.getX(), 2) + Math.pow(p.getY() - n.getY(), 2));
+//                                        double superposition = p.getRadius() + n.getRadius() - diff;
+//
+//                                        if (superposition > 0 && !n.equals(p)) {
+//                                            double normalVersorX = (n.getX() - p.getX()) / diff;
+//                                            double normalVersorY = (n.getY() - p.getY()) / diff;
+//
+//                                            // TODO: Aca puede que sea en vez de la particula p, n sea n, p. Nose bien como diferenciarlo
+//                                            double normalForce = getNormalForce(superposition, p, n);
+//                                            p.addToForce(normalForce * normalVersorX, normalForce * normalVersorY);
+//                                            n.addToForce(-1 * normalForce * normalVersorX, -1 * normalForce * normalVersorY);
+//
+//                                            double relativeVelocityX = Forces.getRelativeVelocityX(p, n);
+//                                            double relativeVelocityY = Forces.getRelativeVelocityY(p, n);
+//                                            double tangencialForce = getTangencialForce(superposition, relativeVelocityX, relativeVelocityY, normalVersorX, normalVersorY, p, n);
+//
+//                                            p.addToForce(tangencialForce * -normalVersorY, tangencialForce * normalVersorX);
+//                                            n.addToForce(-tangencialForce * -normalVersorY, -tangencialForce * normalVersorX);
+//                                        }
+//                                    }
+//                            );
+//                        }
+//                );
 
-                            current.forEach(n -> {
-                                double diff = Math.sqrt(Math.pow(p.getX() - n.getX(), 2) + Math.pow(p.getY() - n.getY(), 2));
-                                double superposition = p.getRadius() + n.getRadius() - diff;
+                for (Particle currentParticle : currentParticleList) {
+                    // Add gravity
+                    currentParticle.addToForce(0.0, currentParticle.getMass() * Forces.GRAVITY);
 
-                                if (superposition > 0 && !n.equals(p)) {
-                                    double normalVersorX = (n.getX() - p.getX()) / diff;
-                                    double normalVersorY = (n.getY() - p.getY()) / diff;
+                    for (Particle neighbourParticle : currentParticleList) {
+                        if (neighbourParticle.equals(currentParticle)) continue;
 
-                                    // TODO: Aca puede que sea en vez de la particula p, n sea n, p. Nose bien como diferenciarlo
-                                    // Asumo que tiene que coincidir con el que esta mas abajo
-                                    double normalForce = getNormalForce(superposition, p, n);
-                                    p.addToForce(normalForce * normalVersorX,normalForce * normalVersorY);
+                        double diff = Math.sqrt(Math.pow(currentParticle.getX() - neighbourParticle.getX(), 2) + Math.pow(currentParticle.getY() - neighbourParticle.getY(), 2));
+                        double superposition = currentParticle.getRadius() + neighbourParticle.getRadius() - diff;
 
-                                    double relativeVelocityX = Forces.getRelativeVelocityX(p, n);
-                                    double relativeVelocityY = Forces.getRelativeVelocityY(p, n);
-                                    double tangencialForce = getTangencialForce(superposition, relativeVelocityX, relativeVelocityY, normalVersorX, normalVersorX, p, n);
-                                    p.addToForce(tangencialForce * -normalVersorY, tangencialForce * normalVersorX);
-                                }
-                            });
+                        if (superposition > 0) {
+                            double normalVersorX = (neighbourParticle.getX() - currentParticle.getX()) / diff;
+                            double normalVersorY = (neighbourParticle.getY() - currentParticle.getY()) / diff;
 
-                            // Add particle forces
-                            neighbours.forEach(
-                                    n -> {
-                                        double diff = Math.sqrt(Math.pow(p.getX() - n.getX(), 2) + Math.pow(p.getY() - n.getY(), 2));
-                                        double superposition = p.getRadius() + n.getRadius() - diff;
+                            double normalForce = getNormalForce(superposition, currentParticle, neighbourParticle);
+                            currentParticle.addToForce(normalForce * normalVersorX, normalForce * normalVersorY);
 
-                                        if (superposition > 0 && !n.equals(p)) {
-                                            double normalVersorX = (n.getX() - p.getX()) / diff;
-                                            double normalVersorY = (n.getY() - p.getY()) / diff;
+                            double relativeVelocityX = Forces.getRelativeVelocityX(currentParticle, neighbourParticle);
+                            double relativeVelocityY = Forces.getRelativeVelocityY(currentParticle, neighbourParticle);
+                            double tangentialForce = getTangentialForce(superposition, relativeVelocityX, relativeVelocityY, normalVersorX, normalVersorY, currentParticle, neighbourParticle);
 
-                                            // TODO: Aca puede que sea en vez de la particula p, n sea n, p. Nose bien como diferenciarlo
-                                            double normalForce = getNormalForce(superposition, p, n);
-                                            p.addToForce(normalForce * normalVersorX, normalForce * normalVersorY);
-                                            n.addToForce(-1 * normalForce * normalVersorX, -1 * normalForce * normalVersorY);
-
-                                            double relativeVelocityX = Forces.getRelativeVelocityX(p, n);
-                                            double relativeVelocityY = Forces.getRelativeVelocityY(p, n);
-                                            double tangencialForce = getTangencialForce(superposition, relativeVelocityX, relativeVelocityY, normalVersorX, normalVersorY, p, n);
-
-                                            p.addToForce(tangencialForce * -normalVersorY, tangencialForce * normalVersorX);
-                                            n.addToForce(-tangencialForce * -normalVersorY, -tangencialForce * normalVersorX);
-                                        }
-                                    }
-                            );
+                            currentParticle.addToForce(tangentialForce * -normalVersorY, tangentialForce * normalVersorX);
                         }
-                );
+                    }
+
+                    // Add particle forces
+                    for (Particle neighbourParticle : neighboursList) {
+                        if (neighbourParticle.equals(currentParticle)) continue;
+
+                        double diff = Math.sqrt(Math.pow(currentParticle.getX() - neighbourParticle.getX(), 2) + Math.pow(currentParticle.getY() - neighbourParticle.getY(), 2));
+                        double superposition = currentParticle.getRadius() + neighbourParticle.getRadius() - diff;
+
+                        if (superposition > 0) {
+                            double normalVersorX = (neighbourParticle.getX() - currentParticle.getX()) / diff;
+                            double normalVersorY = (neighbourParticle.getY() - currentParticle.getY()) / diff;
+
+                            double normalForce = getNormalForce(superposition, currentParticle, neighbourParticle);
+                            currentParticle.addToForce(normalForce * normalVersorX, normalForce * normalVersorY);
+                            neighbourParticle.addToForce(-1 * normalForce * normalVersorX, -1 * normalForce * normalVersorY);
+
+                            double relativeVelocityX = Forces.getRelativeVelocityX(currentParticle, neighbourParticle);
+                            double relativeVelocityY = Forces.getRelativeVelocityY(currentParticle, neighbourParticle);
+                            double tangentialForce = getTangentialForce(superposition, relativeVelocityX, relativeVelocityY, normalVersorX, normalVersorY, currentParticle, neighbourParticle);
+
+                            currentParticle.addToForce(tangentialForce * -normalVersorY, tangentialForce * normalVersorX);
+                            neighbourParticle.addToForce(-tangentialForce * -normalVersorY, -tangentialForce * normalVersorX);
+                        }
+                    }
+                }
+
+
 
                 if (row == (ROWS - ROWS_SILO)) {
-                    updateForceFloor(current);
+                    updateForceFloor(currentParticleList);
                 }
 
                 if (row == ROWS - 1) {
-                    updateForceTop(current);
+                    updateForceTop(currentParticleList);
                 }
 
                 if (col == 0) {
-                    updateForceLeftWall(current);
+                    updateForceLeftWall(currentParticleList);
                 }
 
                 if (col == COLS - 1) {
-                    updateForceRightWall(current);
+                    updateForceRightWall(currentParticleList);
                 }
 
             }
@@ -303,7 +350,6 @@ public class Simulation {
         });
     }
 
-
     //if modificado para los vecinos
     private List<Particle> getNeighboursCellIndex(int col, int row) {
         List<Particle> particlesList = new ArrayList<>();
@@ -325,4 +371,11 @@ public class Simulation {
         return particlesList;
     }
 
+    public double getTopRightLimitY() {
+        return topRightLimitY;
+    }
+
+    public double getBottomLeftLimitY() {
+        return bottomLeftLimitY;
+    }
 }

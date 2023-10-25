@@ -1,6 +1,5 @@
 package ar.edu.itba.ss.utils;
 
-import ar.edu.itba.ss.models.Pair;
 import ar.edu.itba.ss.models.Particle;
 
 import java.io.File;
