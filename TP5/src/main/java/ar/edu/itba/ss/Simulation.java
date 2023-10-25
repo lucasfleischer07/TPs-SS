@@ -145,7 +145,7 @@ public class Simulation {
                 do {
                     overlap = false;
                     particle.setX(particle.getRadius() + Math.random() * (DIMENSION_X - 2.0 * particle.getRadius()));
-                    particle.setY(40.0 + Configuration.getL() / 10 + Math.random() * ((Configuration.getL() - 40.0) - particle.getRadius()));
+                    particle.setY(0.40 + Configuration.getL() / 10 + Math.random() * ((Configuration.getL() - 0.4) - particle.getRadius()));
                     c = getIndexX(particle.getX());
                     r = getIndexY(particle.getY());
 
@@ -371,18 +371,8 @@ public class Simulation {
 //                        }
 //                );
 
-
-
-
-
             }
         }
-
-
-
-
-
-
     }
 
     private boolean outsideHole(Particle particle) {
@@ -391,7 +381,7 @@ public class Simulation {
 
     private void updateForceFloor(List<Particle> particles) {
         particles.forEach(p -> {
-            if (outsideHole(p)) { //si pasa por el agujero, no choca con la pared
+            if (outsideHole(p) && !p.isTakenAway()) { //si pasa por el agujero, no choca con la pared
                 double superposition = p.getRadius() - (p.getY() - bottomLeftLimitY);
                 if (superposition > 0) {
                     p.addToForce(getWallForce("x", superposition, p.getVelocityX(), p.getVelocityY(), FloorNormalVersorX, FloorNormalVersorY, p, null), getWallForce("y", superposition, p.getVelocityX(), p.getVelocityY(), FloorNormalVersorX, FloorNormalVersorY, p, null));

@@ -4,10 +4,11 @@ import java.util.Objects;
 
 //TODO: ADAPTAR
 public class Forces {
-    public static final double K_NORMAL = 250;
+    public static final double K_NORMAL = 0.250;
     public static final double K_TAN = 2 * K_NORMAL;
-    public static final double GAMMA = 2.5;
-    public static final double GRAVITY = -9.81;
+    public static final double GAMMA = 0.0025;
+    public static final double MU = 0.7;
+    public static final double GRAVITY = -0.0981;
 
     public static double getRelativeVelocityX(Particle A, Particle B) {
 //        TODO: Ver si esto esta bien para choque contra la pared o no
@@ -40,7 +41,7 @@ public class Forces {
     }
 
     public static double getTangentialForceT1(double superposition, double relativeTangencialVelocity, Particle A, Particle B) {
-        return -GAMMA * Math.abs(getNormalForce(superposition, A, B)) * Math.signum(relativeTangencialVelocity);
+        return -MU * Math.abs(getNormalForce(superposition, A, B)) * Math.signum(relativeTangencialVelocity);
     }
 
     public static double getTangentialForce(double superposition, double relativeTangencialVelocityX, double relativeTangencialVelocityY, double normalVersorX, double normalVersorY, Particle A, Particle B) {
