@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 
 public class Configuration {
 
-    private static double particleMinRadius, particleMaxRadius, w, l, d, mass, dt, a, frecuency;
+    private static double particleMinRadius, particleMaxRadius, w, l, d, mass, dt, a;
     private static int iterations, n;
     private static String outputFile, staticFile;
 
@@ -30,8 +30,7 @@ public class Configuration {
             mass = configObject.get("mass").getAsDouble();
             dt = configObject.get("dt").getAsDouble();
             iterations = configObject.get("iterations").getAsInt();
-            a = configObject.get("a").getAsDouble();
-            frecuency = configObject.get("w").getAsDouble();
+            a = configObject.get("A").getAsDouble();
             outputFile = configObject.get("outputFile").getAsString();
             staticFile = configObject.get("staticFile").getAsString();
         } catch (Exception e) {

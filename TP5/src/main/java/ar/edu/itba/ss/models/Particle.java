@@ -14,6 +14,10 @@ public class Particle {
     private final int id;
     private boolean reInjected = false;
 
+    private SimColors color;
+
+    private boolean takenAway = false;
+
     // Beeman information
     private final Double dt;
     private final Double sqrDt;
@@ -24,7 +28,7 @@ public class Particle {
     private Double actualVelocityX;
     private Double actualVelocityY;
 
-    public Particle(int id, Double x, Double y, Double radius, Double mass, Double dt) {
+    public Particle(int id, Double x, Double y, Double radius, Double mass, Double dt, SimColors color) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -37,8 +41,13 @@ public class Particle {
         this.dt = dt;
         this.sqrDt = Math.pow(dt, 2);
 
+        this.actualAccelerationX = 0.0;
+        this.actualAccelerationY = 0.0;
+
         this.prevAccelerationX = 0.0;
         this.prevAccelerationY = Forces.GRAVITY;
+
+        this.color = color;
     }
 
     public Double getForceX() {
@@ -166,7 +175,7 @@ public class Particle {
     }
 
     public Particle copy(){
-        return new Particle(id, x, y, radius, mass, dt);
+        return new Particle(id, x, y, radius, mass, dt, color);
     }
 
     public void resetForce() {
@@ -197,6 +206,28 @@ public class Particle {
 
     public void reInject(){
         reInjected = true;
+        setColor(SimColors.RED);
+    }
+
+    public void setColor(SimColors color){
+        this.color = color;
+    }
+
+    public SimColors getColor(){
+        return color;
+    }
+
+    public boolean isTakenAway() {
+        return takenAway;
+    }
+
+    public void setTakenAway(boolean takenAway) {
+        this.takenAway = takenAway;
+    }
+
+    public double getEnergy() {
+        return Math.pow(Math.sqrt(Math.pow(this.velocityX - 0.0, 2) + Math.pow(this.velocityY - 0.0, 2)), 2) * mass / 2.0;
+//        return Math.pow(this.velocity.module(Pair.ZERO), 2) * mass / 2.0;
     }
 
     @Override
@@ -224,17 +255,14 @@ public class Particle {
         double newX = this.getX() + this.getVelocityX() * dt + (2.0 / 3.0) * this.getAccelerationX() * sqrDt - (1.0 / 6.0) * this.getPrevAccelerationX() * sqrDt;
         double newY = this.getY() + this.getVelocityY() * dt + (2.0 / 3.0) * this.getAccelerationY() * sqrDt - (1.0 / 6.0) * this.getPrevAccelerationY() * sqrDt;
 
-        double predictedVx = this.getVelocityX() + 1.5 * this.getAccelerationX() * dt - 0.5 * this.getPrevAccelerationX() * dt;
-        double predictedVy = this.getVelocityY() + 1.5 * this.getAccelerationY() * dt - 0.5 * this.getPrevAccelerationX() * dt;
-
-        this.actualVelocityX = this.getActualVelocityX();
-        this.actualVelocityY = this.getActualVelocityY();
-
-        this.actualAccelerationX = this.getActualAccelerationX();
-        this.actualAccelerationY = this.getActualAccelerationY();
-
         this.x = newX;
         this.y = newY;
+
+        this.actualVelocityX = velocityX;
+        this.actualVelocityY = velocityY;
+
+        double predictedVx = this.getVelocityX() + 1.5 * this.getAccelerationX() * dt - 0.5 * this.getPrevAccelerationX() * dt;
+        double predictedVy = this.getVelocityY() + 1.5 * this.getAccelerationY() * dt - 0.5 * this.getPrevAccelerationX() * dt;
 
         this.velocityX = predictedVx;
         this.velocityY = predictedVy;
