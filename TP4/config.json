@@ -1,8 +1,8 @@
 {
   "exerciseNumber": 2,
-  "integrationMethod": "verlet",
-  "dt": 0.000001,
-  "N": 25,
+  "integrationMethod": "gear",
+  "dt": 0.0001,
+  "N": 10,
   "iterations": 1,
   "particleRadius": 2.25,
   "lineLength": 135,

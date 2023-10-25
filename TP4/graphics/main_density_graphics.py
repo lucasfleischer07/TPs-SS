@@ -96,7 +96,7 @@ def main():
         elif current_dt == (1.0E-5):
             current_dt_particle_data = parse_output_file(output_base_path + "_" + str(N) + "_1.0E-5" + "_item4.txt")
         else:
-            current_dt_particle_data = parse_output_file(output_base_path + "_" + str(N) + "_" + str(current_dt) + "_item4.txt")
+            current_dt_particle_data = parse_output_file(output_base_path + "_" + str(N) + "_" + str(current_dt) + ".txt")
 
         # Calcula la diferencia entre los datos de partículas y almacénala en phi_dt_difference
         for time in current_dt_particle_data.keys():

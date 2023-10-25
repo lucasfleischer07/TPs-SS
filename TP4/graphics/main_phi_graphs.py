@@ -9,7 +9,11 @@ def main():
     dt_values = [1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5]
     n, particleRadius, lineLength, iterations = parse_config_json(config_json_path)
     phi_dt_difference = {}
-    color_list = ['b', 'g', 'r', 'c', 'y']
+    # color_list = ['b', 'g', 'r', 'c', 'y']
+    color_list = ['#440154', '#3B528B', '#21918C', '#5DC863', '#FDE725']
+
+
+
 
     index = 1
     for dt in range(len(dt_values) - 1):
@@ -37,21 +41,19 @@ def main():
                 x_difference += (abs(next_particle['x'] - current_particle['x']))
 
             if current_dt == (1.0E-1):
-                aux_phi.append(x_difference/50000)
-            elif current_dt == (1.0E-2):
-                aux_phi.append(x_difference)
+                aux_phi.append(x_difference/10000)
+            # elif current_dt == (1.0E-2):
+            #     aux_phi.append(x_difference/15)
             elif current_dt == (1.0E-3):
-                aux_phi.append(x_difference/5)
-            elif current_dt == (1.0E-4):
+                aux_phi.append(x_difference/3)
+            # elif current_dt == (1.0E-4):
+            #     aux_phi.append(x_difference/10)
+            else:
                 aux_phi.append(x_difference)
-            # else:
-            #     aux_phi.append(x_difference)
-
-            # aux_phi.append(x_difference)
 
         phi_dt_difference[index] = aux_phi
         # plt.scatter([i*0.1 for i in range(0, 1801)], aux_phi, marker='o', linestyle='-', color=color_list[index-1],label=f'K= {index}')
-        plt.plot([i * 0.1 for i in range(0, 1801)], aux_phi, linestyle='-', color=color_list[index - 1],label=f'K= {index}')
+        plt.plot([i * 0.1 for i in range(0, 1801)], aux_phi, linestyle='-', color=color_list[index - 1], label=f'K= {index}')
         index += 1
 
     # print(phi_dt_difference)

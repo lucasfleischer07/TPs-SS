@@ -36,7 +36,7 @@ def main():
         plt.plot(t, x, label=f"{method}", linestyle=linestyle)
 
     plt.xlabel("Tiempo (s)")
-    plt.ylabel("Posición (m)")
+    plt.ylabel("Φ (cm)")
 
     plt.tight_layout()
     plt.legend(loc="lower right")

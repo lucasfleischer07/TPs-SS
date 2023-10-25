@@ -10,8 +10,9 @@ def main():
     dt_values = [1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5]
     n, particleRadius, lineLength, iterations = parse_config_json(config_json_path)
     phi_dt_difference = {}
-    color_list = ['b', 'g', 'r', 'c', 'y', 'm']
+    # color_list = ['b', 'g', 'r', 'c', 'y', 'm']
     # color_list = ['navy', 'darkgreen', 'maroon', 'teal', 'gold', 'purple']
+    color_list = ['#440154', '#3B528B', '#21918C', '#5DC863', '#FDE725', 'purple']
 
     for dt in dt_values:
         index = 0
