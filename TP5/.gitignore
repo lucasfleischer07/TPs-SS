@@ -38,3 +38,6 @@ build/
 .DS_Store
 
 *.txt
+
+graphics/animations/*
+graphics/__pycache__/*

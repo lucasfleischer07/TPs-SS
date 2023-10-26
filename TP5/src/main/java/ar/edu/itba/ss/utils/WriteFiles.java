@@ -17,7 +17,7 @@ public class WriteFiles {
         stringBuilder.append(time).append("\t").append(limit1).append("\t").append(limit2).append("\n");
 
         for(Particle particle : particles) {
-            stringBuilder.append(String.format(Locale.US ,"%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n",
+            stringBuilder.append(String.format(Locale.US ,"%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%s\n",
                     particle.getId(),
                     particle.getX(),
                     particle.getY(),
@@ -25,7 +25,8 @@ public class WriteFiles {
                     particle.getVelocityY(),
                     particle.getForceX(),
                     particle.getForceY(),
-                    particle.getRadius()));
+                    particle.getRadius(),
+                    particle.getColor()));
         }
 
         outputWriter.write(stringBuilder.toString());

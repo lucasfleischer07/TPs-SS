@@ -86,7 +86,6 @@ public class GenerateParticle {
             }
         }
         staticWriter.close();
-//        return particles;
     }
 
 //    public static List<Particle> generateParticles(String staticFileName) throws IOException {

@@ -35,7 +35,7 @@ public class Particle {
         this.radius = radius;
         this.mass = mass;
         this.forceX = 0.0;
-        this.forceY = mass * Forces.GRAVITY;
+        this.forceY = 0.0;
         this.velocityX = 0.0;
         this.velocityY = 0.0;
         this.dt = dt;
@@ -188,20 +188,18 @@ public class Particle {
         this.setForceY(this.getY() + y);
     }
 
-//    TODO: Esta no esta adaptada porque creo que hace lo mismo que la de arriba pero le pasa un pair
-//    public void addToForce(Pair<Double> pair) {
-//        force.setX(force.getX() + pair.getX());
-//        force.setY(force.getY() + pair.getY());
-//    }
+    public double distance (Particle other) {
+        return Math.sqrt(Math.pow(this.getX() - other.getX(), 2) + Math.pow(this.getY() - other.getY(), 2));
+    }
 
     public Double getAccelerationX() {
         // La fuerza viene en Newtons
-        return (this.getForceX() * 100) / getMass();
+        return forceX/mass;
     }
 
     public Double getAccelerationY() {
         // La fuerza viene en Newtons
-        return (this.getForceY() * 100) / getMass();
+        return forceY/mass;
     }
 
     public void reInject(){
