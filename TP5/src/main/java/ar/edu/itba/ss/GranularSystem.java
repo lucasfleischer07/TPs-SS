@@ -1,8 +1,11 @@
 package ar.edu.itba.ss;
 
+import ar.edu.itba.ss.models.Grid;
+import ar.edu.itba.ss.models.Limit;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.utils.Configuration;
 import ar.edu.itba.ss.utils.WriteFiles;
+import sun.security.krb5.Config;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,53 +13,62 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GranularSystem implements Runnable {
-
+    private final int iterations;
     private final double dt;
     private final double frequency;
-    private final List<Particle> particles;
-    private final Simulation simulation;
-//    private final List<Limit> limits;
-    private final int iterations;
-    private final String path;
-    private final List<Double> times = new ArrayList<>();
-    private final List<Double> energy = new ArrayList<>();
+    private final String outputFileName;
+    private final List<Particle> particleList;
+    private final List<Limit> limitsList;
+    private final List<Double> timesList = new ArrayList<>();
+    private final List<Double> energyList = new ArrayList<>();
+    private final Grid grid;
 
-
-    public GranularSystem(double l, double w, double dt, double d, double maxTime, double frequency, String outputFileName, List<Particle> particles) {
+    public GranularSystem(double dt, double iterations, double frequency, String outputFileName, List<Particle> particles) {
+        this.limitsList = new ArrayList<>();
         this.dt = dt;
-        this.iterations = (int)(maxTime/dt);
+        this.iterations = (int)(iterations/dt);
         this.frequency = frequency;
-        this.particles = particles.stream().map(Particle::copy).collect(Collectors.toList());
-        this.path = outputFileName;
-        simulation = new Simulation(Configuration.getW(), Configuration.getL() + Configuration.getL()/10, 0.0, Configuration.getL()/10, Configuration.getD());
-        simulation.addAll(this.particles);
+        this.outputFileName = outputFileName;
+        this.particleList = particles.stream().map(Particle::particleClone).collect(Collectors.toList());
 
+        Limit limit1 = new Limit(Configuration.getW(), Configuration.getL() + Configuration.getL() /10);
+        this.limitsList.add(limit1);
+        Limit limit2 = new Limit(0.0, Configuration.getL() /10);
+        this.limitsList.add(limit2);
+        Limit limit3 = new Limit(Configuration.getW(), 0.0);
+        this.limitsList.add(limit3);
+        Limit leftHoleLimit = new Limit(Configuration.getW() / 2 - Configuration.getD() / 2, Configuration.getL() /10);
+        this.limitsList.add(leftHoleLimit);
+        Limit rightHoleLimit = new Limit(Configuration.getW() / 2 + Configuration.getD() / 2, Configuration.getL() /10);
+        this.limitsList.add(rightHoleLimit);
+
+        this.grid = new Grid(limit1, limit2, Configuration.getD());
+
+        grid.addAll(this.particleList);
     }
 
     @Override
     public void run() {
-        double auxDt = dt;
         for (int i = 0; i < iterations; i++) {
-            simulation.movement(i * dt, frequency);
+            grid.shake(i * dt, frequency);
 
-            particles.forEach(Particle::prediction);
-            particles.forEach(Particle::resetForce);
+            particleList.forEach(Particle::prediction);
+            particleList.forEach(Particle::forcesReseted);
 
-            for (int j = 0; j < simulation.update(); j++) {
-                times.add(i * dt);
+            for (int j = 0; j < grid.update(); j++) {
+                timesList.add(i * dt);
             }
 
-            simulation.updateForces();
-            particles.forEach(Particle::correction);
-            particles.forEach(Particle::resetForce);
-            simulation.updateForces();
+            grid.updateForces();
+            particleList.forEach(Particle::correction);
+            particleList.forEach(Particle::forcesReseted);
+            grid.updateForces();
 
             if (i % 100 == 0) {
-                System.out.println("Iteración = " + i);
-
-                energy.add(particles.stream().mapToDouble(Particle::getEnergy).sum());
+                energyList.add(particleList.stream().mapToDouble(Particle::getEnergy).sum());
                 try {
-                    WriteFiles.GenerateOutputFile(path, particles, i*dt, simulation.getBottomLeftLimitY(), simulation.getTopRightLimitY());
+                    WriteFiles.GenerateOutputFile(outputFileName, particleList, i * dt, limitsList.get(0).getY(), limitsList.get(1).getY());
+                    System.out.println("Iteración = " + i);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -66,17 +78,14 @@ public class GranularSystem implements Runnable {
     }
 
     public List<Double> getTimes() {
-        return times;
+        return timesList;
     }
 
     public double getCaudal(){
-        return times.size() / (iterations * dt);
+        return timesList.size() / (iterations * dt);
     }
 
     public List<Double> getEnergy() {
-        return energy;
+        return energyList;
     }
-
-
-
 }

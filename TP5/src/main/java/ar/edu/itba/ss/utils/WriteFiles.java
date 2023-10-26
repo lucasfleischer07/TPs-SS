@@ -19,13 +19,13 @@ public class WriteFiles {
         for(Particle particle : particles) {
             stringBuilder.append(String.format(Locale.US ,"%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%s\n",
                     particle.getId(),
-                    particle.getX(),
-                    particle.getY(),
-                    particle.getVelocityX(),
-                    particle.getVelocityY(),
-                    particle.getForceX(),
-                    particle.getForceY(),
-                    particle.getRadius(),
+                    particle.getPosition().getX(),
+                    particle.getPosition().getY(),
+                    particle.getVelocity().getX(),
+                    particle.getVelocity().getY(),
+                    particle.getFuerzas().getX(),
+                    particle.getFuerzas().getY(),
+                    particle.getParticleRadius(),
                     particle.getColor()));
         }
 

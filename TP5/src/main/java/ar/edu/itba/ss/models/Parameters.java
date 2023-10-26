@@ -8,11 +8,9 @@ public class Parameters {
     public void addParticle(Particle particle) {
         particles.add(particle);
     }
-
     public List<Particle> getParticles() {
         return particles;
     }
-
     public void setParticles(List<Particle> particles) {
         this.particles = particles;
     }

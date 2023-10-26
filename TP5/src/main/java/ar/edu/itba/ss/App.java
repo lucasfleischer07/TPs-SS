@@ -17,10 +17,7 @@ public class App {
 //        int[] frequencies = {5, 10, 15, 20, 30, 50};
         int[] frequencies = {5};
         for(int frequency : frequencies) {
-            GranularSystem granularSystem = new GranularSystem(Configuration.getL(),
-                                                               Configuration.getW(),
-                                                               Configuration.getDt(),
-                                                               Configuration.getD(),
+            GranularSystem granularSystem = new GranularSystem(Configuration.getDt(),
                                                                Configuration.getIterations(),
                                                                frequency,
                                                                Configuration.getOutputFile(),

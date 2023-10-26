@@ -1,102 +1,100 @@
 package ar.edu.itba.ss.models;
 
+import ar.edu.itba.ss.utils.Color;
+import ar.edu.itba.ss.utils.ForcesUtils;
+
 import java.util.Objects;
 
 public class Particle {
-    private Double forceX;
-    private Double forceY;
-    private Double x;
-    private Double y;
-    private Double velocityX;
-    private Double velocityY;
-    private final Double radius;
-    private final Double mass;
+    private static final double ZERO_VALUE = 0.0;
+    private final static double SCALAR1 = (2.0 / 3.0);
+    private final static double SCALAR2 = -(1.0 / 6.0);
+    private final Pair fuerzas;
+    private final Double radius, mass, dt, sqrDt;
     private final int id;
-    private boolean reInjected = false;
+    private boolean attachedFromSlit = false;
+    private boolean particleSlit = false;
+    private Color color;
+    private Pair position, velocity, previousAcc, actualAcc, actualVel;
 
-    private SimColors color;
+    public void forcesReseted() {
+        fuerzas.setX(ZERO_VALUE);
+        fuerzas.setY(ZERO_VALUE);
+    }
 
-    private boolean takenAway = false;
+    public double getEnergy(){
+        return Math.pow(this.velocity.mathModule(Pair.ZERO_VALUE), 2) * mass / 2.0;
+    }
 
-    // Beeman information
-    private final Double dt;
-    private final Double sqrDt;
-    private Double prevAccelerationX;
-    private Double prevAccelerationY;
-    private Double actualAccelerationX;
-    private Double actualAccelerationY;
-    private Double actualVelocityX;
-    private Double actualVelocityY;
+    public void addToForce(double x, double y) {
+        fuerzas.setX(fuerzas.getX() + x);
+        fuerzas.setY(fuerzas.getY() + y);
+    }
 
-    public Particle(int id, Double x, Double y, Double radius, Double mass, Double dt, SimColors color) {
+    public Particle(int id, Pair position, Double radius, Double mass, Double dt, Color color) {
         this.id = id;
-        this.x = x;
-        this.y = y;
+        this.position = position;
         this.radius = radius;
         this.mass = mass;
-        this.forceX = 0.0;
-        this.forceY = 0.0;
-        this.velocityX = 0.0;
-        this.velocityY = 0.0;
+        this.fuerzas = new Pair(ZERO_VALUE, ZERO_VALUE);
+        this.velocity = new Pair(ZERO_VALUE, ZERO_VALUE);
         this.dt = dt;
         this.sqrDt = Math.pow(dt, 2);
-
-        this.actualAccelerationX = 0.0;
-        this.actualAccelerationY = 0.0;
-
-        this.prevAccelerationX = 0.0;
-        this.prevAccelerationY = Forces.GRAVITY;
-
+        actualAcc = new Pair(ZERO_VALUE, ZERO_VALUE);
+        previousAcc = new Pair(ZERO_VALUE, ForcesUtils.GRAVITY);
         this.color = color;
     }
 
-    public Double getForceX() {
-        return forceX;
+    public Double getParticleRadius() {
+        return radius;
     }
 
-    public void setForceX(Double forceX) {
-        this.forceX = forceX;
+    public Double getParticleMass() {
+        return mass;
+    }
+    public Particle particleClone() {
+        return new Particle(id, position, radius, mass, dt, color);
     }
 
-    public Double getForceY() {
-        return forceY;
+    public void addToForce(Pair pair) {
+        fuerzas.setX(fuerzas.getX() + pair.getX());
+        fuerzas.setY(fuerzas.getY() + pair.getY());
     }
 
-    public void setForceY(Double forceY) {
-        this.forceY = forceY;
+    public Pair getAcceleration() {
+        return fuerzas.pairMultiply(1.0 / mass);
     }
 
-    public Double getX() {
-        return x;
+    public void attachedFromSlit() {
+        attachedFromSlit = true;
+        setColor(Color.RED);
     }
 
-    public void setX(Double x) {
-        this.x = x;
+    public String toString() {
+        return position.getX() + " " + position.getY() + " " + velocity.getX() + " " + velocity.getY() + " " + radius + " " + color;
     }
 
-    public Double getY() {
-        return y;
+    public void setColor(Color color){
+        this.color = color;
     }
 
-    public void setY(Double y) {
-        this.y = y;
+    public Color getColor(){
+        return color;
     }
 
-    public Double getVelocityX() {
-        return velocityX;
+    public Pair getPosition() {
+        return position;
     }
 
-    public void setVelocityX(Double velocityX) {
-        this.velocityX = velocityX;
+    public Pair getVelocity() {
+        return velocity;
     }
 
-    public Double getVelocityY() {
-        return velocityY;
+    public Pair getFuerzas() {
+        return fuerzas;
     }
 
-    public void setVelocityY(Double velocityY) {
-        this.velocityY = velocityY;
-    }
+
 
     public Double getRadius() {
         return radius;
@@ -104,18 +102,6 @@ public class Particle {
 
     public Double getMass() {
         return mass;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public boolean isReInjected() {
-        return reInjected;
-    }
-
-    public void setReInjected(boolean reInjected) {
-        this.reInjected = reInjected;
     }
 
     public Double getDt() {
@@ -126,111 +112,61 @@ public class Particle {
         return sqrDt;
     }
 
-    public Double getPrevAccelerationX() {
-        return prevAccelerationX;
+    public boolean isAttachedFromSlit() {
+        return attachedFromSlit;
     }
 
-    public void setPrevAccelerationX(Double prevAccelerationX) {
-        this.prevAccelerationX = prevAccelerationX;
+    public Pair getPreviousAcc() {
+        return previousAcc;
     }
 
-    public Double getPrevAccelerationY() {
-        return prevAccelerationY;
+    public Pair getActualAcc() {
+        return actualAcc;
     }
 
-    public void setPrevAccelerationY(Double prevAccelerationY) {
-        this.prevAccelerationY = prevAccelerationY;
+    public Pair getActualVel() {
+        return actualVel;
     }
 
-    public Double getActualAccelerationX() {
-        return actualAccelerationX;
+    public void setAttachedFromSlit(boolean attachedFromSlit) {
+        this.attachedFromSlit = attachedFromSlit;
     }
 
-    public void setActualAccelerationX(Double actualAccelerationX) {
-        this.actualAccelerationX = actualAccelerationX;
+    public void setPosition(Pair position) {
+        this.position = position;
     }
 
-    public Double getActualAccelerationY() {
-        return actualAccelerationY;
+    public void setVelocity(Pair velocity) {
+        this.velocity = velocity;
     }
 
-    public void setActualAccelerationY(Double actualAccelerationY) {
-        this.actualAccelerationY = actualAccelerationY;
+    public void setPreviousAcc(Pair previousAcc) {
+        this.previousAcc = previousAcc;
     }
 
-    public Double getActualVelocityX() {
-        return actualVelocityX;
+    public void setActualAcc(Pair actualAcc) {
+        this.actualAcc = actualAcc;
     }
 
-    public void setActualVelocityX(Double actualVelocityX) {
-        this.actualVelocityX = actualVelocityX;
+    public void setActualVel(Pair actualVel) {
+        this.actualVel = actualVel;
     }
 
-    public Double getActualVelocityY() {
-        return actualVelocityY;
+    // ALgoritmo
+    public void prediction() {
+        actualAcc = this.getAcceleration();
+        this.position = position.pairSummatory(velocity.pairMultiply(dt).pairSummatory(actualAcc.pairMultiply(SCALAR1).pairSummatory(previousAcc.pairMultiply(SCALAR2)).pairMultiply(sqrDt)));
+        this.actualVel = velocity;
+        this.velocity = this.actualVel.pairSummatory(this.actualAcc.pairMultiply(1.5 * dt).pairSummatory(previousAcc.pairMultiply(-0.5 * dt)));
     }
 
-    public void setActualVelocityY(Double actualVelocityY) {
-        this.actualVelocityY = actualVelocityY;
-    }
-
-    public Particle copy(){
-        return new Particle(id, x, y, radius, mass, dt, color);
-    }
-
-    public void resetForce() {
-        this.setForceX(0.0);
-        this.setForceY(0.0);
-    }
-
-    public void addToForce(double x, double y) {
-        this.setForceX(this.getX() + x);
-        this.setForceY(this.getY() + y);
-    }
-
-    public double distance (Particle other) {
-        return Math.sqrt(Math.pow(this.getX() - other.getX(), 2) + Math.pow(this.getY() - other.getY(), 2));
-    }
-
-    public Double getAccelerationX() {
-        // La fuerza viene en Newtons
-        return forceX/mass;
-    }
-
-    public Double getAccelerationY() {
-        // La fuerza viene en Newtons
-        return forceY/mass;
-    }
-
-    public void reInject(){
-        reInjected = true;
-        setColor(SimColors.RED);
-    }
-
-    public void setColor(SimColors color){
-        this.color = color;
-    }
-
-    public SimColors getColor(){
-        return color;
-    }
-
-    public boolean isTakenAway() {
-        return takenAway;
-    }
-
-    public void setTakenAway(boolean takenAway) {
-        this.takenAway = takenAway;
-    }
-
-    public double getEnergy() {
-        return Math.pow(Math.sqrt(Math.pow(this.velocityX - 0.0, 2) + Math.pow(this.velocityY - 0.0, 2)), 2) * mass / 2.0;
-//        return Math.pow(this.velocity.module(Pair.ZERO), 2) * mass / 2.0;
-    }
-
-    @Override
-    public String toString() {
-        return "Particle id = " + this.getId() + "x = " + this.getX() + ", y = " + this.getY() + ", velX = " + this.getVelocityX() + ", velY = " + this.getVelocityY() + ", radius = " + radius + ", forceX = " + this.getForceX() + ", forceY = " + this.getForceY();
+    public void correction(){
+        if (attachedFromSlit){
+            this.velocity = new Pair(ZERO_VALUE, ZERO_VALUE);attachedFromSlit = false;previousAcc = new Pair(ZERO_VALUE, ForcesUtils.GRAVITY);
+        } else {
+            this.velocity = actualVel.pairSummatory(this.getAcceleration().pairMultiply((1.0 / 3.0) * dt).pairSummatory(actualAcc.pairMultiply((5.0 / 6.0) * dt).pairSummatory(previousAcc.pairMultiply(-(1.0 / 6.0) * dt))));
+            previousAcc = actualAcc;
+        }
     }
 
     @Override
@@ -246,44 +182,15 @@ public class Particle {
         return Objects.hash(id);
     }
 
-
-//    TODO: Todavia no esta adaptado esto de aca abajo (solo para que no tire error)
-    // BEEMAN
-    public void prediction() {
-        double newX = this.getX() + this.getVelocityX() * dt + (2.0 / 3.0) * this.getAccelerationX() * sqrDt - (1.0 / 6.0) * this.getPrevAccelerationX() * sqrDt;
-        double newY = this.getY() + this.getVelocityY() * dt + (2.0 / 3.0) * this.getAccelerationY() * sqrDt - (1.0 / 6.0) * this.getPrevAccelerationY() * sqrDt;
-
-        this.x = newX;
-        this.y = newY;
-
-        this.actualVelocityX = velocityX;
-        this.actualVelocityY = velocityY;
-
-        double predictedVx = this.getVelocityX() + 1.5 * this.getAccelerationX() * dt - 0.5 * this.getPrevAccelerationX() * dt;
-        double predictedVy = this.getVelocityY() + 1.5 * this.getAccelerationY() * dt - 0.5 * this.getPrevAccelerationX() * dt;
-
-        this.velocityX = predictedVx;
-        this.velocityY = predictedVy;
+    public int getId() {
+        return id;
     }
 
-    public void correction(){
-        if (reInjected){
-            this.velocityX = 0.0;
-            this.velocityY = 0.0;
-            reInjected = false;
-            this.prevAccelerationX = 0.0;
-            this.prevAccelerationY = Forces.GRAVITY;
-        } else {
-            double newVx = this.getActualVelocityX() + (1.0/3.0) * this.getAccelerationX() * dt + (5.0/6.0) * this.getActualAccelerationX() * dt - (1.0/6.0) * this.getPrevAccelerationX() * dt;
-            double newVy = this.getActualVelocityY() + (1.0/3.0) * this.getAccelerationY() * dt + (5.0/6.0) * this.getActualAccelerationY() * dt - (1.0/6.0) * this.getPrevAccelerationY() * dt;
-            this.velocityX = newVx;
-            this.velocityY = newVy;
-
-            this.prevAccelerationX = this.actualAccelerationX;
-            this.prevAccelerationY = this.actualAccelerationY;
-        }
-
+    public boolean isParticleSlit() {
+        return particleSlit;
     }
 
-
+    public void setParticleSlit(boolean particleSlit) {
+        this.particleSlit = particleSlit;
+    }
 }

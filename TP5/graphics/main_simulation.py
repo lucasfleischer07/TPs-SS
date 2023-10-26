@@ -21,8 +21,6 @@ def update_particle_positions(frame, particle_data, ax, L, W, D, dt):
     ax.add_line(plt.Line2D([0, W/2 - D / 2], [L/10, L/10], color='b', linewidth=2))
     ax.add_line(plt.Line2D([D / 2 + W/2, W], [L / 10, L / 10], color='b', linewidth=2))
 
-    print("Iteracion = " + "{:.3f}".format(frame))
-
     # Configura los límites de los ejes
     ax.set_xlim(0, W)
     ax.set_ylim(0, L + L / 10)
@@ -31,7 +29,8 @@ def update_particle_positions(frame, particle_data, ax, L, W, D, dt):
 
 
     for p in particles:
-        ax.add_patch(Circle((p['x'], p['y']), p['radius'], color='r', fill=True))
+        color = tuple(int(c) / 255 for c in p['color'].split())
+        ax.add_patch(Circle((p['x'], p['y']), p['radius'], color=color, fill=True))
 
     print("Iteracion = " + "{:.3f}".format(frame))
 

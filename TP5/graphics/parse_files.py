@@ -42,7 +42,7 @@ def parse_output_file(file_path):
                 'fx': float(data[5]),
                 'fy': float(data[6]),
                 'radius': float(data[7]),
-                # 'color': float(data[8])
+                'color': data[8]
             }
 
             particles_data[time].append(particle)
