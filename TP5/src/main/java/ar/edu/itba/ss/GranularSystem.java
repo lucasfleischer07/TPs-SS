@@ -1,11 +1,10 @@
 package ar.edu.itba.ss;
 
-import ar.edu.itba.ss.models.Grid;
-import ar.edu.itba.ss.models.Limit;
+import ar.edu.itba.ss.models.Simulation;
+import ar.edu.itba.ss.models.Vertex;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.utils.Configuration;
 import ar.edu.itba.ss.utils.WriteFiles;
-import sun.security.krb5.Config;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,10 +17,10 @@ public class GranularSystem implements Runnable {
     private final double frequency;
     private final String outputFileName;
     private final List<Particle> particleList;
-    private final List<Limit> limitsList;
+    private final List<Vertex> limitsList;
     private final List<Double> timesList = new ArrayList<>();
     private final List<Double> energyList = new ArrayList<>();
-    private final Grid grid;
+    private final Simulation simulation;
 
     public GranularSystem(double dt, double iterations, double frequency, String outputFileName, List<Particle> particles) {
         this.limitsList = new ArrayList<>();
@@ -31,38 +30,38 @@ public class GranularSystem implements Runnable {
         this.outputFileName = outputFileName;
         this.particleList = particles.stream().map(Particle::particleClone).collect(Collectors.toList());
 
-        Limit limit1 = new Limit(Configuration.getW(), Configuration.getL() + Configuration.getL() /10);
-        this.limitsList.add(limit1);
-        Limit limit2 = new Limit(0.0, Configuration.getL() /10);
-        this.limitsList.add(limit2);
-        Limit limit3 = new Limit(Configuration.getW(), 0.0);
-        this.limitsList.add(limit3);
-        Limit leftHoleLimit = new Limit(Configuration.getW() / 2 - Configuration.getD() / 2, Configuration.getL() /10);
-        this.limitsList.add(leftHoleLimit);
-        Limit rightHoleLimit = new Limit(Configuration.getW() / 2 + Configuration.getD() / 2, Configuration.getL() /10);
-        this.limitsList.add(rightHoleLimit);
+        Vertex vertex1 = new Vertex(Configuration.getW(), Configuration.getL() + Configuration.getL() /10);
+        this.limitsList.add(vertex1);
+        Vertex vertex2 = new Vertex(0.0, Configuration.getL() /10);
+        this.limitsList.add(vertex2);
+        Vertex vertex3 = new Vertex(Configuration.getW(), 0.0);
+        this.limitsList.add(vertex3);
+        Vertex leftHoleVertex = new Vertex(Configuration.getW() / 2 - Configuration.getD() / 2, Configuration.getL() /10);
+        this.limitsList.add(leftHoleVertex);
+        Vertex rightHoleVertex = new Vertex(Configuration.getW() / 2 + Configuration.getD() / 2, Configuration.getL() /10);
+        this.limitsList.add(rightHoleVertex);
 
-        this.grid = new Grid(limit1, limit2, Configuration.getD());
+        this.simulation = new Simulation(vertex1, vertex2, Configuration.getD());
 
-        grid.addAll(this.particleList);
+        simulation.addAll(this.particleList);
     }
 
     @Override
     public void run() {
         for (int i = 0; i < iterations; i++) {
-            grid.shake(i * dt, frequency);
+            simulation.siloMovement(i * dt, frequency);
 
             particleList.forEach(Particle::prediction);
             particleList.forEach(Particle::forcesReseted);
 
-            for (int j = 0; j < grid.update(); j++) {
+            for (int j = 0; j < simulation.update(); j++) {
                 timesList.add(i * dt);
             }
 
-            grid.updateForces();
+            simulation.updateForces();
             particleList.forEach(Particle::correction);
             particleList.forEach(Particle::forcesReseted);
-            grid.updateForces();
+            simulation.updateForces();
 
             if (i % 100 == 0) {
                 energyList.add(particleList.stream().mapToDouble(Particle::getEnergy).sum());

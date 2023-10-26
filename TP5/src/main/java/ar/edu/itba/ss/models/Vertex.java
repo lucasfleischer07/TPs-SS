@@ -1,12 +1,12 @@
 package ar.edu.itba.ss.models;
 
-public class Limit {
+public class Vertex {
 
     //TODO REFFF
-    private final Pair position;
+    private final ParticlePair position;
 
-    public Limit(Double x, Double y) {
-        this.position = new Pair(x, y);
+    public Vertex(Double x, Double y) {
+        this.position = new ParticlePair(x, y);
     }
 
     public void setY(Double Y){
@@ -17,7 +17,7 @@ public class Limit {
         return this.position.getY();
     }
 
-    public Pair getPosition() {
+    public ParticlePair getPosition() {
         return position;
     }
 

@@ -1,6 +1,6 @@
 package ar.edu.itba.ss.utils;
 
-import ar.edu.itba.ss.models.Pair;
+import ar.edu.itba.ss.models.ParticlePair;
 import ar.edu.itba.ss.models.Parameters;
 import ar.edu.itba.ss.models.Particle;
 
@@ -33,7 +33,7 @@ public class GenerateParticle {
                 for (int i = 0; i < values.length; i++) {
                     valuesInDoubles[i] = Double.parseDouble(values[i]);
                 }
-                parameters.addParticle(new Particle((int)valuesInDoubles[0], new Pair(valuesInDoubles[1], valuesInDoubles[2]), valuesInDoubles[3], Configuration.getMass(), Configuration.getDt(), Color.BLUE));
+                parameters.addParticle(new Particle((int)valuesInDoubles[0], new ParticlePair(valuesInDoubles[1], valuesInDoubles[2]), valuesInDoubles[3], Configuration.getMass(), Configuration.getDt(), Color.BLUE));
             }
 
         } catch (IOException e) {
@@ -63,7 +63,7 @@ public class GenerateParticle {
             radius = Configuration.getParticleMinRadius() + Math.random() * (Configuration.getParticleMaxRadius() - Configuration.getParticleMinRadius());
             x = radius + Math.random() * (Configuration.getW() - 2 * radius);
             y = radius + Configuration.getL()/10 + Math.random() * (Configuration.getL() - 2 * radius);
-            Particle newParticle = new Particle(i, new Pair(x, y), radius, Configuration.getMass(), Configuration.getDt(), Color.BLUE);
+            Particle newParticle = new Particle(i, new ParticlePair(x, y), radius, Configuration.getMass(), Configuration.getDt(), Color.BLUE);
 
             overlap = false;
 

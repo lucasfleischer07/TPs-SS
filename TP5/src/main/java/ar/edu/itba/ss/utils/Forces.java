@@ -1,19 +1,27 @@
 package ar.edu.itba.ss.utils;
 
-import ar.edu.itba.ss.models.Pair;
+import ar.edu.itba.ss.models.ParticlePair;
 import ar.edu.itba.ss.models.Particle;
 
-public class ForcesUtils {
-
+public class Forces {
+//    TODO: Parametros en m
     public static final double K_NORMAL = 0.25;
+//    public static final double K_NORMAL = 25000;
     public static final double GRAVITY = -0.05;
     public static final double GAMMA = 0.0025;
     public static final double MU = 0.7;
     public static final double K_TAN = 2 * K_NORMAL;
 
+//    TODO: Parametros en cm
+//    public static final double K_NORMAL = 250;
+//    public static final double GRAVITY = -5.0;
+//    public static final double GAMMA = 2.5;
+//    public static final double MU = 0.7;
+//    public static final double K_TAN = 2 * K_NORMAL;
+
 
     public static double getNormalForce(double superposition, Particle A, Particle B) {
-        Pair relativeVelocity;
+        ParticlePair relativeVelocity;
         if(B == null) {
             relativeVelocity = A.getVelocity();
         } else {
@@ -25,7 +33,7 @@ public class ForcesUtils {
     }
 
 
-    public static Pair getNormalForce(double superposition, Pair versor, Particle A, Particle B) {
+    public static ParticlePair getNormalForce(double superposition, ParticlePair versor, Particle A, Particle B) {
         double force = getNormalForce(superposition, A, B);
 
         return versor.pairMultiply(force);
@@ -40,16 +48,16 @@ public class ForcesUtils {
         return -MU * Math.abs(getNormalForce(superposition, A, B)) * Math.signum(relativeTangencialVelocity);
     }
 
-    public static Pair getTangencialForce(double superposition, Pair relativeTangencialVelocity, Pair normalVersor, Particle A, Particle B) {
-        Pair tan = new Pair(-normalVersor.getY(), normalVersor.getX());
+    public static ParticlePair getTangencialForce(double superposition, ParticlePair relativeTangencialVelocity, ParticlePair normalVersor, Particle A, Particle B) {
+        ParticlePair tan = new ParticlePair(-normalVersor.getY(), normalVersor.getX());
         double forceT3 = getTangencialForceT3(superposition, relativeTangencialVelocity.dotProduct(tan));
         double forceT1 = getTangencialForceT1(superposition, relativeTangencialVelocity.dotProduct(tan), A, B);
         double force = Math.min(forceT1, forceT3);
         return tan.pairMultiply(force);
     }
 
-    public static Pair getWallForce(double superposition, Pair relativeTangencialVelocity, Pair normalVersor, Particle A, Particle B) {
-        Pair tan = new Pair(-normalVersor.getY(), normalVersor.getX());
+    public static ParticlePair getWallForce(double superposition, ParticlePair relativeTangencialVelocity, ParticlePair normalVersor, Particle A, Particle B) {
+        ParticlePair tan = new ParticlePair(-normalVersor.getY(), normalVersor.getX());
         double forceT3 = getTangencialForceT3(superposition, relativeTangencialVelocity.dotProduct(tan));
         double forceT1 = getTangencialForceT1(superposition, relativeTangencialVelocity.dotProduct(tan), A, B);
         double forceT = Math.min(forceT1, forceT3);

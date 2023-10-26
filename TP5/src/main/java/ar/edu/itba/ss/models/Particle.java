@@ -1,7 +1,7 @@
 package ar.edu.itba.ss.models;
 
 import ar.edu.itba.ss.utils.Color;
-import ar.edu.itba.ss.utils.ForcesUtils;
+import ar.edu.itba.ss.utils.Forces;
 
 import java.util.Objects;
 
@@ -9,13 +9,13 @@ public class Particle {
     private static final double ZERO_VALUE = 0.0;
     private final static double SCALAR1 = (2.0 / 3.0);
     private final static double SCALAR2 = -(1.0 / 6.0);
-    private final Pair fuerzas;
+    private final ParticlePair fuerzas;
     private final Double radius, mass, dt, sqrDt;
     private final int id;
     private boolean attachedFromSlit = false;
     private boolean particleSlit = false;
     private Color color;
-    private Pair position, velocity, previousAcc, actualAcc, actualVel;
+    private ParticlePair position, velocity, previousAcc, actualAcc, actualVel;
 
     public void forcesReseted() {
         fuerzas.setX(ZERO_VALUE);
@@ -23,7 +23,7 @@ public class Particle {
     }
 
     public double getEnergy(){
-        return Math.pow(this.velocity.mathModule(Pair.ZERO_VALUE), 2) * mass / 2.0;
+        return Math.pow(this.velocity.mathModule(ParticlePair.ZERO_VALUE), 2) * mass / 2.0;
     }
 
     public void addToForce(double x, double y) {
@@ -31,17 +31,17 @@ public class Particle {
         fuerzas.setY(fuerzas.getY() + y);
     }
 
-    public Particle(int id, Pair position, Double radius, Double mass, Double dt, Color color) {
+    public Particle(int id, ParticlePair position, Double radius, Double mass, Double dt, Color color) {
         this.id = id;
         this.position = position;
         this.radius = radius;
         this.mass = mass;
-        this.fuerzas = new Pair(ZERO_VALUE, ZERO_VALUE);
-        this.velocity = new Pair(ZERO_VALUE, ZERO_VALUE);
+        this.fuerzas = new ParticlePair(ZERO_VALUE, ZERO_VALUE);
+        this.velocity = new ParticlePair(ZERO_VALUE, ZERO_VALUE);
         this.dt = dt;
         this.sqrDt = Math.pow(dt, 2);
-        actualAcc = new Pair(ZERO_VALUE, ZERO_VALUE);
-        previousAcc = new Pair(ZERO_VALUE, ForcesUtils.GRAVITY);
+        actualAcc = new ParticlePair(ZERO_VALUE, ZERO_VALUE);
+        previousAcc = new ParticlePair(ZERO_VALUE, Forces.GRAVITY);
         this.color = color;
     }
 
@@ -56,12 +56,12 @@ public class Particle {
         return new Particle(id, position, radius, mass, dt, color);
     }
 
-    public void addToForce(Pair pair) {
-        fuerzas.setX(fuerzas.getX() + pair.getX());
-        fuerzas.setY(fuerzas.getY() + pair.getY());
+    public void addToForce(ParticlePair particlePair) {
+        fuerzas.setX(fuerzas.getX() + particlePair.getX());
+        fuerzas.setY(fuerzas.getY() + particlePair.getY());
     }
 
-    public Pair getAcceleration() {
+    public ParticlePair getAcceleration() {
         return fuerzas.pairMultiply(1.0 / mass);
     }
 
@@ -82,15 +82,15 @@ public class Particle {
         return color;
     }
 
-    public Pair getPosition() {
+    public ParticlePair getPosition() {
         return position;
     }
 
-    public Pair getVelocity() {
+    public ParticlePair getVelocity() {
         return velocity;
     }
 
-    public Pair getFuerzas() {
+    public ParticlePair getFuerzas() {
         return fuerzas;
     }
 
@@ -116,15 +116,15 @@ public class Particle {
         return attachedFromSlit;
     }
 
-    public Pair getPreviousAcc() {
+    public ParticlePair getPreviousAcc() {
         return previousAcc;
     }
 
-    public Pair getActualAcc() {
+    public ParticlePair getActualAcc() {
         return actualAcc;
     }
 
-    public Pair getActualVel() {
+    public ParticlePair getActualVel() {
         return actualVel;
     }
 
@@ -132,23 +132,23 @@ public class Particle {
         this.attachedFromSlit = attachedFromSlit;
     }
 
-    public void setPosition(Pair position) {
+    public void setPosition(ParticlePair position) {
         this.position = position;
     }
 
-    public void setVelocity(Pair velocity) {
+    public void setVelocity(ParticlePair velocity) {
         this.velocity = velocity;
     }
 
-    public void setPreviousAcc(Pair previousAcc) {
+    public void setPreviousAcc(ParticlePair previousAcc) {
         this.previousAcc = previousAcc;
     }
 
-    public void setActualAcc(Pair actualAcc) {
+    public void setActualAcc(ParticlePair actualAcc) {
         this.actualAcc = actualAcc;
     }
 
-    public void setActualVel(Pair actualVel) {
+    public void setActualVel(ParticlePair actualVel) {
         this.actualVel = actualVel;
     }
 
@@ -162,7 +162,7 @@ public class Particle {
 
     public void correction(){
         if (attachedFromSlit){
-            this.velocity = new Pair(ZERO_VALUE, ZERO_VALUE);attachedFromSlit = false;previousAcc = new Pair(ZERO_VALUE, ForcesUtils.GRAVITY);
+            this.velocity = new ParticlePair(ZERO_VALUE, ZERO_VALUE);attachedFromSlit = false;previousAcc = new ParticlePair(ZERO_VALUE, Forces.GRAVITY);
         } else {
             this.velocity = actualVel.pairSummatory(this.getAcceleration().pairMultiply((1.0 / 3.0) * dt).pairSummatory(actualAcc.pairMultiply((5.0 / 6.0) * dt).pairSummatory(previousAcc.pairMultiply(-(1.0 / 6.0) * dt))));
             previousAcc = actualAcc;
