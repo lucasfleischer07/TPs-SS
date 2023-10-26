@@ -9,7 +9,7 @@ import java.util.List;
 
 public class App {
     public static void main( String[] args ) throws IOException {
-//        GenerateParticle.generateStaticFile(Configuration.getStaticFile());
+        GenerateParticle.generateStaticFile(Configuration.getStaticFile());
         List<Particle> particles = GenerateParticle.generateParticles(Configuration.getStaticFile());
 
 
