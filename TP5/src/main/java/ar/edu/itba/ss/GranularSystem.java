@@ -15,6 +15,7 @@ public class GranularSystem implements Runnable {
     private final int iterations;
     private final double dt;
     private final double frequency;
+    private final double holeSize;
     private final String outputFileName;
     private final List<Particle> particleList;
     private final List<Vertex> limitsList;
@@ -22,13 +23,14 @@ public class GranularSystem implements Runnable {
     private final List<Double> energyList = new ArrayList<>();
     private final Simulation simulation;
 
-    public GranularSystem(double dt, double iterations, double frequency, String outputFileName, List<Particle> particles) {
+    public GranularSystem(double dt, double holeSize, double iterations, double frequency, String outputFileName, List<Particle> particles) {
         this.limitsList = new ArrayList<>();
         this.dt = dt;
         this.iterations = (int)(iterations/dt);
         this.frequency = frequency;
         this.outputFileName = outputFileName;
         this.particleList = particles.stream().map(Particle::particleClone).collect(Collectors.toList());
+        this.holeSize = holeSize;
 
         Vertex vertex1 = new Vertex(Configuration.getW(), Configuration.getL() + Configuration.getL() /10);
         this.limitsList.add(vertex1);
@@ -36,12 +38,12 @@ public class GranularSystem implements Runnable {
         this.limitsList.add(vertex2);
         Vertex vertex3 = new Vertex(Configuration.getW(), 0.0);
         this.limitsList.add(vertex3);
-        Vertex leftHoleVertex = new Vertex(Configuration.getW() / 2 - Configuration.getD() / 2, Configuration.getL() /10);
+        Vertex leftHoleVertex = new Vertex(Configuration.getW() / 2 - holeSize / 2, Configuration.getL() /10);
         this.limitsList.add(leftHoleVertex);
-        Vertex rightHoleVertex = new Vertex(Configuration.getW() / 2 + Configuration.getD() / 2, Configuration.getL() /10);
+        Vertex rightHoleVertex = new Vertex(Configuration.getW() / 2 + holeSize / 2, Configuration.getL() /10);
         this.limitsList.add(rightHoleVertex);
 
-        this.simulation = new Simulation(vertex1, vertex2, Configuration.getD());
+        this.simulation = new Simulation(vertex1, vertex2, holeSize);
 
         simulation.addAll(this.particleList);
     }
