@@ -3,19 +3,21 @@ package ar.edu.itba.ss.models;
 import ar.edu.itba.ss.utils.Color;
 import ar.edu.itba.ss.utils.Forces;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Particle {
-    private static final double ZERO_VALUE = 0.0;
-    private final static double SCALAR1 = (2.0 / 3.0);
-    private final static double SCALAR2 = -(1.0 / 6.0);
+    private static final double ZERO_VALUE = 0.0, SCALAR1 = (2.0 / 3.0), SCALAR2 = -(1.0 / 6.0);
     private final ParticlePair fuerzas;
     private final Double radius, mass, dt, sqrDt;
     private final int id;
-    private boolean attachedFromSlit = false;
-    private boolean particleSlit = false;
+    private boolean attachedFromSlit = false, particleSlit = false;
     private Color color;
     private ParticlePair position, velocity, previousAcc, actualAcc, actualVel;
+
+    public Map<Particle, Double> totalVelocitiesAcummulated = new HashMap<>();
+    public Double[] forcesAcumulatedInWalls = {0.0, 0.0, 0.0, 0.0};
 
     public void forcesReseted() {
         fuerzas.setX(ZERO_VALUE);
@@ -94,8 +96,6 @@ public class Particle {
         return fuerzas;
     }
 
-
-
     public Double getRadius() {
         return radius;
     }
@@ -151,6 +151,42 @@ public class Particle {
     public void setActualVel(ParticlePair actualVel) {
         this.actualVel = actualVel;
     }
+
+//-------------------------------------------------------------------------------------------
+
+    public double sumOfVelocities(Particle particle){
+        return totalVelocitiesAcummulated.get(particle);
+    }
+
+    public void addSumOfVelocities(Particle other, double relativeVelocity){
+        double velocitiesAcummulated = totalVelocitiesAcummulated.get(other);
+
+        this.totalVelocitiesAcummulated.put(other, velocitiesAcummulated + relativeVelocity);
+        other.totalVelocitiesAcummulated.put(this, velocitiesAcummulated + relativeVelocity);
+    }
+
+    public void sumOfVelocitiesReset(Particle particle){
+        this.totalVelocitiesAcummulated.put(particle, 0.0);
+        particle.totalVelocitiesAcummulated.put(this, 0.0);
+    }
+
+    public void sumOfVelocitiesInWallReset(int id){
+        this.forcesAcumulatedInWalls[id] = 0.0;
+    }
+
+    public double sumOfVelocitiesInWall(int id){
+        return forcesAcumulatedInWalls[id];
+    }
+
+    public void addAcumVelWall(int index, double relativeVelocity){
+        double currentAcumVel = this.forcesAcumulatedInWalls[index];
+        this.forcesAcumulatedInWalls[index] = currentAcumVel + relativeVelocity;
+    }
+
+
+
+//--------------------------------------------------------------------------------------------------------
+
 
     // ALgoritmo
     public void prediction() {

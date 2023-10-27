@@ -1,14 +1,15 @@
 {
-  "particleMinRadius": 0.0085,
-  "particleMaxRadius": 0.0115,
-  "W": 0.20,
-  "L": 0.70,
-  "D": 0.03,
+  "exercise": "a",
+  "particleMinRadius": 0.85,
+  "particleMaxRadius": 1.15,
+  "W": 20,
+  "L": 70,
+  "D": 3.0,
   "N": 200,
-  "mass": 0.001,
+  "mass": 1,
   "dt": 0.001,
   "iterations": 10,
-  "A": 0.0015,
-  "outputFile": "src/main/resources/output.txt",
-  "staticFile": "src/main/resources/static.txt"
+  "A": 0.15,
+  "outputFile": "src/main/resources/output",
+  "staticFile": "src/main/resources/static"
 }

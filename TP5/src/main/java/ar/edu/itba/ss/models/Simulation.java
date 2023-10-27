@@ -12,9 +12,7 @@ import static ar.edu.itba.ss.utils.Forces.*;
 
 public class Simulation {
     private static final double A = Configuration.getA();
-//    TODO: Esto es para metros
-    private static final double ZERO_VALUE = 0.0, REINJECT_MIN_LIMIT = 0.4;
-//    private static final double ZERO_VALUE = 0.0, REINJECT_MIN_LIMIT = 40.0;
+    private static final double ZERO_VALUE = 0.0, REINJECT_MIN_LIMIT = 40.0;
     private final CellIndex[][] cellIndexes;
 
     //con esta cantidad obtenemos la grilla mas optima posible
@@ -27,15 +25,10 @@ public class Simulation {
     private static final double DIMENSION_Y_AXES = Configuration.getL() + Configuration.getL() / 10;
     private static final double DIMENSION_Y_CELL = DIMENSION_Y_AXES / (double) ROWS_TOTAL;
     private static final double DIMENSION_X_CELL = DIMENSION_X_AXES / (double) COLS_TOTAL;
-    
     private final Vertex upperRightVertex, downLeftVertex;
     private final double upperTopVertexY, downLeftVertexY, leftSplitVertex, rightSplitVertex;
     private double movement;
-
-    private static final ParticlePair versorNormalIzqueirda = new ParticlePair(-1.0, ZERO_VALUE);
-    private static final ParticlePair versorNormalDerecha = new ParticlePair(1.0, ZERO_VALUE);
-    private static final ParticlePair versorNormalDown = new ParticlePair(ZERO_VALUE, -1.0);
-    private static final ParticlePair versorNormalUpper = new ParticlePair(ZERO_VALUE, 1.0);
+    private static final ParticlePair versorNormalIzqueirda = new ParticlePair(-1.0, ZERO_VALUE), versorNormalDerecha = new ParticlePair(1.0, ZERO_VALUE), versorNormalDown = new ParticlePair(ZERO_VALUE, -1.0), versorNormalUpper = new ParticlePair(ZERO_VALUE, 1.0);
 
 
     public Simulation(Vertex topRightVertex, Vertex bottomLeftVertex, double holeSize) {
@@ -69,8 +62,9 @@ public class Simulation {
 
 
     public void siloMovement(double t, double w) {
-        downLeftVertex.setY(downLeftVertexY + (A * Math.sin(w * t)));
-        upperRightVertex.setY(upperTopVertexY + (A * Math.sin(w * t)));
+        movement = A * Math.sin(w * t);
+        downLeftVertex.setY(downLeftVertexY + movement);
+        upperRightVertex.setY(upperTopVertexY + movement);
     }
 
     private boolean isNotInSplit(Particle p) {
@@ -98,6 +92,8 @@ public class Simulation {
 
                             ParticlePair relativeVelocity = particle.getVelocity().pairSubtract(other.getVelocity());
                             particle.addToForce(getTangencialForce(sumRad - difference, relativeVelocity, normalVersor, particle, other));
+                        } else {
+                            other.sumOfVelocitiesReset(particle);
                         }
                     }
 
@@ -117,6 +113,8 @@ public class Simulation {
 
                             particle.addToForce(tangentialForce);
                             other.addToForce(tangentialForce.pairMultiply(-1.0));
+                        } else {
+                            other.sumOfVelocitiesReset(particle);
                         }
                     }
                 }
@@ -147,6 +145,8 @@ public class Simulation {
                 if (superposition > ZERO_VALUE) {
                     ParticlePair force = getWallForce(superposition, particle.getVelocity(), versorNormalDown, particle, null);
                     particle.addToForce(force);
+                } else {
+                    particle.sumOfVelocitiesInWallReset(0);
                 }
             }
         }
@@ -158,6 +158,8 @@ public class Simulation {
             if (superposition > ZERO_VALUE) {
                 ParticlePair force = getWallForce(superposition, particle.getVelocity(), versorNormalUpper, particle, null);
                 particle.addToForce(force);
+            } else {
+                particle.sumOfVelocitiesInWallReset(1);
             }
         }
     }
@@ -168,6 +170,8 @@ public class Simulation {
             if (superposition > ZERO_VALUE) {
                 ParticlePair force = getWallForce(superposition, particle.getVelocity(), versorNormalIzqueirda, particle, null);
                 particle.addToForce(force);
+            } else {
+                particle.sumOfVelocitiesInWallReset(2);
             }
         }
 
@@ -179,6 +183,8 @@ public class Simulation {
             if (superposition > ZERO_VALUE) {
                 ParticlePair force = getWallForce(superposition, particle.getVelocity(), versorNormalDerecha, particle, null);
                 particle.addToForce(force);
+            } else {
+                particle.sumOfVelocitiesInWallReset(3);
             }
         }
     }

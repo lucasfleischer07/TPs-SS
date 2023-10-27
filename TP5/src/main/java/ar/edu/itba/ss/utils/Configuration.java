@@ -12,7 +12,7 @@ public class Configuration {
 
     private static double particleMinRadius, particleMaxRadius, w, l, d, mass, dt, a;
     private static int iterations, n;
-    private static String outputFile, staticFile;
+    private static String outputFile, staticFile, exercise;
 
     static {
         try {
@@ -33,6 +33,7 @@ public class Configuration {
             a = configObject.get("A").getAsDouble();
             outputFile = configObject.get("outputFile").getAsString();
             staticFile = configObject.get("staticFile").getAsString();
+            exercise = configObject.get("exercise").getAsString();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,5 +85,9 @@ public class Configuration {
 
     public static String getStaticFile() {
         return staticFile;
+    }
+
+    public static String getExercise() {
+        return exercise;
     }
 }

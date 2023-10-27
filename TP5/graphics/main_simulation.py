@@ -12,6 +12,7 @@ def update_particle_positions(frame, particle_data, ax, L, W, D, dt):
     ax.clear()
 
     particles = particle_data[frame]
+    # limits = limits_data[frame]
 
     # Dibuja un rectángulo
     rect = Rectangle((0, 0), W, L + L / 10, color='b', fill=False)
@@ -54,7 +55,7 @@ def main():
     # Save animation as mp4
     Writer = animation.writers['ffmpeg']
     writer = Writer(fps=20, metadata=dict(artist='Me'), bitrate=1800)
-    anim.save('animations/animation_D_' + str(D) + '.mp4', writer=writer)
+    anim.save('animations/animation_D_' + str(D) + '_dt_ ' + str(dt) + '_gravedad_5_kn_250_mu_0.55.mp4', writer=writer)
 
 
 if __name__ == "__main__":
