@@ -31,7 +31,7 @@ def parse_output_file(file_path):
         if len(data) == 3:
             time = float(data[0])
             particles_data[time] = []
-            limits.append([float(data[1]), float(data[2])])
+            # limits.append([float(data[1]), float(data[2])])
         else:
             particle = {
                 'id': float(data[0]),
@@ -47,4 +47,4 @@ def parse_output_file(file_path):
 
             particles_data[time].append(particle)
 
-    return particles_data, limits
+    return particles_data

@@ -40,22 +40,24 @@ def update_particle_positions(frame, particle_data, ax, L, W, D, dt):
 
 def main():
     config_json_path = "../config.json"
-    output_base_path = '../src/main/resources/output.txt'
+    output_base_path = '../src/main/resources/output'
 
-    # Crea la figura y el eje
-    fig, ax = plt.subplots()  # Esto crea tanto la figura como el eje
+    for i in [5.0, 10.0, 15.0, 20.0, 30.0, 50.0]:
+        output_base_path = '../src/main/resources/output_frequency_' + str(i) + '.txt'
+        # Crea la figura y el eje
+        fig, ax = plt.subplots()  # Esto crea tanto la figura como el eje
 
-    N, W, L, D, N, mass, dt, iterations, A = parse_config_json(config_json_path)
+        N, W, L, D, N, mass, dt, iterations, A = parse_config_json(config_json_path)
 
-    particle_data, limits = parse_output_file(output_base_path)
+        particle_data = parse_output_file(output_base_path)
 
-    # Llama a la función de actualización de la trama
-    anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, L, W, D, dt), frames=list(particle_data.keys()), repeat=False, interval=1)
+        # Llama a la función de actualización de la trama
+        anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, L, W, D, dt), frames=list(particle_data.keys()), repeat=False, interval=1)
 
-    # Save animation as mp4
-    Writer = animation.writers['ffmpeg']
-    writer = Writer(fps=20, metadata=dict(artist='Me'), bitrate=1800)
-    anim.save('animations/animation_D_' + str(D) + '_dt_ ' + str(dt) + '_gravedad_5_kn_250_mu_0.55.mp4', writer=writer)
+        # Save animation as mp4
+        Writer = animation.writers['ffmpeg']
+        writer = Writer(fps=20, metadata=dict(artist='Me'), bitrate=1800)
+        anim.save('animations/animation_D_' + str(D) + '_dt_ ' + str(dt) + '_frequency_' + str(i) + '.mp4', writer=writer)
 
 
 if __name__ == "__main__":

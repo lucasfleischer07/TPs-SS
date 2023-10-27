@@ -12,12 +12,6 @@ import java.util.Locale;
 public class WriteFiles {
 
     public static <T> void GenerateListFile(String fileName, List<T> list) throws IOException {
-        File file = new File(fileName);
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-        }
-
         PrintWriter outputWriter = new PrintWriter(new FileWriter(fileName, true));
         StringBuilder stringBuilder = new StringBuilder();
         for (T item : list) {
@@ -29,12 +23,6 @@ public class WriteFiles {
     }
 
     public static void GenerateBestFrequencyFile(String fileName, Double bestFrequency) throws IOException {
-        File file = new File(fileName);
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-        }
-
         PrintWriter outputWriter = new PrintWriter(new FileWriter(fileName, true));
         outputWriter.write(bestFrequency + "\n");
         outputWriter.close();

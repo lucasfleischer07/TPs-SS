@@ -41,3 +41,4 @@ build/
 
 graphics/animations/*
 graphics/__pycache__/*
+graphics/graphs/*

@@ -8,7 +8,7 @@
   "N": 200,
   "mass": 1,
   "dt": 0.001,
-  "iterations": 10,
+  "iterations": 1000,
   "A": 0.15,
   "outputFile": "src/main/resources/output",
   "staticFile": "src/main/resources/static"
