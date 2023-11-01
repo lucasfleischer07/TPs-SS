@@ -34,50 +34,11 @@ def update_particle_positions(frame, particle_data, ax, L, W, D, dt, frequency):
         color = tuple(int(c) / 255 for c in p['color'].split())
         ax.add_patch(Circle((p['x'], p['y']), p['radius'], color=color, fill=True))
 
-    # print(f"Thread {threading.current_thread().name} - Running frequency = {frequency} - Iteration = {frame:.3f}")
-    print(f"Running frequency = {frequency} - Iteration = {frame:.3f}")
+    print(f"Running {frequency} - Iteration = {frame:.3f}")
     ax.set_title('Time = ' + "{:.3f}".format(frame) + 's')
 
 
-# def run_simulation(frequency):
-#     config_json_path = "../config.json"
-#     output_base_path = '../src/main/resources/output_frequency_' + str(frequency) + '.txt'
-#
-#     # Crea la figura y el eje
-#     fig, ax = plt.subplots()
-#
-#     N, W, L, D, N, mass, dt, iterations, A = parse_config_json(config_json_path)
-#     particle_data = parse_output_file(output_base_path)
-#
-#     anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, L, W, D, dt, frequency), frames=list(particle_data.keys()), repeat=False, interval=1)
-#
-#     # Save animation as mp4
-#     Writer = animation.writers['ffmpeg']
-#     writer = Writer(fps=20, metadata=dict(artist='Me'), bitrate=1800)
-#     anim.save('animations/animation_D_' + str(D) + '_dt_ ' + str(dt) + '_frequency_' + str(frequency) + '.mp4', writer=writer)
-
-
-# def main():
-#     threads = []
-#
-#     for frequency in [5.0, 10.0, 15.0, 20.0, 30.0, 50.0]:
-#         thread = threading.Thread(target=run_simulation, args=(frequency,))
-#         threads.append(thread)
-#         thread.start()
-#
-#     for thread in threads:
-#         thread.join()
-#
-#
-# if __name__ == "__main__":
-#     main()
-
-
-def main():
-    config_json_path = "../config.json"
-    D = 5.0
-    MHU = 0.1
-
+def animate_frequencies(config_json_path, MHU, D):
     for i in [5.0, 10.0, 15.0, 20.0, 30.0, 50.0]:
         output_base_path = '../src/main/resources/itemA/output_frequency_' + str(i) + '_D_' + str(D) + '_mhu_' + str(MHU) + '.txt'
         # Crea la figura y el eje
@@ -94,6 +55,35 @@ def main():
         Writer = animation.writers['ffmpeg']
         writer = Writer(fps=20, metadata=dict(artist='Me'), bitrate=1800)
         anim.save('animations/animation_D_' + str(D) + '_dt_ ' + str(dt) + '_frequency_' + str(i) + '.mp4', writer=writer)
+
+
+def animate_hole_sizes(config_json_path, MHU, FREQUENCY):
+    for i in [3.0, 4.0, 6.0]:
+        output_base_path = '../src/main/resources/itemB/output_hole_size_' + str(i) + '_frequency_' + str(FREQUENCY) + '_mhu_' + str(MHU) + '.txt'
+        # Crea la figura y el eje
+        fig, ax = plt.subplots()  # Esto crea tanto la figura como el eje
+
+        N, W, L, D, N, mass, dt, iterations, A = parse_config_json(config_json_path)
+
+        particle_data = parse_output_file(output_base_path)
+
+        # Llama a la función de actualización de la trama
+        anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, L, W, D, dt, i), frames=list(particle_data.keys()), repeat=False, interval=1)
+
+        # Save animation as mp4
+        Writer = animation.writers['ffmpeg']
+        writer = Writer(fps=20, metadata=dict(artist='Me'), bitrate=1800)
+        anim.save('animations/animation_D_' + str(i) + '_dt_ ' + str(dt) + '_frequency_' + str(FREQUENCY) + '.mp4', writer=writer)
+
+
+def main():
+    config_json_path = "../config.json"
+    D = 5.0
+    MHU = 0.7
+    FREQUENCY = 20.0
+
+    animate_frequencies(config_json_path, MHU, D)
+    animate_hole_sizes(config_json_path, MHU, FREQUENCY)
 
 
 if __name__ == "__main__":
