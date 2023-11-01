@@ -304,7 +304,7 @@ public class Simulation {
                 cellIndexes[newRow][newCol].addParticles(particle);
                 cellIndexes[row][col].removeParticles(particle);
                 if (particle.isParticleSlit() && particle.getColor().equals(Color.RED)) {
-                    particle.setColor(Color.BLUE);
+                    particle.setColor(Color.RED);
                 }
                 return true;
             }
