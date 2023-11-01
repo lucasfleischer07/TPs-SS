@@ -15,9 +15,9 @@ public class Particle {
     private boolean attachedFromSlit = false, particleSlit = false;
     private Color color;
     private ParticlePair position, velocity, previousAcc, actualAcc, actualVel;
+    public Map<Particle, ParticlePair> totalVelocitiesAcummulatedMap = new HashMap<>();
 
-    public Map<Particle, Double> totalVelocitiesAcummulated = new HashMap<>();
-    public Double[] forcesAcumulatedInWalls = {0.0, 0.0, 0.0, 0.0};
+    private ParticlePair floorRelativeVelocity = ParticlePair.ZERO_VALUE, rightRelativeVelocity = ParticlePair.ZERO_VALUE, leftRelativeVelocity = ParticlePair.ZERO_VALUE, topRelativeVelocity = ParticlePair.ZERO_VALUE;
 
     public void forcesReseted() {
         fuerzas.setX(ZERO_VALUE);
@@ -153,39 +153,47 @@ public class Particle {
     }
 
 //-------------------------------------------------------------------------------------------
-
-    public double sumOfVelocities(Particle particle){
-        return totalVelocitiesAcummulated.get(particle);
+    public Map<Particle, ParticlePair> getTotalVelocitiesAcummulatedMap() {
+        return totalVelocitiesAcummulatedMap;
     }
 
-    public void addSumOfVelocities(Particle other, double relativeVelocity){
-        double velocitiesAcummulated = totalVelocitiesAcummulated.get(other);
-
-        this.totalVelocitiesAcummulated.put(other, velocitiesAcummulated + relativeVelocity);
-        other.totalVelocitiesAcummulated.put(this, velocitiesAcummulated + relativeVelocity);
+    public void setTotalVelocitiesAcummulatedMap(ParticlePair vel, Particle particle) {
+        this.totalVelocitiesAcummulatedMap.putIfAbsent(particle, vel);
     }
 
-    public void sumOfVelocitiesReset(Particle particle){
-        this.totalVelocitiesAcummulated.put(particle, 0.0);
-        particle.totalVelocitiesAcummulated.put(this, 0.0);
+    public ParticlePair getFloorRelativeVelocity() {
+        return floorRelativeVelocity;
     }
 
-    public void sumOfVelocitiesInWallReset(int id){
-        this.forcesAcumulatedInWalls[id] = 0.0;
+    public void setFloorRelativeVelocity(ParticlePair floorRelativeVelocity) {
+        this.floorRelativeVelocity = floorRelativeVelocity;
     }
 
-    public double sumOfVelocitiesInWall(int id){
-        return forcesAcumulatedInWalls[id];
+    public ParticlePair getRightRelativeVelocity() {
+        return rightRelativeVelocity;
     }
 
-    public void addAcumVelWall(int index, double relativeVelocity){
-        double currentAcumVel = this.forcesAcumulatedInWalls[index];
-        this.forcesAcumulatedInWalls[index] = currentAcumVel + relativeVelocity;
+    public void setRightRelativeVelocity(ParticlePair rightRelativeVelocity) {
+        this.rightRelativeVelocity = rightRelativeVelocity;
     }
 
+    public ParticlePair getLeftRelativeVelocity() {
+        return leftRelativeVelocity;
+    }
 
+    public void setLeftRelativeVelocity(ParticlePair leftRelativeVelocity) {
+        this.leftRelativeVelocity = leftRelativeVelocity;
+    }
 
-//--------------------------------------------------------------------------------------------------------
+    public ParticlePair getTopRelativeVelocity() {
+        return topRelativeVelocity;
+    }
+
+    public void setTopRelativeVelocity(ParticlePair topRelativeVelocity) {
+        this.topRelativeVelocity = topRelativeVelocity;
+    }
+
+    //--------------------------------------------------------------------------------------------------------
 
 
     // ALgoritmo

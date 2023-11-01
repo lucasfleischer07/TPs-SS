@@ -2,6 +2,7 @@ package ar.edu.itba.ss;
 
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.utils.Configuration;
+import ar.edu.itba.ss.utils.Forces;
 import ar.edu.itba.ss.utils.GenerateParticle;
 import ar.edu.itba.ss.utils.WriteFiles;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class App {
     public static void main( String[] args ) throws IOException, InterruptedException {
-        GenerateParticle.generateStaticFile(Configuration.getStaticFile() + ".txt");
+//        GenerateParticle.generateStaticFile(Configuration.getStaticFile() + ".txt");
         double bestFrequency;
 
 // -------------------- Este es el item a que pide varias w ------------------------
@@ -31,7 +32,7 @@ public class App {
                             Configuration.getD(),
                             Configuration.getIterations(),
                             frequency,
-                            Configuration.getOutputFile() + "_frequency_" + frequency + ".txt",
+                            "src/main/resources/itemA/output" + "_frequency_" + frequency + "_D_" + Configuration.getD() + "_mhu_" + Forces.MU + ".txt",
                             particles
                     );
 
@@ -46,34 +47,29 @@ public class App {
 
                 List<Double> caudals = systems_a.stream().map(GranularSystem::getCaudal).collect(Collectors.toList());
                 bestFrequency = caudals.get(caudals.indexOf(caudals.stream().max(Double::compareTo).get()));
-                WriteFiles.GenerateBestFrequencyFile("src/main/resources/best_frequency.txt", bestFrequency);
-                WriteFiles.GenerateListFile("src/main/resources/caudal_frequency.txt", caudals);
+                WriteFiles.GenerateBestFrequencyFile("src/main/resources/itemA/best_frequency.txt", bestFrequency);
+                WriteFiles.GenerateListFile("src/main/resources/itemA/caudal_frequency" + "_D_" + Configuration.getD() + "_mhu_" + Forces.MU + ".txt", caudals);
 
-                int i = 1, j = 1;
+                int i = 1;
                 for (GranularSystem system : systems_a) {
-                    WriteFiles.GenerateListFile("src/main/resources/times_frequency_" + i + ".txt", system.getTimes());
+                    WriteFiles.GenerateListFile("src/main/resources/itemA/times_frequency_" + i + "_D_" + Configuration.getD() + "_mhu_" + Forces.MU + ".txt", system.getTimes());
                     i++;
-                }
-
-                for (GranularSystem system : systems_a) {
-                    WriteFiles.GenerateListFile("src/main/resources/energy_frequency_" + j + ".txt", system.getEnergy());
-                    j++;
                 }
 
                 break;
             case "b":
-                double[] holeSizes = {4.0, 5.0, 6.0};
+                double[] holeSizes = {3.0, 4.0, 5.0, 6.0};
                 List<GranularSystem> systems_b = new ArrayList<>();
                 ExecutorService executor_b = Executors.newFixedThreadPool(holeSizes.length);
-
+                // TODO: CAMBIAR LA FRECUENCIA A LA QUE CORRESPONDA
+                double frequency = 20.0;
                 for (double holeSize : holeSizes) {
                     List<Particle> particles = GenerateParticle.generateParticles(Configuration.getStaticFile() + ".txt");
-                    // TODO: CAMBIAR LA FRECUENCIA A LA QUE CORRESPONDA
                     GranularSystem granularSystem = new GranularSystem(Configuration.getDt(),
                             holeSize,
                             Configuration.getIterations(),
-                            20.0,
-                            Configuration.getOutputFile() + "_hole_size_" + holeSize + ".txt",
+                            frequency,
+                            "src/main/resources/itemB/output" + "_hole_size_" + holeSize + "_frequency_" + frequency + "_mhu_" + Forces.MU + ".txt",
                             particles
                     );
                     systems_b.add(granularSystem);
@@ -85,17 +81,12 @@ public class App {
                     throw new IllegalStateException("Threads timeout");
                 }
 
-                WriteFiles.GenerateListFile("src/main/resources/caudals_hole_size_.txt", systems_b.stream().map(GranularSystem::getCaudal).collect(Collectors.toList()));
+                WriteFiles.GenerateListFile("src/main/resources/itemB/caudals_hole_size" + "_mhu_" + Forces.MU + ".txt", systems_b.stream().map(GranularSystem::getCaudal).collect(Collectors.toList()));
 
-                int k = 1, l = 1;
+                int k = 1;
                 for (GranularSystem system : systems_b) {
-                    WriteFiles.GenerateListFile("src/main/resources/times_hole_size_" + k + ".txt", system.getTimes());
+                    WriteFiles.GenerateListFile("src/main/resources/itemB/times_hole_size_" + k + "_mhu_" + Forces.MU + ".txt", system.getTimes());
                     k++;
-                }
-
-                for (GranularSystem system : systems_b) {
-                    WriteFiles.GenerateListFile("src/main/resources/energy_hole_size_" + l + ".txt", system.getTimes());
-                    l++;
                 }
 
                 break;

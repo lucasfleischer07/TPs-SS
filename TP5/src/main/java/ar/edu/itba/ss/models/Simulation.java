@@ -91,9 +91,17 @@ public class Simulation {
                             particle.addToForce(getNormalForce(sumRad - difference, normalVersor, particle, other));
 
                             ParticlePair relativeVelocity = particle.getVelocity().pairSubtract(other.getVelocity());
-                            particle.addToForce(getTangencialForce(sumRad - difference, relativeVelocity, normalVersor, particle, other));
+                            ParticlePair aux = particle.getTotalVelocitiesAcummulatedMap().get(other);
+                            ParticlePair accum;
+                            if(aux == null) {
+                                accum = relativeVelocity;
+                            } else {
+                                accum = aux.pairSummatory(relativeVelocity);
+                            }
+                            particle.setTotalVelocitiesAcummulatedMap(accum, other);
+                            particle.addToForce(getTangencialForce(sumRad - difference, particle.getTotalVelocitiesAcummulatedMap().get(other), normalVersor, particle, other));
                         } else {
-                            other.sumOfVelocitiesReset(particle);
+                            particle.setTotalVelocitiesAcummulatedMap(ParticlePair.ZERO_VALUE, other);
                         }
                     }
 
@@ -114,7 +122,7 @@ public class Simulation {
                             particle.addToForce(tangentialForce);
                             other.addToForce(tangentialForce.pairMultiply(-1.0));
                         } else {
-                            other.sumOfVelocitiesReset(particle);
+                            particle.setTotalVelocitiesAcummulatedMap(ParticlePair.ZERO_VALUE, other);
                         }
                     }
                 }
@@ -143,10 +151,12 @@ public class Simulation {
             if (isNotInSplit(particle) && !particle.isParticleSlit()) {
                 double superposition = particle.getParticleRadius() - (particle.getPosition().getY() - downLeftVertex.getY());
                 if (superposition > ZERO_VALUE) {
-                    ParticlePair force = getWallForce(superposition, particle.getVelocity(), versorNormalDown, particle, null);
+                    Particle auxParticle = particle;
+                    particle.setFloorRelativeVelocity(particle.getFloorRelativeVelocity().pairSummatory(particle.getVelocity()));
+                    ParticlePair force = getWallForce(superposition, particle.getFloorRelativeVelocity(), versorNormalDown, auxParticle, null);
                     particle.addToForce(force);
                 } else {
-                    particle.sumOfVelocitiesInWallReset(0);
+                    particle.setFloorRelativeVelocity(ParticlePair.ZERO_VALUE);
                 }
             }
         }
@@ -158,8 +168,6 @@ public class Simulation {
             if (superposition > ZERO_VALUE) {
                 ParticlePair force = getWallForce(superposition, particle.getVelocity(), versorNormalUpper, particle, null);
                 particle.addToForce(force);
-            } else {
-                particle.sumOfVelocitiesInWallReset(1);
             }
         }
     }
@@ -168,10 +176,12 @@ public class Simulation {
         for (Particle particle : particles) {
             double superposition = particle.getParticleRadius() - (particle.getPosition().getX() - downLeftVertex.getPosition().getX());
             if (superposition > ZERO_VALUE) {
-                ParticlePair force = getWallForce(superposition, particle.getVelocity(), versorNormalIzqueirda, particle, null);
+                Particle auxParticle = particle;
+                particle.setLeftRelativeVelocity(particle.getLeftRelativeVelocity().pairSummatory(particle.getVelocity()));
+                ParticlePair force = getWallForce(superposition, particle.getLeftRelativeVelocity(), versorNormalIzqueirda, auxParticle, null);
                 particle.addToForce(force);
             } else {
-                particle.sumOfVelocitiesInWallReset(2);
+                particle.setLeftRelativeVelocity(ParticlePair.ZERO_VALUE);
             }
         }
 
@@ -181,10 +191,12 @@ public class Simulation {
         for (Particle particle : particles) {
             double superposition = particle.getParticleRadius() - (upperRightVertex.getPosition().getX() - particle.getPosition().getX());
             if (superposition > ZERO_VALUE) {
-                ParticlePair force = getWallForce(superposition, particle.getVelocity(), versorNormalDerecha, particle, null);
+                Particle auxParticle = particle;
+                particle.setRightRelativeVelocity(particle.getRightRelativeVelocity().pairSummatory(particle.getVelocity()));
+                ParticlePair force = getWallForce(superposition, particle.getRightRelativeVelocity(), versorNormalDerecha, auxParticle, null);
                 particle.addToForce(force);
             } else {
-                particle.sumOfVelocitiesInWallReset(3);
+                particle.setRightRelativeVelocity(ParticlePair.ZERO_VALUE);
             }
         }
     }

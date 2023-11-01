@@ -42,8 +42,7 @@ public class ParticlePair {
     }
 
     public ParticlePair pairSummatory(ParticlePair particle2) {
-        return new ParticlePair(this.x + particle2.x,
-                this.y + particle2.y);
+        return new ParticlePair(this.x + particle2.x, this.y + particle2.y);
     }
 
     public double mathModule(ParticlePair particle2) {

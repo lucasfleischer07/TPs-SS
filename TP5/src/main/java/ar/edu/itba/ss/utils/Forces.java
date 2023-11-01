@@ -35,7 +35,7 @@ public class Forces {
 
 
     public static double getTangencialForceT3(double superposition, double relativeTangencialVelocity) {
-        return -K_TAN * (relativeTangencialVelocity) * Configuration.getDt();
+        return -K_TAN * (relativeTangencialVelocity * Configuration.getDt());
     }
 
     public static double getTangencialForceT1(double superposition, double relativeTangencialVelocity, Particle A, Particle B) {
@@ -44,8 +44,7 @@ public class Forces {
 
     public static ParticlePair getTangencialForce(double superposition, ParticlePair relativeTangencialVelocity, ParticlePair normalVersor, Particle A, Particle B) {
         ParticlePair tan = new ParticlePair(-normalVersor.getY(), normalVersor.getX());
-        A.addSumOfVelocities(B, relativeTangencialVelocity.dotProduct(tan));
-        double forceT3 = getTangencialForceT3(superposition, A.sumOfVelocities(B));
+        double forceT3 = getTangencialForceT3(superposition, relativeTangencialVelocity.dotProduct(tan));
         double forceT1 = getTangencialForceT1(superposition, relativeTangencialVelocity.dotProduct(tan), A, B);
         double force = Math.min(forceT1, forceT3);
         return tan.pairMultiply(force);
@@ -65,13 +64,9 @@ public class Forces {
 
 
     public static ParticlePair getWallForce(double superposition, ParticlePair relativeTangencialVelocity, ParticlePair normalVersor, Particle A, Particle B) {
-
-        int wall = determineWall(normalVersor);
-
         ParticlePair tan = new ParticlePair(-normalVersor.getY(), normalVersor.getX());
-        A.addAcumVelWall(wall, relativeTangencialVelocity.dotProduct(tan));
 
-        double forceT3 = getTangencialForceT3(superposition, A.sumOfVelocitiesInWall(wall));
+        double forceT3 = getTangencialForceT3(superposition, relativeTangencialVelocity.dotProduct(tan));
         double forceT1 = getTangencialForceT1(superposition, relativeTangencialVelocity.dotProduct(tan), A, B);
         double forceT = Math.min(forceT1, forceT3);
         double forceN = getNormalForce(superposition, A, B);
