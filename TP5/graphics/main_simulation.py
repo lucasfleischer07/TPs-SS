@@ -49,7 +49,7 @@ def animate_frequencies(config_json_path, MHU, D):
         particle_data = parse_output_file(output_base_path)
 
         # Llama a la función de actualización de la trama
-        anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, L, W, D, dt, i), frames=list(particle_data.keys()), repeat=False, interval=1)
+        anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, L, W, i, dt, i), frames=list(particle_data.keys()), repeat=False, interval=1)
 
         # Save animation as mp4
         Writer = animation.writers['ffmpeg']
