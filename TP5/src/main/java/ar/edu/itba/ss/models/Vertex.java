@@ -1,8 +1,6 @@
 package ar.edu.itba.ss.models;
 
 public class Vertex {
-
-    //TODO REFFF
     private final ParticlePair position;
 
     public Vertex(Double x, Double y) {
@@ -21,7 +19,4 @@ public class Vertex {
         return position;
     }
 
-    public String toString() {
-        return position.getX() + " " + position.getY() + " " + 0.0 + " " + 0.0 + " " + 0.0001 + " " + 0 + " " + 0 + " " + 0;
-    }
 }

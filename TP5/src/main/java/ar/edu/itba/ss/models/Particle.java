@@ -19,20 +19,6 @@ public class Particle {
 
     private ParticlePair floorRelativeVelocity = ParticlePair.ZERO_VALUE, rightRelativeVelocity = ParticlePair.ZERO_VALUE, leftRelativeVelocity = ParticlePair.ZERO_VALUE, topRelativeVelocity = ParticlePair.ZERO_VALUE;
 
-    public void forcesReseted() {
-        fuerzas.setX(ZERO_VALUE);
-        fuerzas.setY(ZERO_VALUE);
-    }
-
-    public double getEnergy(){
-        return Math.pow(this.velocity.mathModule(ParticlePair.ZERO_VALUE), 2) * mass / 2.0;
-    }
-
-    public void addToForce(double x, double y) {
-        fuerzas.setX(fuerzas.getX() + x);
-        fuerzas.setY(fuerzas.getY() + y);
-    }
-
     public Particle(int id, ParticlePair position, Double radius, Double mass, Double dt, Color color) {
         this.id = id;
         this.position = position;
@@ -61,6 +47,16 @@ public class Particle {
     public void addToForce(ParticlePair particlePair) {
         fuerzas.setX(fuerzas.getX() + particlePair.getX());
         fuerzas.setY(fuerzas.getY() + particlePair.getY());
+    }
+
+    public void forcesReseted() {
+        fuerzas.setX(ZERO_VALUE);
+        fuerzas.setY(ZERO_VALUE);
+    }
+
+    public void addToForce(double x, double y) {
+        fuerzas.setX(fuerzas.getX() + x);
+        fuerzas.setY(fuerzas.getY() + y);
     }
 
     public ParticlePair getAcceleration() {
@@ -195,7 +191,6 @@ public class Particle {
 
     //--------------------------------------------------------------------------------------------------------
 
-
     // Algoritmo
     public void prediction() {
         actualAcc = this.getAcceleration();
@@ -215,8 +210,12 @@ public class Particle {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Particle)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Particle)) {
+            return false;
+        }
         Particle particle = (Particle) o;
         return id == particle.id;
     }
