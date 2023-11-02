@@ -1,0 +1,8 @@
+@startuml
+class CellIndex{
+-List<Particle> particles
++void addParticles(Particle p)
++boolean removeParticles(Particle p)
++List<Particle> getParticlesList()
+}
+@enduml

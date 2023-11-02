@@ -1,0 +1,20 @@
+@startuml
+class GranularSystem{
+-int iterations
+-double dt
+-double frequency
+-double holeSize
+-String outputFileName
+-List<Particle> particleList
+-List<Vertex> limitsList
+-List<Double> timesList
+-List<Double> energyList
+-Simulation simulation
+
++GranularSystem(double dt, double holeSize, double iterations, double frequency, String outputFileName, List<Particle> particles)
++void run()
++List<Double> getTimes()
++List<Double> getEnergy()
+
+}
+@enduml

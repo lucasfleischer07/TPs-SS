@@ -1,0 +1,28 @@
+@startuml
+class Simulation{
+-double Vertex
+-double upperRightVertex
+-double downLeftVertex
+-double upperTopVertexY
+-double downLeftVertexY
+-double leftSplitVertex
+-double movement
+-{static} ParticlePair versorNormalIzqueirda
+-{static} versorNormalDerecha
+-{static} versorNormalDown
+-{static} versorNormalUpper
+
++void addAll(List<Particle> particles)
++void add(Particle particle)
++void siloMovement(double t, double w)
++boolean isNotInSplit(Particle p)
++void updateForces()
++void updateForceFloor(List<Particle> particles)
++void updateForceTop(List<Particle> particles)
++void updateForceLeftWall(List<Particle> particles)
++void updateForceRightWall(List<Particle> particles)
++int update()
++boolean moveFromCell(Particle particle, int row, int col, int newRow, int newCol)
++boolean updateParticleCell(Particle particle, int row, int col)
+}
+@enduml

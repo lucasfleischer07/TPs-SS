@@ -1,0 +1,18 @@
+@startuml
+class Forces{
++{static} double K_NORMAL
++{static}double GRAVITY
++{static}double GAMMA
++{static}double MU
++{static}double K_TAN
++{static}double ZERO_VALUE
++{static}ParticlePair versorNormalIzqueirda
++double getNormalForce(double superposition, Particle A, Particle B)
++ParticlePair getNormalForce(double superposition, ParticlePair versor, Particle A, Particle B)
++double getTangencialForceT3(double superposition, double relativeTangencialVelocity)\
++double getTangencialForceT1(double superposition, double relativeTangencialVelocity, Particle A, Particle B)
++ParticlePair getTangencialForce(double superposition, ParticlePair relativeTangencialVelocity, ParticlePair normalVersor, Particle A, Particle B)
++int determineWall(ParticlePair normalVersor)
++ParticlePair getWallForce(double superposition, ParticlePair relativeTangencialVelocity, ParticlePair normalVersor, Particle A, Particle B)
+}
+@enduml

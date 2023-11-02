@@ -1,0 +1,16 @@
+@startuml
+!include CellIndex.puml
+!include Forces.puml
+!include GranularSystem.puml
+!include Particle.puml
+!include Simulation.puml
+!include Vertex.puml
+
+skinparam backgroundColor transparent
+
+GranularSystem *-- Simulation
+GranularSystem *-- Vertex
+GranularSystem *-- Particle
+Simulation *-- Forces
+Simulation *-- CellIndex
+@enduml

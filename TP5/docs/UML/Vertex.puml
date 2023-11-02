@@ -1,0 +1,9 @@
+@startuml
+class Vertex{
+-ParticlePair position
++Vertex(Double x, Double y)
++void setY(Double Y)
++Double getY()
++ParticlePair getPosition()
+}
+@enduml

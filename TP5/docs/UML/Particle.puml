@@ -1,0 +1,24 @@
+@startuml
+class Particle {
+    -final ParticlePair fuerzas
+    -Double radius, mass, dt, sqrDt
+    -int id
+    -boolean attachedFromSlit = false, particleSlit = false
+    -Color color
+    -private ParticlePair position, velocity, previousAcc, actualAcc, actualVel
+    -public Map<Particle, ParticlePair> totalVelocitiesAcummulatedMap
+
++void forcesReseted()
++ void addToForce(double x, double y)
++Particle(int id, ParticlePair position, Double radius, Double mass, Double dt, Color color)
++Particle particleClone()
++void addToForce(ParticlePair particlePair)
++void attachedFromSlit()
++isAttachedFromSlit()
++void prediction()
++void correction()
++boolean isParticleSlit()
++void setParticleSlit(boolean particleSlit)
+
+}
+@enduml
