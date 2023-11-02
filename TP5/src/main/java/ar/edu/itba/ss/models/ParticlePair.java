@@ -27,18 +27,15 @@ public class ParticlePair {
     }
 
     public double dotProduct(ParticlePair particle2) {
-        return this.x * particle2.getX()
-                + this.y * particle2.getY();
+        return (this.x * particle2.getX() + this.y * particle2.getY());
     }
 
     public ParticlePair pairMultiply(double scalarValue) {
-        return new ParticlePair(this.x * scalarValue,
-                this.y * scalarValue);
+        return new ParticlePair(this.x * scalarValue, this.y * scalarValue);
     }
 
     public ParticlePair pairSubtract(ParticlePair particle2) {
-        return new ParticlePair(this.x - particle2.x,
-                this.y - particle2.y);
+        return new ParticlePair(this.x - particle2.x,this.y - particle2.y);
     }
 
     public ParticlePair pairSummatory(ParticlePair particle2) {
@@ -56,8 +53,12 @@ public class ParticlePair {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ParticlePair particlePair = (ParticlePair) o;
         return Objects.equals(x, particlePair.x) && Objects.equals(y, particlePair.y);
     }

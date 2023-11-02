@@ -7,11 +7,8 @@ public class Forces {
     public static final double K_NORMAL = 250;
     public static final double GRAVITY = -5;
     public static final double GAMMA = 2.5;
-    public static final double MU = 0.5;
+    public static final double MU = 0.7;
     public static final double K_TAN = 2 * K_NORMAL;
-    private static final double ZERO_VALUE = 0.0;
-
-    private static final ParticlePair versorNormalIzqueirda = new ParticlePair(-1.0, ZERO_VALUE), versorNormalDerecha = new ParticlePair(1.0, ZERO_VALUE), versorNormalDown = new ParticlePair(ZERO_VALUE, -1.0), versorNormalUpper = new ParticlePair(ZERO_VALUE, 1.0);
 
 
     public static double getNormalForce(double superposition, Particle A, Particle B) {
@@ -26,13 +23,10 @@ public class Forces {
 
     }
 
-
     public static ParticlePair getNormalForce(double superposition, ParticlePair versor, Particle A, Particle B) {
         double force = getNormalForce(superposition, A, B);
-
         return versor.pairMultiply(force);
     }
-
 
     public static double getTangencialForceT3(double superposition, double relativeTangencialVelocity) {
         return -K_TAN * (relativeTangencialVelocity * Configuration.getDt());
@@ -50,22 +44,8 @@ public class Forces {
         return tan.pairMultiply(force);
     }
 
-    public static int determineWall(ParticlePair normalVersor) {
-        if (normalVersor.equals(versorNormalDown)) {
-            return 0;
-        } else if (normalVersor.equals(versorNormalUpper)) {
-            return 1;
-        } else if (normalVersor.equals(versorNormalIzqueirda)) {
-            return 2;
-        } else {
-            return 3;
-        }
-    }
-
-
     public static ParticlePair getWallForce(double superposition, ParticlePair relativeTangencialVelocity, ParticlePair normalVersor, Particle A, Particle B) {
         ParticlePair tan = new ParticlePair(-normalVersor.getY(), normalVersor.getX());
-
         double forceT3 = getTangencialForceT3(superposition, relativeTangencialVelocity.dotProduct(tan));
         double forceT1 = getTangencialForceT1(superposition, relativeTangencialVelocity.dotProduct(tan), A, B);
         double forceT = Math.min(forceT1, forceT3);

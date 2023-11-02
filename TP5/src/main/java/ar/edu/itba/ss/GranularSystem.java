@@ -13,14 +13,11 @@ import java.util.stream.Collectors;
 
 public class GranularSystem implements Runnable {
     private final int iterations;
-    private final double dt;
-    private final double frequency;
-    private final double holeSize;
+    private final double dt, frequency, holeSize;
     private final String outputFileName;
     private final List<Particle> particleList;
     private final List<Vertex> limitsList;
     private final List<Double> timesList = new ArrayList<>();
-    private final List<Double> energyList = new ArrayList<>();
     private final Simulation simulation;
 
     public GranularSystem(double dt, double holeSize, double iterations, double frequency, String outputFileName, List<Particle> particles) {
@@ -33,18 +30,17 @@ public class GranularSystem implements Runnable {
         this.holeSize = holeSize;
 
         Vertex vertex1 = new Vertex(Configuration.getW(), Configuration.getL() + Configuration.getL() /10);
-        this.limitsList.add(vertex1);
         Vertex vertex2 = new Vertex(0.0, Configuration.getL() /10);
-        this.limitsList.add(vertex2);
         Vertex vertex3 = new Vertex(Configuration.getW(), 0.0);
-        this.limitsList.add(vertex3);
         Vertex leftHoleVertex = new Vertex(Configuration.getW() / 2 - holeSize / 2, Configuration.getL() /10);
-        this.limitsList.add(leftHoleVertex);
         Vertex rightHoleVertex = new Vertex(Configuration.getW() / 2 + holeSize / 2, Configuration.getL() /10);
+        this.limitsList.add(vertex1);
+        this.limitsList.add(vertex2);
+        this.limitsList.add(vertex3);
+        this.limitsList.add(leftHoleVertex);
         this.limitsList.add(rightHoleVertex);
 
         this.simulation = new Simulation(vertex1, vertex2, holeSize);
-
         simulation.addAll(this.particleList);
     }
 
@@ -52,7 +48,6 @@ public class GranularSystem implements Runnable {
     public void run() {
         for (int i = 0; i < iterations; i++) {
             simulation.siloMovement(i * dt, frequency);
-
             particleList.forEach(Particle::prediction);
             particleList.forEach(Particle::forcesReseted);
 
@@ -66,7 +61,6 @@ public class GranularSystem implements Runnable {
             simulation.updateForces();
 
             if (i % 100 == 0) {
-                energyList.add(particleList.stream().mapToDouble(Particle::getEnergy).sum());
                 try {
                     WriteFiles.GenerateOutputFile(outputFileName, particleList, i * dt, limitsList.get(0).getY(), limitsList.get(1).getY());
                     System.out.println("Iteración = " + i);
@@ -86,7 +80,4 @@ public class GranularSystem implements Runnable {
         return timesList.size() / (iterations * dt);
     }
 
-    public List<Double> getEnergy() {
-        return energyList;
-    }
 }

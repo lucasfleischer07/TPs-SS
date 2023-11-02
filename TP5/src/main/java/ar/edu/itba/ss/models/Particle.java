@@ -196,7 +196,7 @@ public class Particle {
     //--------------------------------------------------------------------------------------------------------
 
 
-    // ALgoritmo
+    // Algoritmo
     public void prediction() {
         actualAcc = this.getAcceleration();
         this.position = position.pairSummatory(velocity.pairMultiply(dt).pairSummatory(actualAcc.pairMultiply(SCALAR1).pairSummatory(previousAcc.pairMultiply(SCALAR2)).pairMultiply(sqrDt)));

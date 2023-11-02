@@ -24,8 +24,6 @@ public class CellIndex {
     }
     @Override
     public String toString() {
-        return "CellIndex{" +
-                "particles=" + particles +
-                '}';
+        return "CellIndex {" + "particles = " + particles + '}';
     }
 }
