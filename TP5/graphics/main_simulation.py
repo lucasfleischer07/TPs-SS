@@ -49,7 +49,7 @@ def animate_frequencies(config_json_path, MHU, D):
         particle_data = parse_output_file(output_base_path)
 
         # Llama a la función de actualización de la trama
-        anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, L, W, i, dt, i), frames=list(particle_data.keys()), repeat=False, interval=1)
+        anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, L, W, D, dt, i), frames=list(particle_data.keys()), repeat=False, interval=1)
 
         # Save animation as mp4
         Writer = animation.writers['ffmpeg']
@@ -58,7 +58,7 @@ def animate_frequencies(config_json_path, MHU, D):
 
 
 def animate_hole_sizes(config_json_path, MHU, FREQUENCY):
-    for i in [3.0, 4.0, 6.0]:
+    for i in [3.0, 4.0, 5.0, 6.0]:
         output_base_path = '../src/main/resources/itemB/output_hole_size_' + str(i) + '_frequency_' + str(FREQUENCY) + '_mhu_' + str(MHU) + '.txt'
         # Crea la figura y el eje
         fig, ax = plt.subplots()  # Esto crea tanto la figura como el eje
@@ -68,7 +68,7 @@ def animate_hole_sizes(config_json_path, MHU, FREQUENCY):
         particle_data = parse_output_file(output_base_path)
 
         # Llama a la función de actualización de la trama
-        anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, L, W, D, dt, i), frames=list(particle_data.keys()), repeat=False, interval=1)
+        anim = animation.FuncAnimation(fig, update_particle_positions, fargs=(particle_data, ax, L, W, i, dt, i), frames=list(particle_data.keys()), repeat=False, interval=1)
 
         # Save animation as mp4
         Writer = animation.writers['ffmpeg']

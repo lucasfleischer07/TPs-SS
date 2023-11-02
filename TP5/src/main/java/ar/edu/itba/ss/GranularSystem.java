@@ -51,7 +51,7 @@ public class GranularSystem implements Runnable {
             particleList.forEach(Particle::prediction);
             particleList.forEach(Particle::forcesReseted);
 
-            for (int j = 0; j < simulation.update(); j++) {
+            for (int j = 0; j < simulation.updateSystem(); j++) {
                 timesList.add(i * dt);
             }
 

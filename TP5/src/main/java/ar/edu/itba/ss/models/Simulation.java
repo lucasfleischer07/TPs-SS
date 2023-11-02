@@ -46,21 +46,6 @@ public class Simulation {
         rightSplitVertex = topRightVertex.getPosition().getX() / 2 + holeSize / 2;
     }
 
-    //addAll que implementa la clase Lists
-    public void addAll(List<Particle> particles) {
-        particles.forEach(this::add);
-    }
-
-    public void add(Particle particle) {
-        CellIndex cell = getCell(particle.getPosition().getX(), particle.getPosition().getY());
-        if (cell != null) {
-            cell.addParticles(particle);
-        } else {
-            throw new IllegalStateException("La celda no existe");
-        }
-    }
-
-
     public void siloMovement(double t, double w) {
         movement = A * Math.sin(w * t);
         downLeftVertex.setY(downLeftVertexY + movement);
@@ -69,8 +54,55 @@ public class Simulation {
 
     private boolean isNotInSplit(Particle p) {
         // si no esta en la rendija
-        return ( p.getPosition().getX() > rightSplitVertex ||
-                p.getPosition().getX() < leftSplitVertex);
+        return (p.getPosition().getX() > rightSplitVertex || p.getPosition().getX() < leftSplitVertex);
+    }
+
+    public int updateSystem() {
+        int outParticles = 0;
+        for (int i = 0; i < ROWS_TOTAL; i++) {
+            for (int j = 0; j < COLS_TOTAL; j++) {
+                for (int m = 0; m < cellIndexes[i][j].getParticlesList().size(); m++) {
+                    if(!updateParticleCellPosition(cellIndexes[i][j].getParticlesList().get(m), i, j)) {
+                        outParticles += 1;
+                    }
+                }
+            }
+        }
+        return outParticles;
+    }
+
+    private List<Particle> getNeighbours(int row, int col) {
+        List<Particle> particleList = new ArrayList<>();
+        if (row < ROWS_TOTAL - 1) {
+            particleList.addAll(cellIndexes[row + 1][col].getParticlesList());
+        }
+
+        if (row < ROWS_TOTAL - 1 && col < COLS_TOTAL - 1) {
+            particleList.addAll(cellIndexes[row + 1][col + 1].getParticlesList());
+        }
+
+        if (col < COLS_TOTAL - 1) {
+            particleList.addAll(cellIndexes[row][col + 1].getParticlesList());
+        }
+
+        if (row > 0 && col < COLS_TOTAL - 1) {
+            particleList.addAll(cellIndexes[row - 1][col + 1].getParticlesList());
+        }
+
+        return particleList;
+    }
+
+    private List<Particle> getAllNeighbours(int row, int col) {
+        List<Particle> particles = new ArrayList<>();
+        int[][] difference = {{0, 0}, {0, 1}, {0, -1}, {1, 0}, {1, 1}, {1, -1}, {-1, 0}, {-1, 1}, {-1, -1}};
+
+        for (int[] value : difference) {
+            try {
+                particles.addAll(cellIndexes[row + value[0]][col + value[1]].getParticlesList());
+            } catch (IndexOutOfBoundsException ignored) {}
+        }
+
+        return particles;
     }
 
     public void updateForces() {
@@ -128,51 +160,25 @@ public class Simulation {
                 }
 
                 if (row <= (ROWS_TOTAL - ROWS_SILO)) {
-                    updateForceFloor(currentList);
+                    updateBottomForce(currentList);
                 }
 
                 if (row == ROWS_TOTAL - 1) {
-                    updateForceTop(currentList);
+                    updateUpForce(currentList);
                 }
 
                 if (col == 0) {
-                    updateForceLeftWall(currentList);
+                    updateLeftWallForce(currentList);
                 }
 
                 if (col == COLS_TOTAL - 1) {
-                    updateForceRightWall(currentList);
+                    updateRightWallForce(currentList);
                 }
             }
         }
     }
 
-    private void updateForceFloor(List<Particle> particles) {
-        for (Particle particle : particles) {
-            if (isNotInSplit(particle) && !particle.isParticleSlit()) {
-                double superposition = particle.getParticleRadius() - (particle.getPosition().getY() - downLeftVertex.getY());
-                if (superposition > ZERO_VALUE) {
-                    Particle auxParticle = particle;
-                    particle.setFloorRelativeVelocity(particle.getFloorRelativeVelocity().pairSummatory(particle.getVelocity()));
-                    ParticlePair force = getWallForce(superposition, particle.getFloorRelativeVelocity(), versorNormalDown, auxParticle, null);
-                    particle.addToForce(force);
-                } else {
-                    particle.setFloorRelativeVelocity(ParticlePair.ZERO_VALUE);
-                }
-            }
-        }
-    }
-
-    private void updateForceTop(List<Particle> particles) {
-        for (Particle particle : particles) {
-            double superposition = particle.getParticleRadius() - (upperRightVertex.getPosition().getY() - particle.getPosition().getY());
-            if (superposition > ZERO_VALUE) {
-                ParticlePair force = getWallForce(superposition, particle.getVelocity(), versorNormalUpper, particle, null);
-                particle.addToForce(force);
-            }
-        }
-    }
-
-    private void updateForceLeftWall(List<Particle> particles) {
+    private void updateLeftWallForce(List<Particle> particles) {
         for (Particle particle : particles) {
             double superposition = particle.getParticleRadius() - (particle.getPosition().getX() - downLeftVertex.getPosition().getX());
             if (superposition > ZERO_VALUE) {
@@ -187,7 +193,17 @@ public class Simulation {
 
     }
 
-    private void updateForceRightWall(List<Particle> particles) {
+    private void updateUpForce(List<Particle> particles) {
+        for (Particle particle : particles) {
+            double superposition = particle.getParticleRadius() - (upperRightVertex.getPosition().getY() - particle.getPosition().getY());
+            if (superposition > ZERO_VALUE) {
+                ParticlePair force = getWallForce(superposition, particle.getVelocity(), versorNormalUpper, particle, null);
+                particle.addToForce(force);
+            }
+        }
+    }
+
+    private void updateRightWallForce(List<Particle> particles) {
         for (Particle particle : particles) {
             double superposition = particle.getParticleRadius() - (upperRightVertex.getPosition().getX() - particle.getPosition().getX());
             if (superposition > ZERO_VALUE) {
@@ -201,55 +217,21 @@ public class Simulation {
         }
     }
 
-
-    private List<Particle> getNeighbours(int row, int col) {
-        List<Particle> particleList = new ArrayList<>();
-        if (row < ROWS_TOTAL - 1) {
-            particleList.addAll(cellIndexes[row + 1][col].getParticlesList());
-        }
-
-        if (row < ROWS_TOTAL - 1 && col < COLS_TOTAL - 1) {
-            particleList.addAll(cellIndexes[row + 1][col + 1].getParticlesList());
-        }
-
-        if (col < COLS_TOTAL - 1) {
-            particleList.addAll(cellIndexes[row][col + 1].getParticlesList());
-        }
-
-        if (row > 0 && col < COLS_TOTAL - 1) {
-            particleList.addAll(cellIndexes[row - 1][col + 1].getParticlesList());
-        }
-
-        return particleList;
-    }
-
-    private List<Particle> getAllNeighbours(int row, int col) {
-        List<Particle> particles = new ArrayList<>();
-        int[][] difference = {{0, 0}, {0, 1}, {0, -1}, {1, 0}, {1, 1}, {1, -1}, {-1, 0}, {-1, 1}, {-1, -1}};
-
-        for (int[] value : difference) {
-            try {
-                particles.addAll(cellIndexes[row + value[0]][col + value[1]].getParticlesList());
-            } catch (IndexOutOfBoundsException ignored) {}
-        }
-
-        return particles;
-    }
-
-    public int update() {
-        int goneParticles = 0;
-        for (int i = 0; i < ROWS_TOTAL; i++) {
-            for (int j = 0; j < COLS_TOTAL; j++) {
-                for (int k = 0; k < cellIndexes[i][j].getParticlesList().size(); k++) {
-                    if(!updateParticleCell(cellIndexes[i][j].getParticlesList().get(k), i, j)) {
-                        goneParticles += 1;
-                    }
+    private void updateBottomForce(List<Particle> particles) {
+        for (Particle particle : particles) {
+            if (isNotInSplit(particle) && !particle.isParticleSlit()) {
+                double superposition = particle.getParticleRadius() - (particle.getPosition().getY() - downLeftVertex.getY());
+                if (superposition > ZERO_VALUE) {
+                    Particle auxParticle = particle;
+                    particle.setFloorRelativeVelocity(particle.getFloorRelativeVelocity().pairSummatory(particle.getVelocity()));
+                    ParticlePair force = getWallForce(superposition, particle.getFloorRelativeVelocity(), versorNormalDown, auxParticle, null);
+                    particle.addToForce(force);
+                } else {
+                    particle.setFloorRelativeVelocity(ParticlePair.ZERO_VALUE);
                 }
             }
         }
-        return goneParticles;
     }
-
 
     private CellIndex getCell(double x, double y) {
         if (x >= DIMENSION_X_AXES || x < 0 || y < 0 || y >= DIMENSION_Y_AXES) {
@@ -268,7 +250,7 @@ public class Simulation {
         return (int) (value / DIMENSION_Y_CELL);
     }
 
-    private boolean moveFromCell(Particle particle, int row, int col, int newRow, int newCol) {
+    private boolean moveToAnotherCell(Particle particle, int row, int col, int newRow, int newCol) {
         try {
             if (newRow < 0) {
                 particle.attachedFromSlit();
@@ -313,7 +295,7 @@ public class Simulation {
         }
     }
 
-    private boolean updateParticleCell(Particle particle, int row, int col) {
+    private boolean updateParticleCellPosition(Particle particle, int row, int col) {
         double inferiorLimitX = ((double) col) * DIMENSION_X_CELL;
         double inferiorLimitY = ((double) row) * DIMENSION_Y_CELL + movement;
         ParticlePair inferiorLimit = new ParticlePair(inferiorLimitX, inferiorLimitY);
@@ -329,10 +311,19 @@ public class Simulation {
         ParticlePair inferiorDiff = particle.getPosition().pairSubtract(inferiorLimit);
         ParticlePair superiorDiff = particle.getPosition().pairSubtract(superiorLimit);
 
-        return moveFromCell(particle, row, col,
-                inferiorDiff.getY() < 0 ? row - 1 : superiorDiff.getY() >= 0 ? row + 1 : row,
-                inferiorDiff.getX() < 0 ? col - 1 : superiorDiff.getX() >= 0 ? col + 1 : col
-        );
+        return moveToAnotherCell(particle, row, col, inferiorDiff.getY() < 0 ? row - 1 : superiorDiff.getY() >= 0 ? row + 1 : row,inferiorDiff.getX() < 0 ? col - 1 : superiorDiff.getX() >= 0 ? col + 1 : col);
+    }
 
+    public void addAll(List<Particle> particles) {
+        particles.forEach(this::add);
+    }
+
+    public void add(Particle particle) {
+        CellIndex cell = getCell(particle.getPosition().getX(), particle.getPosition().getY());
+        if (cell != null) {
+            cell.addParticles(particle);
+        } else {
+            throw new IllegalStateException("La celda no existe");
+        }
     }
 }
